@@ -12,7 +12,7 @@ import java.io.InputStream;
 class FirebaseConnection {
     private static Firestore db;
 
-    private static void initializeDb() throws IOException {
+    private static synchronized void initializeDb() throws IOException {
         // read service account key json
         InputStream serviceAccount = FirebaseConnection.class.getClassLoader().getResourceAsStream("firebase_service_account_key.json");
 
