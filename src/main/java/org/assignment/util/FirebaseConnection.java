@@ -9,10 +9,10 @@ import com.google.firebase.cloud.FirestoreClient;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FirebaseConnection {
-    private final Firestore db;
+class FirebaseConnection {
+    private static Firestore db;
 
-    public FirebaseConnection() throws IOException {
+    private static void initializeDb() throws IOException {
         // read service account key json
         InputStream serviceAccount = FirebaseConnection.class.getClassLoader().getResourceAsStream("firebase_service_account_key.json");
 
@@ -28,6 +28,17 @@ public class FirebaseConnection {
         FirebaseApp.initializeApp(options);
 
         // get a firestore instance
-        this.db = FirestoreClient.getFirestore();
+        db = FirestoreClient.getFirestore();
+    }
+
+    public static Firestore getDb() {
+        if (db == null) {
+            try {
+                initializeDb();
+            } catch (IOException e) {
+                System.err.println("Failed to initialize Firestore: " + e.getMessage());
+            }
+        }
+        return db;
     }
 }
