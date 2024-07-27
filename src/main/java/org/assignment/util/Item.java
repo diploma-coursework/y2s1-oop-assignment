@@ -1,5 +1,4 @@
 package org.assignment.util;
-
 import com.google.firebase.database.annotations.NotNull;
 
 public class Item {
@@ -11,12 +10,10 @@ public class Item {
     private Supplier supplier;
     private static int noOfItems = 1;
 
-    public Item(){
-        noOfItems++;
-    }
+    // Constructor
 
     public Item(String id, String name, double unitPrice, int quantity, Category category,Supplier supplier) {
-        this.id = id;
+        this.id = StringId("P");
         this.name = name;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
@@ -25,18 +22,72 @@ public class Item {
         noOfItems++;
     }
 
-    // getters
+    // Getters
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getUnitPrice() {
+            return unitPrice;
+        }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
     public int getNoOfItems(){
         return noOfItems;
     }
 
+    // Setters
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    // Annotations
+
+    @Override
+    public String toString(){
+        return "Item : "+getId()+"\nName : "+getName()+"\nUnit Price : "+String.format("%.2f", getUnitPrice())+"\nQuantity : "+getQuantity()+"\nCategory : "+getCategory()+"\nSupplier : "+getSupplier()+"\n";
+    }
 
     @NotNull
     protected String StringId(String identifier){
-        return identifier + getNoOfItems();
+        return identifier + String.format("%04d",getNoOfItems());
     }
-
 
 }
