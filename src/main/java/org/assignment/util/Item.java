@@ -1,6 +1,8 @@
 package org.assignment.util;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.util.Scanner;
+
 public class Item {
     private String id;
     private String name;
@@ -12,7 +14,7 @@ public class Item {
 
     // Constructor
 
-    public Item(String id, String name, double unitPrice, int quantity, Category category,Supplier supplier) {
+    public Item(String name, double unitPrice, int quantity, Category category,Supplier supplier) {
         this.id = StringId("P");
         this.name = name;
         this.unitPrice = unitPrice;
@@ -54,10 +56,6 @@ public class Item {
 
     // Setters
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -89,5 +87,41 @@ public class Item {
     protected String StringId(String identifier){
         return identifier + String.format("%04d",getNoOfItems());
     }
+
+    // Methods
+    public void createItem() {
+        // Menu
+        Scanner scanner = new Scanner(System.in);
+    }
+
+    public void readItem(String id) {
+        // Code to retrieve the item from the database by id
+    }
+
+    public void updateItem() {
+        // Code to update this item in the database
+    }
+
+    public void deleteItem() {
+        // Code to delete this item from the database
+    }
+
+    // Stock Management Methods
+    public void checkStockLevel() {
+        // Code to check current stock level of this item
+    }
+
+    public void updateStockLevel(int quantity) {
+        // Code to update the stock level of this item
+        this.quantity = quantity;
+        // Additional database update logic here
+    }
+
+    public void performStockTake(int countedQuantity) {
+        // Code to adjust the quantity based on stock take results
+        this.quantity = countedQuantity;
+        // Additional database update logic here
+    }
+    // Menu Stuff
 
 }
