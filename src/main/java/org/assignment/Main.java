@@ -1,4 +1,6 @@
 package org.assignment;
+import org.assignment.util.Layout;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.BorderFactory;
@@ -17,7 +19,7 @@ public class Main {
         frame.setVisible(true);
 
 
-        ImageIcon image = new ImageIcon(".jpeg"); // Group Logo
+        ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/Sandy.jpeg"); // Group Logo
         frame.setIconImage(image.getImage()); // change icon of frame
         frame.getContentPane().setBackground(new Color(0x000000)); // need change
 

@@ -26,55 +26,31 @@ public class Item {
 
     // Getters
 
-    public String getId() {
-        return id;
-    }
+    public String getId() {return id;}
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public double getUnitPrice() {
-            return unitPrice;
-        }
+    public double getUnitPrice() {return unitPrice;}
 
-    public int getQuantity() {
-        return quantity;
-    }
+    public int getQuantity() {return quantity;}
 
-    public Category getCategory() {
-        return category;
-    }
+    public Category getCategory() {return category;}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+    public Supplier getSupplier() {return supplier;}
 
-    public int getNoOfItems(){
-        return noOfItems;
-    }
+    public int getNoOfItems(){return noOfItems;}
 
     // Setters
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) {this.name = name;}
 
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
+    public void setUnitPrice(double unitPrice) {this.unitPrice = unitPrice;}
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    public void setQuantity(int quantity) {this.quantity = quantity;}
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+    public void setCategory(Category category) {this.category = category;}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+    public void setSupplier(Supplier supplier) {this.supplier = supplier;}
 
     // Annotations
 
