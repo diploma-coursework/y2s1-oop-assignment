@@ -13,7 +13,7 @@ import javax.swing.border.Border;
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setTitle("Assignment Title");
+        frame.setTitle("su-pa-ma-ketto inuentori-");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,800); // sets x,y dimension of frame
         frame.setVisible(true);

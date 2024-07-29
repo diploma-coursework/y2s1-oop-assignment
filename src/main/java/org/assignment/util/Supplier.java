@@ -1,4 +1,17 @@
 package org.assignment.util;
 
 public class Supplier {
+    private String id;
+    private String name;
+    private String address;
+    private String contactNumber;
+    private String email;
+
+    public Supplier(){
+        this.id ="0";
+        this.name="0";
+        this.address="0";
+        this.contactNumber="0";
+        this.email="0";
+    }
 }
