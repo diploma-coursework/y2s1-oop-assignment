@@ -1,6 +1,6 @@
 package org.assignment.util;
 
-public class Staff {
+public class BaseStaff {
     private String id;
     private String name;
     private char gender;
@@ -12,7 +12,7 @@ public class Staff {
     private String address;
 
     // Constructor
-    public Staff(String id, String name, char gender, String position, String contactNumber, String email, String dateJoined, int salary, String address) {
+    public BaseStaff(String id, String name, char gender, String position, String contactNumber, String email, String dateJoined, int salary, String address) {
         this.id = id;
         this.name = name;
         this.gender = gender;

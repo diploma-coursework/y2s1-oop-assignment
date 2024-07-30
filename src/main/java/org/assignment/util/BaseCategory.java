@@ -3,30 +3,30 @@ package org.assignment.util;
 
 import com.google.firebase.database.annotations.NotNull;
 
-public class Category {
+public class BaseCategory {
     private String id;
     private String name;
     private String description;
-    private Category parentCategory;
+    private BaseCategory parentCategory;
     private static int noOfCategory = 1;
 
     // Constructors
 
-    public Category(){
+    public BaseCategory(){
         this.id = StringId("CAT");
         this.name = "0";
         this.description = "0";
         noOfCategory++;
     }
 
-    public Category(String id, String name, String description) {
+    public BaseCategory(String id, String name, String description) {
         this.id = StringId("CAT");
         this.name = name;
         this.description = description;
         noOfCategory++;
     }
 
-    public Category(String id, String name, String description, Category parentCategory) {
+    public BaseCategory(String id, String name, String description, BaseCategory parentCategory) {
         this.id = StringId("CAT");
         this.name = name;
         this.description = description;
@@ -48,7 +48,7 @@ public class Category {
         return description;
     }
 
-    public Category getParentCategory() {
+    public BaseCategory getParentCategory() {
         return parentCategory;
     }
 
@@ -70,7 +70,7 @@ public class Category {
         this.description = description;
     }
 
-    public void setParentCategory(Category parentCategory) {
+    public void setParentCategory(BaseCategory parentCategory) {
         this.parentCategory = parentCategory;
     }
 

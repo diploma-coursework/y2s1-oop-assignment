@@ -1,4 +1,4 @@
-package org.assignment.util;
+package org.assignment;
 
 import javax.swing.*;
 import java.awt.*;
