@@ -7,7 +7,7 @@ class BaseSupplier {
     private String contactNumber;
     private String email;
 
-    public BaseSupplier(){
+    public BaseSupplier() {
         this.id = null;
         this.name= null;
         this.address = null;
