@@ -38,7 +38,4 @@ public class Layout extends JFrame{
         frame.add(panel4,BorderLayout.SOUTH);
         frame.add(panel5,BorderLayout.CENTER);
     }
-
-
-
 }

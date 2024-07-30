@@ -18,7 +18,7 @@ public class Main {
 
         ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/Sandy.jpeg"); // Group Logo
         frame.setIconImage(image.getImage()); // change icon of frame
-        frame.getContentPane().setBackground(new Color(0x000000)); // need change
+        frame.getContentPane().setBackground(new Color(255,255,255)); // need change
 
         JLabel label = new JLabel();
 

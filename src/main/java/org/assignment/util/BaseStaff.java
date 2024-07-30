@@ -24,6 +24,18 @@ public class BaseStaff {
         this.address = address;
     }
 
+    public BaseStaff() {
+        this.id = null;
+        this.name = null;
+        this.gender = '\u0000';
+        this.position = null;
+        this.contactNumber = null;
+        this.email = null;
+        this.dateJoined = null;
+        this.salary = 0;
+        this.address = null;
+    }
+
     // Getters and Setters
     public String getId() {
         return id;
@@ -96,22 +108,8 @@ public class BaseStaff {
     public void setAddress(String address) {
         this.address = address;
     }
-/*  @Override
-    public String toString() {
-        return "Staff{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", gender=" + gender +
-                ", position='" + position + '\'' +
-                ", contactNumber='" + contactNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", dateJoined='" + dateJoined + '\'' +
-                ", salary=" + salary +
-                ", address='" + address + '\'' +
-                '}';
-    }
-*/
-    @Override
+
+   /* @Override
     public String toString() {
         // Initialize the base string
         StringBuilder sb = new StringBuilder("Staff{");
@@ -155,5 +153,5 @@ public class BaseStaff {
         sb.append('}');
 
         return sb.toString();
-    }
+    }*/
 }
