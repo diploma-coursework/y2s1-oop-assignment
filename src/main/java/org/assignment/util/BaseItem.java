@@ -3,17 +3,17 @@ import com.google.firebase.database.annotations.NotNull;
 
 import java.util.Scanner;
 
-public class Item {
+public class BaseItem {
     private String id;
     private String name;
     private double unitPrice;
     private int quantity;
-    private Category category;
-    private Supplier supplier;
+    private BaseCategory category;
+    private BaseSupplier supplier;
     private static int noOfItems = 1;
 
     // Constructor
-    public Item(String name, double unitPrice, Category category,Supplier supplier) {
+    public BaseItem(String name, double unitPrice, BaseCategory category, BaseSupplier supplier) {
         this.id = StringId("P");
         this.name = name;
         this.unitPrice = unitPrice;
@@ -23,7 +23,7 @@ public class Item {
         noOfItems++;
     }
 
-    public Item(String name, double unitPrice, int quantity, Category category,Supplier supplier) {
+    public BaseItem(String name, double unitPrice, int quantity, BaseCategory category, BaseSupplier supplier) {
         this.id = StringId("P");
         this.name = name;
         this.unitPrice = unitPrice;
@@ -43,9 +43,9 @@ public class Item {
 
     private int getQuantity() {return quantity;}
 
-    private Category getCategory() {return category;}
+    private BaseCategory getCategory() {return category;}
 
-    private Supplier getSupplier() {return supplier;}
+    private BaseSupplier getSupplier() {return supplier;}
 
     private int getNoOfItems(){return noOfItems;}
 
@@ -57,9 +57,9 @@ public class Item {
 
     private void setQuantity(int quantity) {this.quantity = quantity;}
 
-    private void setCategory(Category category) {this.category = category;}
+    private void setCategory(BaseCategory category) {this.category = category;}
 
-    private void setSupplier(Supplier supplier) {this.supplier = supplier;}
+    private void setSupplier(BaseSupplier supplier) {this.supplier = supplier;}
 
     // Annotations
 
