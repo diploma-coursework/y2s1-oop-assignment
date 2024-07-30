@@ -1,6 +1,8 @@
 package org.assignment.util;
 
 
+import com.google.firebase.database.annotations.NotNull;
+
 public class Category {
     private String id;
     private String name;
@@ -10,15 +12,22 @@ public class Category {
 
     // Constructors
 
+    public Category(){
+        this.id = StringId("CAT");
+        this.name = "0";
+        this.description = "0";
+        noOfCategory++;
+    }
+
     public Category(String id, String name, String description) {
-        this.id = id;
+        this.id = StringId("CAT");
         this.name = name;
         this.description = description;
         noOfCategory++;
     }
 
     public Category(String id, String name, String description, Category parentCategory) {
-        this.id = id;
+        this.id = StringId("CAT");
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
@@ -75,6 +84,11 @@ public class Category {
         else{
             return "Category ID : "+getId()+"\nCategory Name : "+getName()+"\nCategory Description : "+getDescription()+"\nParent Category Name"+getParentCategory().getName()+"\n";
         }
+    }
+
+    @NotNull
+    protected String StringId(String identifier){
+        return identifier + String.format("%04d",getNoOfCategory());
     }
 
     // Methods

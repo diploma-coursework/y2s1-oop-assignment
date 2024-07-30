@@ -1,4 +1,6 @@
 package org.assignment;
+import org.assignment.util.Layout;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.BorderFactory;
@@ -11,13 +13,13 @@ import javax.swing.border.Border;
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setTitle("Assignment Title");
+        frame.setTitle("su-pa-ma-ketto inuentori-");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,800); // sets x,y dimension of frame
         frame.setVisible(true);
 
 
-        ImageIcon image = new ImageIcon(".jpeg"); // Group Logo
+        ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/Sandy.jpeg"); // Group Logo
         frame.setIconImage(image.getImage()); // change icon of frame
         frame.getContentPane().setBackground(new Color(0x000000)); // need change
 

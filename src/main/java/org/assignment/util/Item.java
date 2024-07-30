@@ -13,6 +13,15 @@ public class Item {
     private static int noOfItems = 1;
 
     // Constructor
+    public Item(String name, double unitPrice, Category category,Supplier supplier) {
+        this.id = StringId("P");
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.quantity = 0;
+        this.category = category;
+        this.supplier = supplier;
+        noOfItems++;
+    }
 
     public Item(String name, double unitPrice, int quantity, Category category,Supplier supplier) {
         this.id = StringId("P");
@@ -26,55 +35,31 @@ public class Item {
 
     // Getters
 
-    public String getId() {
-        return id;
-    }
+    private String getId() {return id;}
 
-    public String getName() {
-        return name;
-    }
+    private String getName() {return name;}
 
-    public double getUnitPrice() {
-            return unitPrice;
-        }
+    private double getUnitPrice() {return unitPrice;}
 
-    public int getQuantity() {
-        return quantity;
-    }
+    private int getQuantity() {return quantity;}
 
-    public Category getCategory() {
-        return category;
-    }
+    private Category getCategory() {return category;}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+    private Supplier getSupplier() {return supplier;}
 
-    public int getNoOfItems(){
-        return noOfItems;
-    }
+    private int getNoOfItems(){return noOfItems;}
 
     // Setters
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    private void setName(String name) {this.name = name;}
 
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
+    private void setUnitPrice(double unitPrice) {this.unitPrice = unitPrice;}
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    private void setQuantity(int quantity) {this.quantity = quantity;}
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+    private void setCategory(Category category) {this.category = category;}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+    private void setSupplier(Supplier supplier) {this.supplier = supplier;}
 
     // Annotations
 
@@ -83,15 +68,23 @@ public class Item {
         return "Item : "+getId()+"\nName : "+getName()+"\nUnit Price : "+String.format("%.2f", getUnitPrice())+"\nQuantity : "+getQuantity()+"\nCategory : "+getCategory()+"\nSupplier : "+getSupplier()+"\n";
     }
 
-    @NotNull
-    protected String StringId(String identifier){
-        return identifier + String.format("%04d",getNoOfItems());
-    }
-
     // Methods
     public void createItem() {
         // Menu
+        // Accept input
+        // get all required parameters
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Name : ");
+        String name = scanner.nextLine();
+        System.out.println("Unit Price : ");
+        double unitPrice = scanner.nextDouble();
+        // check if name exist
+        // select Category
+        // select supplier
+        // add to database
+        // save time information
+
+
     }
 
     public void readItem(String id) {
@@ -124,4 +117,8 @@ public class Item {
     }
     // Menu Stuff
 
+    @NotNull
+    protected String StringId(String identifier){
+        return identifier + String.format("%04d",getNoOfItems());
+    }
 }
