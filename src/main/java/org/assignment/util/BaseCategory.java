@@ -1,8 +1,5 @@
 package org.assignment.util;
 
-
-import com.google.firebase.database.annotations.NotNull;
-
 public class BaseCategory {
     private String id;
     private String name;
@@ -13,21 +10,21 @@ public class BaseCategory {
     // Constructors
 
     public BaseCategory(){
-        this.id = StringId("CAT");
+        // ID is auto generated
         this.name = "0";
         this.description = "0";
         noOfCategory++;
     }
 
-    public BaseCategory(String id, String name, String description) {
-        this.id = StringId("CAT");
+    public BaseCategory( String name, String description) {
+        // ID is auto generated
         this.name = name;
         this.description = description;
         noOfCategory++;
     }
 
-    public BaseCategory(String id, String name, String description, BaseCategory parentCategory) {
-        this.id = StringId("CAT");
+    public BaseCategory( String name, String description, BaseCategory parentCategory) {
+        // ID is auto generated
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
@@ -73,26 +70,5 @@ public class BaseCategory {
     public void setParentCategory(BaseCategory parentCategory) {
         this.parentCategory = parentCategory;
     }
-
-    // Annotations
-
-    @Override
-    public String toString(){
-        if(getParentCategory() == null){
-            return "Category ID : "+getId()+"\nCategory Name : "+getName()+"\nCategory Description : "+getDescription()+"\n";
-        }
-        else{
-            return "Category ID : "+getId()+"\nCategory Name : "+getName()+"\nCategory Description : "+getDescription()+"\nParent Category Name"+getParentCategory().getName()+"\n";
-        }
-    }
-
-    @NotNull
-    protected String StringId(String identifier){
-        return identifier + String.format("%04d",getNoOfCategory());
-    }
-
-    // Methods
-
-    // Menu Stuff
 
 }
