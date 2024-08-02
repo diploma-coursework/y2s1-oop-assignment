@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 
 public class Main {
     public static void main(String[] args) {
+
         JFrame frame = new JFrame();
         frame.setTitle("su-pa-ma-ketto inuentori-");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -16,7 +17,7 @@ public class Main {
         frame.setVisible(true);
 
 
-        ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/assets/icon.jpg"); // Group Logo
+        ImageIcon image = new ImageIcon("src/main/resources/images/icon.png"); // Group Logo
         frame.setIconImage(image.getImage()); // change icon of frame
         frame.getContentPane().setBackground(new Color(255,255,255)); // need change
 
