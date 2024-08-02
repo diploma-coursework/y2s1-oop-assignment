@@ -1,41 +1,66 @@
 package org.assignment;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
-public class Layout extends JFrame{
+public class Layout {
 
-    public static void main(String args){
-
-        // Our GUI Design
+    public static void main(String[] args) {
         JFrame frame = new JFrame();
+        frame.setTitle("su-pa-ma-ketto inuentori-");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500,500);
-        frame.setLayout(new BorderLayout());
+        frame.setSize(800,800); // sets x,y dimension of frame
         frame.setVisible(true);
 
-        JPanel panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
-        JPanel panel4 = new JPanel();
-        JPanel panel5 = new JPanel();
 
-        panel1.setBackground(Color.RED);
-        panel2.setBackground(Color.GREEN);
-        panel3.setBackground(Color.yellow);
-        panel4.setBackground(Color.BLUE);
-        panel5.setBackground(Color.MAGENTA);
+        ImageIcon image = new ImageIcon("src/main/resources/images/icon.png"); // Group Logo
 
-        panel1.setPreferredSize(new Dimension(100,100));
-        panel2.setPreferredSize(new Dimension(100,100));
-        panel3.setPreferredSize(new Dimension(100,100));
-        panel4.setPreferredSize(new Dimension(100,100));
-        panel5.setPreferredSize(new Dimension(100,100));
 
-        frame.add(panel1,BorderLayout.NORTH);
-        frame.add(panel2,BorderLayout.WEST);
-        frame.add(panel3,BorderLayout.EAST);
-        frame.add(panel4,BorderLayout.SOUTH);
-        frame.add(panel5,BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+
+        // Set BorderLayout as the layout manager
+        frame.setLayout(new BorderLayout());
+
+        // For Navigation List
+        // Create the West Panel
+        JPanel westPanel = new JPanel();
+        westPanel.setBackground(Color.ORANGE);
+        westPanel.setPreferredSize(new Dimension(175, 0));
+        frame.add(westPanel, BorderLayout.WEST);
+
+        // Create a panel to handle the North, Center, East, and South panels
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+
+        // Top is for Headers
+        // North Panel
+        JPanel northPanel = new JPanel();
+        northPanel.setBackground(Color.BLUE);
+        northPanel.setPreferredSize(new Dimension(0, 75));
+        frame.add(northPanel, BorderLayout.NORTH);
+
+        // East Panel
+        JPanel eastPanel = new JPanel();
+        eastPanel.setBackground(Color.YELLOW);
+        eastPanel.setPreferredSize(new Dimension(100, 0));
+        mainPanel.add(eastPanel, BorderLayout.EAST);
+
+        // South Panel
+        JPanel southPanel = new JPanel();
+        southPanel.setBackground(Color.YELLOW);
+        southPanel.setPreferredSize(new Dimension(0, 50));
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
+
+        // Center Panel
+        JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(Color.YELLOW);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        // Add mainPanel to the center of the frame
+        frame.add(mainPanel, BorderLayout.CENTER);
+
+        // Display the frame
+        frame.setVisible(true);
     }
 }
