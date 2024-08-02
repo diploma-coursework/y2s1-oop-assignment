@@ -1,6 +1,6 @@
 package org.assignment.util;
 
-public class BaseStaff {
+class BaseStaff {
     private String id;
     private String name;
     private char gender;

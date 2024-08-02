@@ -2,7 +2,7 @@ package org.assignment.util;
 
 import java.time.LocalDateTime;
 
-public class BaseTransaction {
+class BaseTransaction {
     private String id;
     private BaseItem item;
     private BaseStaff staff;

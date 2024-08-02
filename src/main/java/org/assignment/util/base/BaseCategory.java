@@ -1,6 +1,6 @@
 package org.assignment.util;
 
-public class BaseCategory {
+class BaseCategory {
     private String id;
     private String name;
     private String description;
