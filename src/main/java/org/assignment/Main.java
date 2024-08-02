@@ -16,13 +16,13 @@ public class Main {
         frame.setVisible(true);
 
 
-        ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/Sandy.jpeg"); // Group Logo
+        ImageIcon image = new ImageIcon("src/main/java/org/assignment/util/assets/icon.jpg"); // Group Logo
         frame.setIconImage(image.getImage()); // change icon of frame
         frame.getContentPane().setBackground(new Color(255,255,255)); // need change
 
         JLabel label = new JLabel();
 
-        label.setBackground(Color.BLACK); // need change
+        label.setBackground(Color.gray); // need change
         label.setOpaque(true); // display background color
 
         frame.add(label); // add to frame
