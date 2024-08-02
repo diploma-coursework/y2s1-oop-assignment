@@ -1,28 +1,18 @@
-package org.assignment.util;
+package org.assignment.util.base;
 
-class BaseStaff {
+import org.assignment.util.enums.StaffPosition;
+import java.time.LocalDate;
+
+public class BaseStaff {
     private String id;
     private String name;
     private char gender;
-    private String position;
+    private StaffPosition position;
     private String contactNumber;
     private String email;
-    private String dateJoined;
+    private LocalDate dateJoined;
     private int salary;
     private String address;
-
-    // Constructor
-    public BaseStaff(String id, String name, char gender, String position, String contactNumber, String email, String dateJoined, int salary, String address) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-        this.position = position;
-        this.contactNumber = contactNumber;
-        this.email = email;
-        this.dateJoined = dateJoined;
-        this.salary = salary;
-        this.address = address;
-    }
 
     public BaseStaff() {
         this.id = null;
@@ -36,122 +26,73 @@ class BaseStaff {
         this.address = null;
     }
 
-    // Getters and Setters
-    public String getId() {
-        return id;
+    public BaseStaff(String id, String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.position = position;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.dateJoined = dateJoined;
+        this.salary = salary;
+        this.address = address;
     }
 
+    // setters
     public void setId(String id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
-
-    public char getGender() {
-        return gender;
-    }
-
     public void setGender(char gender) {
         this.gender = gender;
     }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
+    public void setPosition(StaffPosition position) {
         this.position = position;
     }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getDateJoined() {
-        return dateJoined;
-    }
-
-    public void setDateJoined(String dateJoined) {
+    public void setDateJoined(LocalDate dateJoined) {
         this.dateJoined = dateJoined;
     }
-
-    public int getSalary() {
-        return salary;
-    }
-
     public void setSalary(int salary) {
         this.salary = salary;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }
 
-   /* @Override
-    public String toString() {
-        // Initialize the base string
-        StringBuilder sb = new StringBuilder("Staff{");
-
-        // Add ID, name, and other fields
-        sb.append("id='").append(id).append('\'').append(", name='").append(name).append('\'');
-
-        // Conditional formatting for gender
-        if (gender == 'M') {
-            sb.append(", gender=Male");
-        } else if (gender == 'F') {
-            sb.append(", gender=Female");
-        } else {
-            sb.append(", gender=Not specified");
-        }
-
-        // Add position and contact number
-        sb.append(", position='").append(position).append('\'').append(", contactNumber= Not provided").append(contactNumber).append('\'');
-
-        // Conditional formatting for email
-        if (email != null && !email.isEmpty()) {
-            sb.append(", email='").append(email).append('\'');
-        } else {
-            sb.append(", email=Not provided");
-        }
-
-        // Add dateJoined
-        sb.append(", dateJoined='").append(dateJoined).append('\'');
-
-        // Conditional formatting for salary
-        if (salary > 0) {
-            sb.append(", salary=").append(salary);
-        } else {
-            sb.append(", salary=0");
-        }
-
-        // Add address
-        sb.append(", address='").append(address).append('\'');
-
-        // Close the string
-        sb.append('}');
-
-        return sb.toString();
-    }*/
+    // getters
+    public String getId() {
+        return this.id;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public char getGender() {
+        return this.gender;
+    }
+    public StaffPosition getPosition() {
+        return this.position;
+    }
+    public String getContactNumber() {
+        return this.contactNumber;
+    }
+    public String getEmail() {
+        return this.email;
+    }
+    public LocalDate getDateJoined() {
+        return this.dateJoined;
+    }
+    public int getSalary() {
+        return this.salary;
+    }
+    public String getAddress() {
+        return this.address;
+    }
 }

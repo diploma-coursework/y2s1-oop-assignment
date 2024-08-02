@@ -1,2 +1,4 @@
-package org.assignment.util.enums;public class TransactionType {
+package org.assignment.util.enums;
+
+public enum TransactionType {
 }

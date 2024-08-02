@@ -1,2 +1,7 @@
-package org.assignment.util.extended;public class ActivityLog {
+package org.assignment.util.extended;
+
+import org.assignment.util.base.BaseActivityLog;
+
+public class ActivityLog extends BaseActivityLog {
+
 }

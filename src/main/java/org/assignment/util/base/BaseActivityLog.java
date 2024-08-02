@@ -1,18 +1,24 @@
-package org.assignment.base;
+package org.assignment.util.base;
 
-import org.assignment.util.Staff;
+import org.assignment.util.extended.Staff;
 import org.assignment.util.enums.LogActivityType;
 import java.time.Instant;
 
-class BaseActivityLog {
+public class BaseActivityLog {
     private Instant logTimeId;
     private Staff staff;
     private LogActivityType logActivityType;
 
     public BaseActivityLog() {
-        this.id = null;
+        this.logTimeId = null;
         this.staff = null;
         this.logActivityType = null;
+    }
+
+    public BaseActivityLog(Instant logTimeId, Staff staff, LogActivityType logActivityType) {
+        this.logTimeId = logTimeId;
+        this.staff = staff;
+        this.logActivityType = logActivityType;
     }
 
     // setters
@@ -34,6 +40,6 @@ class BaseActivityLog {
         return this.staff;
     }
     public LogActivityType getLogActivityType() {
-        return this.activityType;
+        return this.logActivityType;
     }
 }

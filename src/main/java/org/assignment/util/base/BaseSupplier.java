@@ -1,6 +1,6 @@
-package org.assignment.util;
+package org.assignment.util.base;
 
-class BaseSupplier {
+public class BaseSupplier {
     private String id;
     private String name;
     private String address;
@@ -13,6 +13,14 @@ class BaseSupplier {
         this.address = null;
         this.contactNumber = null;
         this.email = null;
+    }
+
+    public BaseSupplier(String id, String name, String address, String contactNumber, String email) {
+        this.id = id;
+        this.name= name;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.email = email;
     }
 
     // setters

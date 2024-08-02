@@ -1,2 +1,4 @@
-package org.assignment.util.enums;public class ActivityType {
+package org.assignment.util.enums;
+
+public class LogActivityType {
 }

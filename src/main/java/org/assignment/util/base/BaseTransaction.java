@@ -1,17 +1,29 @@
-package org.assignment.util;
+package org.assignment.util.base;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import org.assignment.util.enums.TransactionType;
+import org.assignment.util.extended.Item;
+import org.assignment.util.extended.Staff;
 
-class BaseTransaction {
+public class BaseTransaction {
     private String id;
-    private BaseItem item;
-    private BaseStaff staff;
-    private char transactionType; // + for add, - for subtract
+    private Item item;
+    private Staff staff;
+    private TransactionType transactionType;
     private int quantity;
-    private LocalDateTime transactionDate;
+    private LocalDate transactionDate;
 
-    public BaseTransaction( BaseItem item, BaseStaff staff, char transactionType, int quantity, LocalDateTime transactionDate) {
-        // id is auto generated
+    public BaseTransaction() {
+        this.id = null;
+        this.item = null;
+        this.staff = null;
+        this.transactionType = null;
+        this.quantity = 0;
+        this.transactionDate = null;
+    }
+
+    public BaseTransaction(String id, Item item, Staff staff, TransactionType transactionType, int quantity, LocalDate transactionDate) {
+        this.id = id;
         this.item = item;
         this.staff = staff;
         this.transactionType = transactionType;
@@ -19,28 +31,43 @@ class BaseTransaction {
         this.transactionDate = transactionDate;
     }
 
-    // Getters and Setters
-    public String getId() {return id;}
+    // setters
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setItem(Item item) {
+        this.item = item;
+    }
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
 
-    public void setId(String id) {this.id = id;}
-
-    public BaseItem getItem() {return item;}
-
-    public void setItem(BaseItem item) {this.item = item;}
-
-    public BaseStaff getStaff() {return staff;}
-
-    public void setStaff(BaseStaff staff) {this.staff = staff;}
-
-    public char getTransactionType() {return transactionType;}
-
-    public void setTransactionType(char transactionType) {this.transactionType = transactionType;}
-
-    public int getQuantity() {return quantity;}
-
-    public void setQuantity(int quantity) {this.quantity = quantity;}
-
-    public LocalDateTime getTransactionDate() {return transactionDate;}
-
-    public void setTransactionDate(LocalDateTime transactionDate) {this.transactionDate = transactionDate;}
+    // getters
+    public String getId() {
+        return id;
+    }
+    public BaseItem getItem() {
+        return item;
+    }
+    public BaseStaff getStaff() {
+        return staff;
+    }
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
 }

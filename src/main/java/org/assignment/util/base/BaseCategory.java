@@ -1,74 +1,41 @@
-package org.assignment.util;
+package org.assignment.util.base;
 
-class BaseCategory {
+public class BaseCategory {
     private String id;
     private String name;
     private String description;
-    private BaseCategory parentCategory;
-    private static int noOfCategory = 1;
-
-    // Constructors
 
     public BaseCategory(){
-        // ID is auto generated
-        this.name = "0";
-        this.description = "0";
-        noOfCategory++;
+        this.id = null;
+        this.name = null;
+        this.description = null;
     }
 
-    public BaseCategory( String name, String description) {
-        // ID is auto generated
+    public BaseCategory(String id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        noOfCategory++;
     }
 
-    public BaseCategory( String name, String description, BaseCategory parentCategory) {
-        // ID is auto generated
-        this.name = name;
-        this.description = description;
-        this.parentCategory = parentCategory;
-        noOfCategory++;
-    }
-
-    // Getters
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BaseCategory getParentCategory() {
-        return parentCategory;
-    }
-
-    public static int getNoOfCategory() {
-        return noOfCategory;
-    }
-
-    // Setters
-
+    // setters
     public void setId(String id) {
         this.id = id;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setParentCategory(BaseCategory parentCategory) {
-        this.parentCategory = parentCategory;
+    // getters
+    public String getId() {
+        return this.id;
     }
-
+    public String getName() {
+        return this.name;
+    }
+    public String getDescription() {
+        return this.description;
+    }
 }
