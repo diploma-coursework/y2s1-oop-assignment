@@ -1,14 +1,13 @@
 package org.assignment.util.base;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BaseCategory {
     private String id;
     private String name;
     private String description;
     private ArrayList<BaseItem> items;
-    private List<BaseCategory> subCategories;
+    private ArrayList<BaseCategory> categories;
     private boolean isParent = false;
 
     public BaseCategory(){
@@ -19,12 +18,9 @@ public class BaseCategory {
         this.id = id;
         this.name = name;
         this.description = description;
-        if(!isParent){
-            this.items = new ArrayList<>();
-        }
-        else{
-            this.subCategories = new ArrayList<>();
-        }
+        this.isParent = isParent;
+        this.items = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 
     // setters
@@ -39,7 +35,14 @@ public class BaseCategory {
         this.description = description;
     }
     public void setItems(ArrayList<BaseItem> items) {
-        this.items = items;
+        if (!isParent) {
+            this.items = items;
+        }
+    }
+    public void setParentCategory(ArrayList<BaseCategory> category) {
+        if (isParent){
+            this.categories = category;
+        }
     }
     // getters
     public String getId() {
@@ -52,6 +55,19 @@ public class BaseCategory {
         return this.description;
     }
     public ArrayList<BaseItem> getItems() {
+        if(!isParent){
         return this.items;
+        }
+        else{
+            return null;
+        }
+    }
+    public ArrayList<BaseCategory> getCategories(){
+        if(isParent) {
+            return this.categories;
+        }
+        else{
+            return null;
+        }
     }
 }
