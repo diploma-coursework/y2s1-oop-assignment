@@ -15,15 +15,7 @@ public class BaseStaff {
     private String address;
 
     public BaseStaff() {
-        this.id = null;
-        this.name = null;
-        this.gender = '\u0000';
-        this.position = null;
-        this.contactNumber = null;
-        this.email = null;
-        this.dateJoined = null;
-        this.salary = 0;
-        this.address = null;
+        this(null, null, '\u0000', null, null, null, null, 0, null);
     }
 
     public BaseStaff(String id, String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {

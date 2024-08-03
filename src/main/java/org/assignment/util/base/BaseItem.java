@@ -13,12 +13,7 @@ public class BaseItem {
     private Supplier supplier;
 
     public BaseItem() {
-        this.id = null;
-        this.name = null;
-        this.unitPrice = 0.0;
-        this.quantity = 0;
-        this.category = null;
-        this.supplier = null;
+        this(null, null, 0.0, 0, null, null);
     }
 
     public BaseItem(String id, String name, double unitPrice, int quantity, Category category, Supplier supplier) {

@@ -6,9 +6,7 @@ public class BaseCategory {
     private String description;
 
     public BaseCategory(){
-        this.id = null;
-        this.name = null;
-        this.description = null;
+        this(null, null, null);
     }
 
     public BaseCategory(String id, String name, String description) {

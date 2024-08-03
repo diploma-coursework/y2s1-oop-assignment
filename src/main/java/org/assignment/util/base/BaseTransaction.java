@@ -14,12 +14,7 @@ public class BaseTransaction {
     private LocalDate transactionDate;
 
     public BaseTransaction() {
-        this.id = null;
-        this.item = null;
-        this.staff = null;
-        this.transactionType = null;
-        this.quantity = 0;
-        this.transactionDate = null;
+        this(null, null, null, null, 0, null);
     }
 
     public BaseTransaction(String id, Item item, Staff staff, TransactionType transactionType, int quantity, LocalDate transactionDate) {

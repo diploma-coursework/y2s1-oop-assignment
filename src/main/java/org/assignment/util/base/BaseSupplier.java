@@ -8,11 +8,7 @@ public class BaseSupplier {
     private String email;
 
     public BaseSupplier() {
-        this.id = null;
-        this.name= null;
-        this.address = null;
-        this.contactNumber = null;
-        this.email = null;
+        this(null, null, null, null, null);
     }
 
     public BaseSupplier(String id, String name, String address, String contactNumber, String email) {

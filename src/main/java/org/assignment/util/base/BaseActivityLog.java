@@ -10,9 +10,7 @@ public class BaseActivityLog {
     private LogActivityType logActivityType;
 
     public BaseActivityLog() {
-        this.logTimeId = null;
-        this.staff = null;
-        this.logActivityType = null;
+        this(null, null, null);
     }
 
     public BaseActivityLog(Instant logTimeId, Staff staff, LogActivityType logActivityType) {
