@@ -1,11 +1,14 @@
 package org.assignment.util.base;
 
+import java.util.ArrayList;
+
 public class BaseSupplier {
     private String id;
     private String name;
     private String address;
     private String contactNumber;
     private String email;
+    private ArrayList<BaseItem> items;
 
     public BaseSupplier() {
         this(null, null, null, null, null);
@@ -17,6 +20,7 @@ public class BaseSupplier {
         this.address = address;
         this.contactNumber = contactNumber;
         this.email = email;
+        this.items = new ArrayList<>();
     }
 
     // setters

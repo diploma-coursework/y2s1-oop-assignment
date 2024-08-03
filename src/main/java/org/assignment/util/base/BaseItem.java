@@ -7,18 +7,16 @@ public class BaseItem {
     private String name;
     private double unitPrice;
     private int quantity;
-    private Supplier supplier;
 
     public BaseItem() {
-        this(null, null, 0.0, 0, null);
+        this(null, null, 0.0, 0);
     }
 
-    public BaseItem(String id, String name, double unitPrice, int quantity, Supplier supplier) {
+    public BaseItem(String id, String name, double unitPrice, int quantity) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
-        this.supplier = supplier;
     }
 
     // setters
@@ -34,10 +32,6 @@ public class BaseItem {
     private void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    private void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
 
     // getters
     private String getId() {
@@ -51,8 +45,5 @@ public class BaseItem {
     }
     private int getQuantity() {
         return this.quantity;
-    }
-    private Supplier getSupplier() {
-        return this.supplier;
     }
 }
