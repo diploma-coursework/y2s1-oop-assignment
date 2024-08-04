@@ -20,30 +20,30 @@ public class BaseItem {
     }
 
     // setters
-    private void setId(String id) {
+    protected void setId(String id) {
         this.id = id;
     }
-    private void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
-    private void setUnitPrice(double unitPrice) {
+    protected void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
-    private void setQuantity(int quantity) {
+    protected void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     // getters
-    private String getId() {
+    protected String getId() {
         return this.id;
     }
-    private String getName() {
+    protected String getName() {
         return this.name;
     }
-    private double getUnitPrice() {
+    protected double getUnitPrice() {
         return this.unitPrice;
     }
-    private int getQuantity() {
+    protected int getQuantity() {
         return this.quantity;
     }
 }

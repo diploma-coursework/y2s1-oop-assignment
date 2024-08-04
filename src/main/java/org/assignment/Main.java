@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import org.assignment.util.extended.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,8 +22,12 @@ public class Main {
 
             FirebaseApp.initializeApp(options);
 
-            // Create and display the main layout (assuming Layout is a class you've defined)
+            // Create and display the main layout
             Layout layout = new Layout();
+
+//            Item item = new Item();
+//            item.increaseQuantity(30);
+//            System.out.println("Done");
 
         } catch (IOException e) {
             e.printStackTrace();
