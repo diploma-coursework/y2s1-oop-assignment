@@ -24,11 +24,6 @@ public class Main {
 
             // Create and display the main layout
             Layout layout = new Layout();
-
-//            Item item = new Item();
-//            item.increaseQuantity(30);
-//            System.out.println("Done");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
