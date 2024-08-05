@@ -3,12 +3,12 @@ package org.assignment.util.base;
 import java.util.ArrayList;
 
 public class BaseSupplier {
-    private String id;
-    private String name;
-    private String address;
-    private String contactNumber;
-    private String email;
-    private ArrayList<BaseItem> items;
+    protected String id;
+    protected String name;
+    protected String address;
+    protected String contactNumber;
+    protected String email;
+    protected ArrayList<BaseItem> items;
 
     public BaseSupplier() {
         this(null, null, null, null, null);

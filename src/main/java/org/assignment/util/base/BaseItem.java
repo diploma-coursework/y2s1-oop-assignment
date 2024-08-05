@@ -3,10 +3,10 @@ package org.assignment.util.base;
 import org.assignment.util.extended.Supplier;
 
 public class BaseItem {
-    private String id;
-    private String name;
-    private double unitPrice;
-    private int quantity;
+    protected String id;
+    protected String name;
+    protected double unitPrice;
+    protected int quantity;
 
     public BaseItem() {
         this(null, null, 0.0, 0);

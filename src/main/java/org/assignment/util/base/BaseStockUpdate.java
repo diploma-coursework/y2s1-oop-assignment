@@ -6,12 +6,12 @@ import org.assignment.util.extended.Item;
 import org.assignment.util.extended.Staff;
 
 public class BaseStockUpdate {
-    private String id;
-    private Item item;
-    private Staff staff;
-    private StockUpdateType updateType;
-    private int quantity;
-    private LocalDate updateDate;
+    protected String id;
+    protected Item item;
+    protected Staff staff;
+    protected StockUpdateType updateType;
+    protected int quantity;
+    protected LocalDate updateDate;
 
     public BaseStockUpdate() {
         this(null, null, null, null, 0, null);

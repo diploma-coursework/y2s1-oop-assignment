@@ -9,12 +9,12 @@ import com.google.firebase.cloud.FirestoreClient;
 import java.io.IOException;
 import java.io.InputStream;
 
-class FirebaseConnection {
+class Firebase {
     private static Firestore db;
 
     private static synchronized void initializeDb() throws IOException {
         // read service account key json
-        InputStream serviceAccount = FirebaseConnection.class.getClassLoader().getResourceAsStream("firebase_service_account_key.json");
+        InputStream serviceAccount = Firebase.class.getClassLoader().getResourceAsStream("firebase_service_account_key.json");
 
         // service account key json file not found
         if (serviceAccount == null) {
@@ -31,7 +31,7 @@ class FirebaseConnection {
         db = FirestoreClient.getFirestore();
     }
 
-    public static Firestore getDb() {
+    private static Firestore getDb() {
         if (db == null) {
             try {
                 initializeDb();

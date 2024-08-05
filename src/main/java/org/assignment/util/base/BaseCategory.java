@@ -3,12 +3,12 @@ package org.assignment.util.base;
 import java.util.ArrayList;
 
 public class BaseCategory {
-    private String id;
-    private String name;
-    private String description;
-    private ArrayList<BaseItem> items;
-    private ArrayList<BaseCategory> categories;
-    private boolean isParent = false;
+    protected String id;
+    protected String name;
+    protected String description;
+    protected ArrayList<BaseItem> items;
+    protected ArrayList<BaseCategory> categories;
+    protected boolean isParent = false;
 
     public BaseCategory(){
         this(null, null, null,false);

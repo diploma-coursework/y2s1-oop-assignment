@@ -5,9 +5,9 @@ import org.assignment.util.enums.LogActivityType;
 import java.time.Instant;
 
 public class BaseActivityLog {
-    private Instant logTimeId;
-    private Staff staff;
-    private LogActivityType logActivityType;
+    protected Instant logTimeId;
+    protected Staff staff;
+    protected LogActivityType logActivityType;
 
     public BaseActivityLog() {
         this(null, null, null);

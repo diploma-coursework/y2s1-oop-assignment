@@ -4,15 +4,15 @@ import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
 
 public class BaseStaff {
-    private String id;
-    private String name;
-    private char gender;
-    private StaffPosition position;
-    private String contactNumber;
-    private String email;
-    private LocalDate dateJoined;
-    private int salary;
-    private String address;
+    protected String id;
+    protected String name;
+    protected char gender;
+    protected StaffPosition position;
+    protected String contactNumber;
+    protected String email;
+    protected LocalDate dateJoined;
+    protected int salary;
+    protected String address;
 
     public BaseStaff() {
         this(null, null, '\u0000', null, null, null, null, 0, null);
