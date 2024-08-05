@@ -1,29 +1,29 @@
 package org.assignment.util.base;
 
 import java.time.LocalDate;
-import org.assignment.util.enums.TransactionType;
+import org.assignment.util.enums.StockUpdateType;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.Staff;
 
-public class BaseTransaction {
+public class BaseStockUpdate {
     private String id;
     private Item item;
     private Staff staff;
-    private TransactionType transactionType;
+    private StockUpdateType updateType;
     private int quantity;
-    private LocalDate transactionDate;
+    private LocalDate updateDate;
 
-    public BaseTransaction() {
+    public BaseStockUpdate() {
         this(null, null, null, null, 0, null);
     }
 
-    public BaseTransaction(String id, Item item, Staff staff, TransactionType transactionType, int quantity, LocalDate transactionDate) {
+    public BaseStockUpdate(String id, Item item, Staff staff, StockUpdateType updateType, int quantity, LocalDate updateDate) {
         this.id = id;
         this.item = item;
         this.staff = staff;
-        this.transactionType = transactionType;
+        this.updateType = updateType;
         this.quantity = quantity;
-        this.transactionDate = transactionDate;
+        this.updateDate = updateDate;
     }
 
     // setters
@@ -36,14 +36,14 @@ public class BaseTransaction {
     public void setStaff(Staff staff) {
         this.staff = staff;
     }
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+    public void setUpdateType(StockUpdateType updateType) {
+        this.updateType = updateType;
     }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public void setTransactionDate(LocalDate transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 
     // getters
@@ -56,13 +56,13 @@ public class BaseTransaction {
     public BaseStaff getStaff() {
         return staff;
     }
-    public TransactionType getTransactionType() {
-        return transactionType;
+    public StockUpdateType getUpdateType() {
+        return updateType;
     }
     public int getQuantity() {
         return quantity;
     }
-    public LocalDate getTransactionDate() {
-        return transactionDate;
+    public LocalDate getUpdateDate() {
+        return updateDate;
     }
 }
