@@ -11,21 +11,6 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            // Initialize Firebase
-            FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase_service_account_key.json");
-
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://oop-assignment-3a178.firebaseio.com")
-                    .build();
-
-            FirebaseApp.initializeApp(options);
-
-            // Create and display the main layout
-            Layout layout = new Layout();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Staff.dbCreateNewStaff();
     }
 }
