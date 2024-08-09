@@ -12,5 +12,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         Staff.dbCreateNewStaff();
+//        Item test = new Item();
+//        test.dbCreateNewItem();
     }
+
 }
