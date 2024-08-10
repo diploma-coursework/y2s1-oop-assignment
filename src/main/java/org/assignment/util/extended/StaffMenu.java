@@ -23,7 +23,6 @@ public class StaffMenu {
         }
     }
 
-
     private static boolean validAccount(String iDString, String passString){
         //        Do checking from Database
         if (iDString.compareToIgnoreCase("AAA") != 0 || passString.compareTo("AAA") != 0){
