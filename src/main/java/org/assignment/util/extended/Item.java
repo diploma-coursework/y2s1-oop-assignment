@@ -2,29 +2,42 @@ package org.assignment.util.extended;
 
 import org.assignment.util.base.BaseItem;
 
+// IDK if needed
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+// imports from example
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
+import org.assignment.util.FirebaseConnection;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Item extends BaseItem {
 
-    public void increaseQuantity(int amount) {
-        // Increment the quantity
-        this.setQuantity(this.getQuantity() + amount);
-        // Update the quantity in the database
-        // updateQuantityInDatabase();
+    public void dbCreateNewItem(){
+        Firestore db = FirebaseConnection.getDb();
+
+        try {
+            Map<String, Object> itemInfo = new HashMap<>();
+            itemInfo.put("name", "ExampleItem1");
+            itemInfo.put("unitPrice",3.0);
+            itemInfo.put("quantity", 0);
+
+            ApiFuture<WriteResult> future = db.collection("item").document("id").set(itemInfo);
+            WriteResult result = future.get();
+
+            System.out.println(result.getUpdateTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void updateQuantityInDatabase() {
-        // Get a reference to the database
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-        // Update the quantity in Firebase (adjust the path if necessary)
-        database.child("items").child("P001").child("quantity").setValue(2, null, (databaseError, databaseReference) -> {
-            if (databaseError == null) {
-                System.out.println("Quantity successfully updated.");
-            } else {
-                System.err.println("Failed to update quantity: " + databaseError.getMessage());
-            }
-        });
-    }
 }
