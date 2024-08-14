@@ -5,7 +5,7 @@ import org.assignment.util.enums.StockUpdateType;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.Staff;
 
-public class BaseStockUpdate {
+abstract public class BaseStockUpdate {
     protected String id;
     protected Item item;
     protected Staff staff;

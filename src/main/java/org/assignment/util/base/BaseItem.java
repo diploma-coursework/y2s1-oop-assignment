@@ -2,7 +2,7 @@ package org.assignment.util.base;
 
 import org.assignment.util.extended.Supplier;
 
-public class BaseItem {
+abstract public class BaseItem {
     protected String id;
     protected String name;
     protected double unitPrice;

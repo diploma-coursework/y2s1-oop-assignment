@@ -3,7 +3,7 @@ package org.assignment.util.base;
 import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
 
-public class BaseStaff {
+abstract public class BaseStaff {
     protected String id;
     protected String name;
     protected char gender;

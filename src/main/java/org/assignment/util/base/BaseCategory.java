@@ -2,7 +2,7 @@ package org.assignment.util.base;
 
 import java.util.ArrayList;
 
-public class BaseCategory {
+abstract public class BaseCategory {
     protected String id;
     protected String name;
     protected String description;

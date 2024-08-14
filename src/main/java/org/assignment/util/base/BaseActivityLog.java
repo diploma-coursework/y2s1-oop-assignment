@@ -4,7 +4,7 @@ import org.assignment.util.extended.Staff;
 import org.assignment.util.enums.LogActivityType;
 import java.time.Instant;
 
-public class BaseActivityLog {
+abstract public class BaseActivityLog {
     protected Instant logTimeId;
     protected Staff staff;
     protected LogActivityType logActivityType;
