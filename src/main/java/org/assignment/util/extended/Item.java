@@ -1,5 +1,6 @@
 package org.assignment.util.extended;
 
+import jdk.jfr.Category;
 import org.assignment.util.base.BaseItem;
 
 // IDK if needed
@@ -19,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Item extends BaseItem {
+    private ItemCategory itemCategory;
+    private Supplier supplier;
 
     public void dbCreateNewItem(){
         Firestore db = FirebaseConnection.getDb();
@@ -38,6 +41,5 @@ public class Item extends BaseItem {
         }
 
     }
-
 
 }

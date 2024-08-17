@@ -13,8 +13,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 //        Staff.dbCreateNewStaff();
-//        Item test = new Item();
-//        test.dbCreateNewItem();
+        Item test = new Item();
+        test.dbCreateNewItem();
 
     }
 
