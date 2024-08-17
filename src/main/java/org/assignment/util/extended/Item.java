@@ -42,4 +42,21 @@ public class Item extends BaseItem {
 
     }
 
+    public static void dbGetItemById(String staffId) {
+        Firestore db = FirebaseConnection.getDb();
+
+        try {
+            ApiFuture<DocumentSnapshot> future = db.collection("item").document("id").get();
+            DocumentSnapshot document = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String iDMaker(int amount){
+
+
+        return "";
+    }
+
 }
