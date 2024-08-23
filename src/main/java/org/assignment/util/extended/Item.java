@@ -42,21 +42,21 @@ public class Item extends BaseItem {
 
     }
 
-    public static void dbGetItemById(String staffId) {
+    public void dbGetItemById(String itemId) {
         Firestore db = FirebaseConnection.getDb();
 
         try {
-            ApiFuture<DocumentSnapshot> future = db.collection("item").document("id").get();
+            ApiFuture<DocumentSnapshot> future = db.collection("item").document(itemId).get();
             DocumentSnapshot document = future.get();
+            if (document.exists()) {
+                System.out.println("Item data: " + document.getData());
+            } else {
+                System.out.println("No such item found!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    public String iDMaker(int amount){
-
-
-        return "";
     }
 
 }

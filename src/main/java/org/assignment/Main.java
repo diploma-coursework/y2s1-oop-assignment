@@ -16,6 +16,8 @@ public class Main {
         Item test = new Item();
         test.dbCreateNewItem();
 
+        test.dbGetItemById("id");
+
     }
 
 }
