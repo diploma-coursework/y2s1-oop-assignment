@@ -109,6 +109,9 @@ public class Item extends BaseItem {
                     // Update the document with the new value
                     Map<String, Object> updatedData = new HashMap<>();
                     updatedData.put("amount", newAmount);
+
+                    ApiFuture<WriteResult> updateFuture = db.collection("idNumber").document("item").set(updatedData);
+                    WriteResult result = updateFuture.get();
                 } else {
                     System.out.println("Field 'amount' is not a number.");
                 }
