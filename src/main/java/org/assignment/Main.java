@@ -16,8 +16,8 @@ public class Main {
         Item test = new Item();
         test.dbCreateNewItem();
 
-        test.dbGetItemById("id");
-        Item.dbGetIdCount();
+        test.dbGetItemById("ITEM0001");
+//        Item.dbGetIdCount();
 
     }
 

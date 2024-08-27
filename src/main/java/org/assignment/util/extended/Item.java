@@ -24,24 +24,25 @@ public class Item extends BaseItem {
     private Supplier supplier;
 
     public void dbCreateNewItem(){
+        dbCreateNewItem("ExampleItem1",3.0,0);
+    }
+
+    public void dbCreateNewItem(String name, double unitPrice,int quantity){
         Firestore db = FirebaseConnection.getDb();
 
         try {
             Map<String, Object> itemInfo = new HashMap<>();
-            itemInfo.put("name", "ExampleItem1");
-            itemInfo.put("unitPrice",3.0);
-            itemInfo.put("quantity", 0);
+            itemInfo.put("name", name);
+            itemInfo.put("unitPrice",unitPrice);
+            itemInfo.put("quantity", quantity);
 
-
-            ApiFuture<WriteResult> future = db.collection("item").document("id").set(itemInfo);
+            ApiFuture<WriteResult> future = db.collection("item").document(dbCreateNewId()).set(itemInfo);
             WriteResult result = future.get();
 
             System.out.println(result.getUpdateTime());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void dbGetItemById(String itemId) {
@@ -53,7 +54,7 @@ public class Item extends BaseItem {
 
         try {
             int count = Integer.parseInt(itemId.substring(4));
-            ApiFuture<DocumentSnapshot> future = db.collection("Count").document("item").get();
+            ApiFuture<DocumentSnapshot> future = db.collection("item").document(itemId).get();
             DocumentSnapshot document = future.get();
             if (document.exists()) {
                 System.out.println("Item data: " + document.getData());
@@ -63,10 +64,9 @@ public class Item extends BaseItem {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public static void dbGetIdCount(){
+    private static int dbGetIdCount(){
         Firestore db = FirebaseConnection.getDb();
 
         try {
@@ -75,15 +75,42 @@ public class Item extends BaseItem {
             DocumentSnapshot document = future.get();
 
             if (document.exists()) {
-                // Retrieve the field as an Object
-//                double count = document.getDouble("amount");
                 Object fieldObject = document.get("amount");
 
-                // Ensure the object is not null and is a Number
                 if (fieldObject instanceof Number) {
-                    int fieldValue = ((Number) fieldObject).intValue();
+                    return ((Number) fieldObject).intValue();
                 } else {
-                    System.out.println("Field is not a number.");
+                    return -1;
+                }
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private static void dbIncrementCount() {
+        Firestore db = FirebaseConnection.getDb();
+
+        try {
+            // Retrieve the document snapshot
+            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document("item").get();
+            DocumentSnapshot document = future.get();
+
+            if (document.exists()) {
+                Object fieldObject = document.get("amount");
+
+                if (fieldObject instanceof Number) {
+                    // Increment the value by 1
+                    int newAmount = ((Number) fieldObject).intValue() + 1;
+
+                    // Update the document with the new value
+                    Map<String, Object> updatedData = new HashMap<>();
+                    updatedData.put("amount", newAmount);
+                } else {
+                    System.out.println("Field 'amount' is not a number.");
                 }
             } else {
                 System.out.println("Document does not exist.");
@@ -93,4 +120,13 @@ public class Item extends BaseItem {
         }
     }
 
+    private static String dbCreateNewId(){
+                if(dbGetIdCount() != -1){
+                    dbIncrementCount();
+                    return "ITEM" +String.format("%04d",dbGetIdCount());
+                }
+                else{
+                    return "ERROR";
+                }
+    }
 }
