@@ -1,24 +1,19 @@
 package org.assignment.util.base;
 
 abstract public class BaseItemCategory {
-    protected String id;
     protected String name;
     protected String description;
 
     public BaseItemCategory(){
-        this(null, null, null);
+        this(null, null);
     }
 
-    public BaseItemCategory(String id, String name, String description) {
-        this.id = id;
+    public BaseItemCategory(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     // setters
-    public void setId(String id) {
-        this.id = id;
-    }
     public void setName(String name) {
         this.name = name;
     }
@@ -27,9 +22,6 @@ abstract public class BaseItemCategory {
     }
 
     // getters
-    public String getId() {
-        return this.id;
-    }
     public String getName() {
         return this.name;
     }

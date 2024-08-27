@@ -14,8 +14,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +21,22 @@ public class Item extends BaseItem {
     private ItemCategory itemCategory;
     private Supplier supplier;
 
-    public void dbCreateNewItem(){
-        dbCreateNewItem("ExampleItem1",3.0,0);
+    public Item(){
+        this(null,0.0,0,null,null);
     }
 
-    public void dbCreateNewItem(String name, double unitPrice,int quantity){
+    public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
+        super(name, unitPrice, quantity); // Call the superclass constructor
+        this.itemCategory = itemCategory;
+        this.supplier = supplier;
+    }
+
+    public void dbCreateNewItem(){
+        dbCreateNewItem("Example",0.0,0,null,null);
+    }
+
+    // store Item
+    public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
         Firestore db = FirebaseConnection.getDb();
 
         try {
@@ -35,6 +44,8 @@ public class Item extends BaseItem {
             itemInfo.put("name", name);
             itemInfo.put("unitPrice",unitPrice);
             itemInfo.put("quantity", quantity);
+            itemInfo.put("itemCategory", itemCategory);
+            itemInfo.put("supplier", supplier);
 
             ApiFuture<WriteResult> future = db.collection("item").document(dbCreateNewId()).set(itemInfo);
             WriteResult result = future.get();
@@ -45,7 +56,8 @@ public class Item extends BaseItem {
         }
     }
 
-    public void dbGetItemById(String itemId) {
+    // get Item by ID
+    public static void dbGetItemById(String itemId) {
         Firestore db = FirebaseConnection.getDb();
         // itemId example, ITEM0001
         if(itemId.length() <8 && !itemId.startsWith("ITEM")){
@@ -66,6 +78,7 @@ public class Item extends BaseItem {
         }
     }
 
+    // No. of Item
     private static int dbGetIdCount(){
         Firestore db = FirebaseConnection.getDb();
 
@@ -91,6 +104,7 @@ public class Item extends BaseItem {
         }
     }
 
+    // No. of item +1
     private static void dbIncrementCount() {
         Firestore db = FirebaseConnection.getDb();
 
@@ -123,6 +137,7 @@ public class Item extends BaseItem {
         }
     }
 
+    // create Item ID
     private static String dbCreateNewId(){
                 if(dbGetIdCount() != -1){
                     dbIncrementCount();

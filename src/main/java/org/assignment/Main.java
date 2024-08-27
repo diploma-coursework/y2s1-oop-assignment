@@ -13,10 +13,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 //        Staff.dbCreateNewStaff();
-        Item test = new Item();
-        test.dbCreateNewItem();
 
-        test.dbGetItemById("ITEM0001");
+        Item.dbGetItemById("ITEM0001");
 //        Item.dbGetIdCount();
 
     }
