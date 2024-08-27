@@ -32,6 +32,7 @@ public class Item extends BaseItem {
             itemInfo.put("unitPrice",3.0);
             itemInfo.put("quantity", 0);
 
+
             ApiFuture<WriteResult> future = db.collection("item").document("id").set(itemInfo);
             WriteResult result = future.get();
 
@@ -40,13 +41,19 @@ public class Item extends BaseItem {
             e.printStackTrace();
         }
 
+
     }
 
     public void dbGetItemById(String itemId) {
         Firestore db = FirebaseConnection.getDb();
+        // itemId example, ITEM0001
+        if(itemId.length() <8 && !itemId.startsWith("ITEM")){
+            return;
+        }
 
         try {
-            ApiFuture<DocumentSnapshot> future = db.collection("item").document(itemId).get();
+            int count = Integer.parseInt(itemId.substring(4));
+            ApiFuture<DocumentSnapshot> future = db.collection("Count").document("item").get();
             DocumentSnapshot document = future.get();
             if (document.exists()) {
                 System.out.println("Item data: " + document.getData());
@@ -57,6 +64,33 @@ public class Item extends BaseItem {
             e.printStackTrace();
         }
 
+    }
+
+    public static void dbGetIdCount(){
+        Firestore db = FirebaseConnection.getDb();
+
+        try {
+            // Retrieve the document snapshot
+            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document("item").get();
+            DocumentSnapshot document = future.get();
+
+            if (document.exists()) {
+                // Retrieve the field as an Object
+//                double count = document.getDouble("amount");
+                Object fieldObject = document.get("amount");
+
+                // Ensure the object is not null and is a Number
+                if (fieldObject instanceof Number) {
+                    int fieldValue = ((Number) fieldObject).intValue();
+                } else {
+                    System.out.println("Field is not a number.");
+                }
+            } else {
+                System.out.println("Document does not exist.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

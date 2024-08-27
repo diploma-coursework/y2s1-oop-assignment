@@ -17,6 +17,7 @@ public class Main {
         test.dbCreateNewItem();
 
         test.dbGetItemById("id");
+        Item.dbGetIdCount();
 
     }
 
