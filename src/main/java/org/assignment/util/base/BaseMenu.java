@@ -27,5 +27,5 @@ public abstract class BaseMenu {
         }
     }
 
-    protected record Option(String description, Runnable execute) {}
+    public record Option(String description, Runnable execute) {}
 }

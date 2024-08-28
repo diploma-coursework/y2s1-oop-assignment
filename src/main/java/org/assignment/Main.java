@@ -12,11 +12,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-//        Staff.dbCreateNewStaff();
 
-        Item.dbGetItemById("ITEM0001");
-//        Item.dbGetIdCount();
-
+        ItemMenu itemMenu = new ItemMenu();
+        itemMenu.start();
     }
 
 }
