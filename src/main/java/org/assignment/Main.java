@@ -13,12 +13,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        //ItemMenu itemMenu = new ItemMenu();
-        //itemMenu.start();
-
-        StaffMenu staffMenu = new StaffMenu();
-        staffMenu.start();
-
+        Item item = new Item();
+        item.dbCreateNewItem();
     }
 
 }

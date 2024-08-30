@@ -13,7 +13,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
-import org.assignment.util.base.BaseMenu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,18 +35,26 @@ public class Item extends BaseItem {
         dbCreateNewItem("Example",0.0,0,null,null);
     }
 
-    // store Item
     public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
+        writeToDb(createMap(name, unitPrice, quantity, itemCategory, supplier),"item");
+
+    }
+
+    // store Item
+    public Map<String, Object> createMap(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
+        Map<String, Object> itemInfo = new HashMap<>();
+        itemInfo.put("name", name);
+        itemInfo.put("unitPrice",unitPrice);
+        itemInfo.put("quantity", quantity);
+        itemInfo.put("itemCategory", itemCategory);
+        itemInfo.put("supplier", supplier);
+
+        return itemInfo;
+    }
+
+    public void writeToDb(Map<String, Object> itemInfo , String collection){
         Firestore db = FirebaseConnection.getDb();
-
         try {
-            Map<String, Object> itemInfo = new HashMap<>();
-            itemInfo.put("name", name);
-            itemInfo.put("unitPrice",unitPrice);
-            itemInfo.put("quantity", quantity);
-            itemInfo.put("itemCategory", itemCategory);
-            itemInfo.put("supplier", supplier);
-
             ApiFuture<WriteResult> future = db.collection("item").document(dbCreateNewId()).set(itemInfo);
             WriteResult result = future.get();
 
