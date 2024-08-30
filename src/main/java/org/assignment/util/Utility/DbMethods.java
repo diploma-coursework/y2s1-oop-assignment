@@ -1,6 +1,7 @@
 package org.assignment.util.Utility;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 public class DbMethods {
 
+    // Write
     public static void writeToDb(Map<String, Object> itemInfo , String collection, String idFormat, String idFormatSize){
         Firestore db = FirebaseConnection.getDb();
         try {
@@ -25,6 +27,56 @@ public class DbMethods {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Modify
+    public static void modifyInDb(Map<String, Object> itemInfo , String id, String collection){
+        Firestore db = FirebaseConnection.getDb();
+//        DocumentSnapshot document = dbGetInstanceById(collection, id, idFormat);
+
+        DocumentReference docRef = db.collection(collection).document(id);
+
+        // Update the document with the provided fields
+        ApiFuture<WriteResult> future = docRef.update(itemInfo);
+
+        try {
+            // Block on response and check if it was successful
+            WriteResult result = future.get();
+            System.out.println("Document successfully updated at: " + result.getUpdateTime());
+        } catch (Exception e) {
+            System.err.println("Error updating document: " + e.getMessage());
+        }
+    }
+
+
+
+    // Delete
+
+
+    // View
+
+
+    //
+
+    // get Item by ID
+    public static DocumentSnapshot dbGetInstanceById(String collection, String itemId, String idFormat) {
+        Firestore db = FirebaseConnection.getDb();
+        // itemId example, ITEM0001
+        if(itemId.length() <8 && !itemId.startsWith(idFormat)){
+            return null;
+        }
+
+        try {
+            int count = Integer.parseInt(itemId.substring(4));
+            ApiFuture<DocumentSnapshot> future = db.collection(collection).document(itemId).get();
+            DocumentSnapshot document = future.get();
+            if (document.exists()) {
+                return document;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // No. of Item
@@ -87,11 +139,11 @@ public class DbMethods {
     }
 
     // create Item ID
-    private static String dbCreateNewId(String Class, String idFormat, String idFormatSize){
-        String idSize = "\"%0" + idFormatSize + "d\"";
+    private static String dbCreateNewId(String Class, String idFormat, String idSize){
+        String idFormatSize = "\"%0" + idSize + "d\"";
         if(dbGetIdCount(Class) != -1){
             dbIncrementCount(Class);
-            return idFormat +String.format(idSize,dbGetIdCount(Class));
+            return idFormat +String.format(idFormatSize,dbGetIdCount(Class));
         }
         else{
             return "ERROR";
