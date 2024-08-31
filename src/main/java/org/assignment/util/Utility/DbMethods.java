@@ -17,10 +17,10 @@ import java.util.Map;
 public class DbMethods {
 
     // Write
-    public static void writeToDb(Map<String, Object> itemInfo , String collection, String idFormat, String idFormatSize){
+    public static void writeToDb(Map<String, Object> itemInfo , String collection, String idFormat, int idSize){
         Firestore db = FirebaseConnection.getDb();
         try {
-            ApiFuture<WriteResult> future = db.collection(collection).document(dbCreateNewId(collection,idFormat,idFormatSize)).set(itemInfo);
+            ApiFuture<WriteResult> future = db.collection(collection).document(dbCreateNewId(collection,idFormat,idSize)).set(itemInfo);
             WriteResult result = future.get();
 
             System.out.println(result.getUpdateTime());
@@ -29,7 +29,7 @@ public class DbMethods {
         }
     }
 
-    // Modify
+    // Modify ( have issue?)
     public static void modifyInDb(Map<String, Object> itemInfo , String id, String collection){
         Firestore db = FirebaseConnection.getDb();
 //        DocumentSnapshot document = dbGetInstanceById(collection, id, idFormat);
@@ -58,7 +58,7 @@ public class DbMethods {
 
     //
 
-    // get Item by ID
+    // get Item by ID ( have issue?)
     public static DocumentSnapshot dbGetInstanceById(String collection, String itemId, String idFormat) {
         Firestore db = FirebaseConnection.getDb();
         // itemId example, ITEM0001
@@ -139,8 +139,8 @@ public class DbMethods {
     }
 
     // create Item ID
-    private static String dbCreateNewId(String Class, String idFormat, String idSize){
-        String idFormatSize = "\"%0" + idSize + "d\"";
+    private static String dbCreateNewId(String Class, String idFormat, int idSize){
+        String idFormatSize = "%0" + idSize + "d";
         if(dbGetIdCount(Class) != -1){
             dbIncrementCount(Class);
             return idFormat +String.format(idFormatSize,dbGetIdCount(Class));

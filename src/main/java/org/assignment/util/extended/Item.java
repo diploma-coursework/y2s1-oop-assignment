@@ -1,6 +1,7 @@
 package org.assignment.util.extended;
 
 import jdk.jfr.Category;
+import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseItem;
 
 // IDK if needed
@@ -53,15 +54,16 @@ public class Item extends BaseItem {
     }
 
     public void writeToDb(Map<String, Object> itemInfo , String collection){
-        Firestore db = FirebaseConnection.getDb();
-        try {
-            ApiFuture<WriteResult> future = db.collection("item").document(dbCreateNewId()).set(itemInfo);
-            WriteResult result = future.get();
-
-            System.out.println(result.getUpdateTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DbMethods.writeToDb(itemInfo , collection, "ITEM", 4);
+//        Firestore db = FirebaseConnection.getDb();
+//        try {
+//            ApiFuture<WriteResult> future = db.collection("item").document(dbCreateNewId()).set(itemInfo);
+//            WriteResult result = future.get();
+//
+//            System.out.println(result.getUpdateTime());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     // get Item by ID

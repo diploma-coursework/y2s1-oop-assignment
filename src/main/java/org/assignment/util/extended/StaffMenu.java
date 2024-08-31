@@ -68,7 +68,7 @@ public class StaffMenu extends BaseMenu {
         Map<String, Object> staffData = convertStaffToMap(newStaff);
 
         // Store in the database
-        DbMethods.writeToDb(staffData, "staff", "STAFF", "0004");
+        DbMethods.writeToDb(staffData, "staff", "STAFF", 4);
     }
 
     private void Login() {
