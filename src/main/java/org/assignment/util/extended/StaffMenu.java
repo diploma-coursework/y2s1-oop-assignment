@@ -1,8 +1,14 @@
 package org.assignment.util.extended;
 
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.enums.StaffPosition;
+import org.assignment.util.Utility.DbMethods;
+import org.assignment.util.base.BaseStaff;
+
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 public class StaffMenu extends BaseMenu {
 
@@ -27,8 +33,42 @@ public class StaffMenu extends BaseMenu {
     }
 
     private void signUp() {
-        System.out.println("Adding an item...");
-        // Logic to add item
+        Scanner scanner = new Scanner(System.in);
+
+        // Collect staff details
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter Gender (M/F): ");
+        char gender = scanner.next().charAt(0);
+
+        System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
+        StaffPosition position = StaffPosition.valueOf(scanner.next().toUpperCase());
+
+        System.out.print("Enter Contact Number: ");
+        String contactNumber = scanner.next();
+
+        System.out.print("Enter Email: ");
+        String email = scanner.next();
+
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Enter Address: ");
+        String address = scanner.nextLine();
+
+        System.out.print("Enter Salary: ");
+        int salary = scanner.nextInt();
+
+        LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
+
+        // Create a staff object (BaseStaff or its subclass)
+        BaseStaff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
+
+        // Convert the staff object to a map
+        Map<String, Object> staffData = convertStaffToMap(newStaff);
+
+        // Store in the database
+        DbMethods.writeToDb(staffData, "staff", "STAFF", "0004");
     }
 
     private void Login() {
@@ -58,5 +98,18 @@ public class StaffMenu extends BaseMenu {
         // Check from database
         // Placeholder logic
         return iDString.equalsIgnoreCase("AAA") && passString.equals("AAA");
+    }
+
+    private Map<String, Object> convertStaffToMap(BaseStaff staff) {
+        Map<String, Object> staffData = new HashMap<>();
+        staffData.put("name", staff.getName());
+        staffData.put("gender", String.valueOf(staff.getGender())); // Convert char to string
+        staffData.put("position", staff.getPosition().name()); // Enum to string
+        staffData.put("contactNumber", staff.getContactNumber());
+        staffData.put("email", staff.getEmail());
+        staffData.put("dateJoined", staff.getDateJoined().toString()); // LocalDate to string
+        staffData.put("salary", staff.getSalary());
+        staffData.put("address", staff.getAddress());
+        return staffData;
     }
 }

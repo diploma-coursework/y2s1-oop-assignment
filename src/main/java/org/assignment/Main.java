@@ -15,6 +15,7 @@ public class Main {
 
         Item item = new Item();
         item.dbCreateNewItem();
+
     }
 
 }
