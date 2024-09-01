@@ -32,31 +32,24 @@ public class DbMethods {
         }
     }
 
-    //-----------------------------
-    public static <T, U> void editInDb( String id, String collection, int choice, T newValue) {
-        // Print the name of the class making the call
+    public static <T> void editInDb( String id, String collection, int choice, T newValue) {
         String callingClassName = new Throwable().getStackTrace()[1].getClassName();
-        System.out.println("Called from class: " + callingClassName);
 
-        // Get the Class object for the calling class
-        Class<?> callingClass = null;
+        Class<?> callingClass;
         try {
             callingClass = Class.forName(callingClassName);
-            System.out.println("Class Found");
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found: " + e.getMessage());
             return;
         }
-        // Get the field name based on choice
+
+        if (!DbMethodsInterface.class.isAssignableFrom(callingClass)) {
+            return;
+        }
+
         String fieldName = null;
         try {
-            // Print the class name
-            System.out.println("Called from class: " + callingClass.getSimpleName());
-
-            // Retrieve the static method 'Choice' with an int parameter
             Method choiceMethod = callingClass.getMethod("Choice", int.class);
-
-            // Invoke the method statically, passing 'choice' as the parameter
             fieldName = (String) choiceMethod.invoke(null, choice);
 
         } catch (NoSuchMethodException e) {
@@ -75,11 +68,10 @@ public class DbMethods {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put(fieldName, newValue);
 
-        // Call the modifyInDb method to update the document in the database
         modifyInDb(updateMap, id, collection);
     }
 
-    // Modify method to update fields in Firestore
+    // Modify method
     public static void modifyInDb(Map<String, Object> itemInfo, String id, String collection) {
         Firestore db = FirebaseConnection.getDb();
 

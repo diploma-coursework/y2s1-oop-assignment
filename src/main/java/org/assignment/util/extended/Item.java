@@ -2,6 +2,7 @@ package org.assignment.util.extended;
 
 import jdk.jfr.Category;
 import org.assignment.util.Utility.DbMethods;
+import org.assignment.util.Utility.DbMethodsInterface;
 import org.assignment.util.base.BaseItem;
 
 // IDK if needed
@@ -18,7 +19,7 @@ import org.assignment.util.FirebaseConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item extends BaseItem {
+public class Item extends BaseItem implements DbMethodsInterface {
     private ItemCategory itemCategory;
     private Supplier supplier;
 
@@ -62,8 +63,8 @@ public class Item extends BaseItem {
         DbMethods.editInDb(id, collection, choice, newValue);
     }
 
+    // Will be used in DbMethods;
     public static String Choice(int choice) {
-        // This is Example, Every class need @Override this
         switch (choice) {
             case 1:
                 return "name";
