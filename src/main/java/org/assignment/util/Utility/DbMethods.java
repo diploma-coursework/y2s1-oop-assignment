@@ -32,6 +32,7 @@ public class DbMethods {
         }
     }
 
+    // find Class, Choice method, fieldName, Modify
     public static <T> void editInDb( String id, String collection, int choice, T newValue) {
         String callingClassName = new Throwable().getStackTrace()[1].getClassName();
 
@@ -44,6 +45,7 @@ public class DbMethods {
         }
 
         if (!DbMethodsInterface.class.isAssignableFrom(callingClass)) {
+            System.err.println(callingClass.getSimpleName() + "did not implement DbMethodsInterface");
             return;
         }
 
@@ -75,14 +77,10 @@ public class DbMethods {
     public static void modifyInDb(Map<String, Object> itemInfo, String id, String collection) {
         Firestore db = FirebaseConnection.getDb();
 
-        // Reference to the document in the specified collection
         DocumentReference docRef = db.collection(collection).document(id);
-
-        // Update the document with the provided fields
         ApiFuture<WriteResult> future = docRef.update(itemInfo);
 
         try {
-            // Block on response and check if it was successful
             WriteResult result = future.get();
             System.out.println("Document successfully updated at: " + result.getUpdateTime());
         } catch (Exception e) {
@@ -90,12 +88,41 @@ public class DbMethods {
         }
     }
 
-
     // Delete
+    public static void deleteInDb(String id, String collection) {
+        Firestore db = FirebaseConnection.getDb();
 
+        DocumentReference docRef = db.collection(collection).document(id);
+        ApiFuture<WriteResult> future = docRef.delete();
+
+        try {
+            WriteResult result = future.get();
+            System.out.println("Document successfully deleted at: " + result.getUpdateTime());
+        } catch (Exception e) {
+            System.err.println("Error deleting document: " + e.getMessage());
+        }
+    }
 
     // View
+    public static void viewInDb(String id, String collection) {
+        Firestore db = FirebaseConnection.getDb();
 
+        DocumentReference docRef = db.collection(collection).document(id);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+
+        try {
+            DocumentSnapshot document = future.get();
+
+            if (document.exists()) {
+                // Print the document fields
+                System.out.println("Document data: " + document.getData());
+            } else {
+                System.out.println("No Document");
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting document: " + e.getMessage());
+        }
+    }
 
     //
 

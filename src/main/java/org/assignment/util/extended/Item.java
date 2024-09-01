@@ -42,7 +42,7 @@ public class Item extends BaseItem implements DbMethodsInterface {
 
     }
 
-    // store Item
+
     public Map<String, Object> createMap(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
         Map<String, Object> itemInfo = new HashMap<>();
         itemInfo.put("name", name);
@@ -54,14 +54,21 @@ public class Item extends BaseItem implements DbMethodsInterface {
         return itemInfo;
     }
 
+    // Create
     public void writeToDb(Map<String, Object> itemInfo , String collection){
         DbMethods.writeToDb(itemInfo , collection, "ITEM", 4);
     }
 
-
+    // Modify
     public <T> void editInDb(String id, String collection, int choice, T newValue){
         DbMethods.editInDb(id, collection, choice, newValue);
     }
+
+    // Delete
+
+
+
+
 
     // Will be used in DbMethods;
     public static String Choice(int choice) {
