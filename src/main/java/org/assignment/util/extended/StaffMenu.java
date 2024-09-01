@@ -39,7 +39,6 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            // Collect staff details with validation
             System.out.print("Enter Name: ");
             String name = scanner.nextLine();
             if (name.isEmpty()) {
@@ -60,7 +59,7 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Email: ");
             String email = scanner.next();
-            if(!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                 throw new IllegalArgumentException("Invalid email format");
             }
 
@@ -78,14 +77,12 @@ public class StaffMenu extends BaseMenu {
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
             // Create a Staff object
-            BaseStaff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
+            Staff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
 
             // Validate staff object
             if (newStaff.isValid()) {
-                // Convert to a map and write to Firestore
-                Map<String, Object> staffData = convertStaffToMap(newStaff);
-                String id = DbMethods.dbCreateNewId("item","ITEM",4);
-                DbMethods.writeToDb(staffData, "staff", id);
+                // Write to Firestore
+                newStaff.writeToDb();
                 System.out.println("Staff successfully signed up and saved to the database.");
             } else {
                 System.out.println("Failed to sign up: Invalid staff data.");
@@ -94,7 +91,6 @@ public class StaffMenu extends BaseMenu {
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
 
     private void Login() {

@@ -19,6 +19,8 @@ import java.util.Map;
 
 public class Staff extends BaseStaff {
 
+    private StaffPosition position;
+
     public Staff(){
         this(null, null, '\u0000', null, null, null, null, 0, null);
     }
@@ -48,35 +50,73 @@ public class Staff extends BaseStaff {
         return staffData;
     }
 
+    //accessor
     public StaffPosition getPosition() {
         return position;
     }
 
+    //mutator
     public void setPosition(StaffPosition position) {
         this.position = position;
     }
 
+    //get access level based on position of staff
+    public AccessLevel getAccessLevel() {
+        return position.getAccessLevel();
+    }
+
+    public void performTask() {
+        switch (getAccessLevel()) {
+            case STAFF:
+                // Actions for STAFF level
+                System.out.println("Performing staff-level actions.");
+                break;
+            case MANAGER:
+                // Actions for MANAGER level
+                System.out.println("Performing manager-level actions.");
+                break;
+            case ADMIN:
+                // Actions for ADMIN level
+                System.out.println("Performing admin-level actions.");
+                break;
+        }
+    }
+
     // Write staff data to Firestore
     public void writeToDb() {
-        Map<String, Object> staffData = this.toFirestoreMap();
-        String id = DbMethods.dbCreateNewId("item","ITEM",4);
-        DbMethods.writeToDb(staffData, "staff", id);
+        try {
+            Map<String, Object> staffData = this.toFirestoreMap();
+            DbMethods.writeToDb(staffData, "staff", "STF", 5);
+        } catch (Exception e) {
+            System.err.println("Error writing staff data to database: " + e.getMessage());
+        }
     }
 
     // Modify staff data in Firestore
     public void modifyInDb(Map<String, Object> itemInfo) {
-        DbMethods.modifyInDb(itemInfo, getId(), "staff");
+        try {
+            DbMethods.modifyInDb(itemInfo, getId(), "staff");
+        } catch (Exception e) {
+            System.err.println("Error modifying staff data in database: " + e.getMessage());
+        }
     }
 
     // Delete staff data from Firestore
     public static void deleteInDb(String id) {
-        DbMethods.deleteInDb(id, "staff");
+        try {
+            DbMethods.deleteInDb(id, "staff");
+        } catch (Exception e) {
+            System.err.println("Error deleting staff data from database: " + e.getMessage());
+        }
     }
 
     // View staff data from Firestore
     public static void viewInDb(String id) {
-        DbMethods.viewInDb(id, "staff");
+        try {
+            DbMethods.viewInDb(id, "staff");
+        } catch (Exception e) {
+            System.err.println("Error viewing staff data from database: " + e.getMessage());
+        }
     }
-
 }
 
