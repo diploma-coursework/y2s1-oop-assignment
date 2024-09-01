@@ -91,27 +91,6 @@ public class DbMethods {
 
     //
 
-    // get Item by ID ( have issue?)
-    public static DocumentSnapshot dbGetInstanceById(String collection, String itemId, String idFormat) {
-        Firestore db = FirebaseConnection.getDb();
-        // itemId example, ITEM0001
-        if(itemId.length() <8 && !itemId.startsWith(idFormat)){
-            return null;
-        }
-
-        try {
-            int count = Integer.parseInt(itemId.substring(4));
-            ApiFuture<DocumentSnapshot> future = db.collection(collection).document(itemId).get();
-            DocumentSnapshot document = future.get();
-            if (document.exists()) {
-                return document;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     // No. of Item
     private static int dbGetIdCount(String Class){
         Firestore db = FirebaseConnection.getDb();
