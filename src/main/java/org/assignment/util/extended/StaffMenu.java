@@ -4,6 +4,8 @@ import org.assignment.util.base.BaseMenu;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseStaff;
+import org.assignment.util.enums.AccessLevel;
+import org.assignment.util.extended.Staff;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class StaffMenu extends BaseMenu {
         menuOptions.put("2", new Option("Login", this::Login));
         menuOptions.put("3", new Option("delete", this::delete));
         menuOptions.put("4", new Option("Quit", this::modify));
-        menuOptions.put("5", new Option("Display List of staffs", this::display));
+        menuOptions.put("5", new Option("Display List of staffs", this::view));
         menuOptions.put("q", new Option("Quit", this::quit));
     }
 
@@ -33,60 +35,77 @@ public class StaffMenu extends BaseMenu {
     }
 
     private void signUp() {
+
         Scanner scanner = new Scanner(System.in);
 
-        // Collect staff details
-        System.out.print("Enter Name: ");
-        String name = scanner.nextLine();
+        try {
+            // Collect staff details with validation
+            System.out.print("Enter Name: ");
+            String name = scanner.nextLine();
+            if (name.isEmpty()) {
+                throw new IllegalArgumentException("Name cannot be empty");
+            }
 
-        System.out.print("Enter Gender (M/F): ");
-        char gender = scanner.next().charAt(0);
+            System.out.print("Enter Gender (M/F): ");
+            char gender = scanner.next().toUpperCase().charAt(0);
+            if (gender != 'M' && gender != 'F') {
+                throw new IllegalArgumentException("Invalid gender");
+            }
 
-        System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
-        StaffPosition position = StaffPosition.valueOf(scanner.next().toUpperCase());
+            System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
+            StaffPosition position = StaffPosition.valueOf(scanner.next().toUpperCase());
 
-        System.out.print("Enter Contact Number: ");
-        String contactNumber = scanner.next();
+            System.out.print("Enter Contact Number: ");
+            String contactNumber = scanner.next();
 
-        System.out.print("Enter Email: ");
-        String email = scanner.next();
+            System.out.print("Enter Email: ");
+            String email = scanner.next();
+            if(!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                throw new IllegalArgumentException("Invalid email format");
+            }
 
-        scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // Consume newline
 
-        System.out.print("Enter Address: ");
-        String address = scanner.nextLine();
+            System.out.print("Enter Address: ");
+            String address = scanner.nextLine();
 
-        System.out.print("Enter Salary: ");
-        int salary = scanner.nextInt();
+            System.out.print("Enter Salary: ");
+            int salary = scanner.nextInt();
+            if (salary < 0) {
+                throw new IllegalArgumentException("Salary cannot be negative");
+            }
 
-        LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
+            LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
-        // Create a staff object (BaseStaff or its subclass)
-        BaseStaff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
+            // Create a Staff object
+            BaseStaff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
 
-        // Convert the staff object to a map
-        Map<String, Object> staffData = convertStaffToMap(newStaff);
+            // Validate staff object
+            if (newStaff.isValid()) {
+                // Convert to a map and write to Firestore
+                Map<String, Object> staffData = convertStaffToMap(newStaff);
+                DbMethods.writeToDb(staffData, "staff", "STF", 5);
+                System.out.println("Staff successfully signed up and saved to the database.");
+            } else {
+                System.out.println("Failed to sign up: Invalid staff data.");
+            }
 
-        // Store in the database
-        DbMethods.writeToDb(staffData, "staff", "STAFF", 4);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     private void Login() {
-        System.out.println("Removing an item...");
-        // Logic to remove item
     }
 
     private void delete() {
-        System.out.println("Viewing all items...");
-        // Logic to view items
     }
 
     private void modify() {
-        System.out.println("Exiting the menu...");
     }
 
-    private void display() {
-        System.out.println("display");
+    private void view() {
     }
 
     private void quit() {
@@ -101,7 +120,9 @@ public class StaffMenu extends BaseMenu {
     }
 
     private Map<String, Object> convertStaffToMap(BaseStaff staff) {
+
         Map<String, Object> staffData = new HashMap<>();
+
         staffData.put("name", staff.getName());
         staffData.put("gender", String.valueOf(staff.getGender())); // Convert char to string
         staffData.put("position", staff.getPosition().name()); // Enum to string
@@ -110,6 +131,7 @@ public class StaffMenu extends BaseMenu {
         staffData.put("dateJoined", staff.getDateJoined().toString()); // LocalDate to string
         staffData.put("salary", staff.getSalary());
         staffData.put("address", staff.getAddress());
+
         return staffData;
     }
 }

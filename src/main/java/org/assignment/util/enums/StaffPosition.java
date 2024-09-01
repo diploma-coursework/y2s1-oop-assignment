@@ -1,10 +1,20 @@
 package org.assignment.util.enums;
 
 public enum StaffPosition {
-    INVENTORY_CLERK,
-    STOCK_CONTROLLER,
-    WAREHOUSE_MANAGER,
-    PURCHASING_AGENT,
-    INVENTORY_SUPERVISOR,
-    ADMIN
+    INVENTORY_CLERK(AccessLevel.STAFF),
+    STOCK_CONTROLLER(AccessLevel.STAFF),
+    WAREHOUSE_MANAGER(AccessLevel.MANAGER),
+    PURCHASING_AGENT(AccessLevel.STAFF),
+    INVENTORY_SUPERVISOR(AccessLevel.MANAGER),
+    ADMIN(AccessLevel.ADMIN);
+
+    private final AccessLevel accessLevel;
+
+    StaffPosition(AccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public AccessLevel getAccessLevel() {
+        return this.accessLevel;
+    }
 }

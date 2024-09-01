@@ -14,6 +14,7 @@ abstract public class BaseStaff {
     protected int salary;
     protected String address;
 
+    // constructors
     public BaseStaff() {
         this(null, null, '\u0000', null, null, null, null, 0, null);
     }
@@ -47,12 +48,18 @@ abstract public class BaseStaff {
         this.contactNumber = contactNumber;
     }
     public void setEmail(String email) {
+        if(email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Invalid email address");
+        }
         this.email = email;
     }
     public void setDateJoined(LocalDate dateJoined) {
         this.dateJoined = dateJoined;
     }
     public void setSalary(int salary) {
+        if (salary < 0) {
+            throw new IllegalArgumentException("Salary cannot be negative");
+        }
         this.salary = salary;
     }
     public void setAddress(String address) {
@@ -86,5 +93,29 @@ abstract public class BaseStaff {
     }
     public String getAddress() {
         return this.address;
+    }
+
+    // REQUIRED operation to make sure the object have important data that represent them BEFORE storing into firestore
+    public boolean isValid() {
+        return name != null && !name.isEmpty() &&
+                email != null && !email.isEmpty() &&
+                position != null;
+    }
+
+    // make the class more functional and easier to work with
+    public void increaseSalary(int increment) {
+        if (increment > 0) {
+            this.salary += increment;
+        }
+    }
+
+    public void updateContactDetails(String newContactNumber, String newEmail) {
+        setContactNumber(newContactNumber);
+        setEmail(newEmail);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Staff[id=%s, name=%s, gender=%c, position=%s, contactNumber=%s, email=%s, dateJoined=%s, salary=%d, address=%s]", id, name, gender, position, contactNumber, email, dateJoined, salary, address);
     }
 }
