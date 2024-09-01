@@ -62,4 +62,22 @@ public class Item extends BaseItem {
         DbMethods.editInDb(id, collection, choice, newValue);
     }
 
+    public static String Choice(int choice) {
+        // This is Example, Every class need @Override this
+        switch (choice) {
+            case 1:
+                return "name";
+            case 2:
+                return "unitPrice";
+            case 3:
+                return "quantity";
+            case 4:
+                return "itemCategory";
+            case 5:
+                return "supplier";
+            default:
+                return null;
+        }
+    }
+
 }

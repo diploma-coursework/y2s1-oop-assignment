@@ -6,11 +6,14 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
+import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
 
 import org.assignment.util.extended.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,27 +32,40 @@ public class DbMethods {
         }
     }
 
-    private static String Choice(int choice) {
-        // This is Example, Every class need @Override this
-        switch (choice) {
-            case 1:
-                return "name";
-            case 2:
-                return "unitPrice";
-            case 3:
-                return "quantity";
-            case 4:
-                return "itemCategory";
-            case 5:
-                return "supplier";
-            default:
-                return null;
-        }
-    }
+    //-----------------------------
+    public static <T, U> void editInDb( String id, String collection, int choice, T newValue) {
+        // Print the name of the class making the call
+        String callingClassName = new Throwable().getStackTrace()[1].getClassName();
+        System.out.println("Called from class: " + callingClassName);
 
-    // Method to edit specific fields in the Firestore document
-    public static <T> void editInDb(String id, String collection, int choice, T newValue) {
-        String fieldName = Choice(choice);
+        // Get the Class object for the calling class
+        Class<?> callingClass = null;
+        try {
+            callingClass = Class.forName(callingClassName);
+            System.out.println("Class Found");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Class not found: " + e.getMessage());
+            return;
+        }
+        // Get the field name based on choice
+        String fieldName = null;
+        try {
+            // Print the class name
+            System.out.println("Called from class: " + callingClass.getSimpleName());
+
+            // Retrieve the static method 'Choice' with an int parameter
+            Method choiceMethod = callingClass.getMethod("Choice", int.class);
+
+            // Invoke the method statically, passing 'choice' as the parameter
+            fieldName = (String) choiceMethod.invoke(null, choice);
+
+        } catch (NoSuchMethodException e) {
+            System.err.println("Choice method not found: " + e.getMessage());
+        } catch (InvocationTargetException e) {
+            System.err.println("Error invoking Choice method: " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            System.err.println("Illegal access to Choice method: " + e.getMessage());
+        }
 
         if (fieldName == null) {
             System.err.println("Invalid choice");
