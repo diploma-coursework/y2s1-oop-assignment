@@ -6,11 +6,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
-import org.assignment.util.base.BaseMenu;
-import org.assignment.util.extended.ItemCategory;
-import org.assignment.util.extended.Supplier;
-
-import org.assignment.util.extended.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
