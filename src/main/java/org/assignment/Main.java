@@ -14,8 +14,8 @@ public class Main {
     public static void main(String[] args) {
 
         Item item = new Item();
-        item.dbCreateNewItem();
-
+//        item.dbCreateNewItem();
+        item.editInDb("ITEM0004","item",1,"Chair");
     }
 
 }

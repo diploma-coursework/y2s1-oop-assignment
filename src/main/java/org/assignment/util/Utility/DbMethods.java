@@ -29,11 +29,45 @@ public class DbMethods {
         }
     }
 
-    // Modify ( have issue?)
-    public static void modifyInDb(Map<String, Object> itemInfo , String id, String collection){
-        Firestore db = FirebaseConnection.getDb();
-//        DocumentSnapshot document = dbGetInstanceById(collection, id, idFormat);
+    private static String Choice(int choice) {
+        // This is Example, Every class need @Override this
+        switch (choice) {
+            case 1:
+                return "name";
+            case 2:
+                return "unitPrice";
+            case 3:
+                return "quantity";
+            case 4:
+                return "itemCategory";
+            case 5:
+                return "supplier";
+            default:
+                return null;
+        }
+    }
 
+    // Method to edit specific fields in the Firestore document
+    public static <T> void editInDb(String id, String collection, int choice, T newValue) {
+        String fieldName = Choice(choice);
+
+        if (fieldName == null) {
+            System.err.println("Invalid choice");
+            return;
+        }
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put(fieldName, newValue);
+
+        // Call the modifyInDb method to update the document in the database
+        modifyInDb(updateMap, id, collection);
+    }
+
+    // Modify method to update fields in Firestore
+    public static void modifyInDb(Map<String, Object> itemInfo, String id, String collection) {
+        Firestore db = FirebaseConnection.getDb();
+
+        // Reference to the document in the specified collection
         DocumentReference docRef = db.collection(collection).document(id);
 
         // Update the document with the provided fields
@@ -47,7 +81,6 @@ public class DbMethods {
             System.err.println("Error updating document: " + e.getMessage());
         }
     }
-
 
 
     // Delete
