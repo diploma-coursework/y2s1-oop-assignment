@@ -16,36 +16,51 @@ import java.util.Map;
 
 public class Item extends BaseItem implements DbMethodsInterface {
     private ItemCategory itemCategory;
-    private String supplier;
+    private Supplier supplier;
 
 
     public Item(){
         this(null,0.0,0,null,null);
     }
 
-    public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, String supplier) {
+    public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
         super(name, unitPrice, quantity); // Call the superclass constructor
-        Firestore db = FirebaseConnection.getDb();
-        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
-        DocumentReference supplierRef = db.collection("Suppliers").document(supplier);
+//        Firestore db = FirebaseConnection.getDb();
+//        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
+//        DocumentReference supplierRef = db.collection("Suppliers").document(supplier.getId());
         this.itemCategory = itemCategory;
         this.supplier = supplier;
+    }
+
+    // getters and setters
+    public ItemCategory getItemCategory(){
+        return this.itemCategory;
+    }
+
+    public Supplier getSupplier(){
+        return this.supplier;
+    }
+
+    public boolean secureInstance(Item item){
+        if(ItemMenu.cofirmSave(item)) {
+            dbCreateNewItem(item.getName(), item.getUnitPrice(), item.getQuantity(), item.getItemCategory(), item.getSupplier());
+        }
+        return false;
     }
 
     public void dbCreateNewItem(){
         dbCreateNewItem("Example",0.0,0,null,null);
     }
 
-    public void dbCreateNewItem(String name, double unitPrice,int quantity, DocumentReference itemCategory, DocumentReference supplier){
-        // Add confirmation Message
-
-
-        // create ID
+    // create New Item
+    public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
+        Firestore db = FirebaseConnection.getDb();
         String id = DbMethods.dbCreateNewId("item","ITEM",4);
+        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
+        DocumentReference supplierRef = db.collection("Suppliers").document(supplier.getId());
 
-        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategory, supplier), "item", id);
+        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategoryRef, supplierRef), "item", id);
     }
-
 
     public Map<String, Object> createMap(String name, double unitPrice, int quantity, DocumentReference itemCategory, DocumentReference supplier) {
         Map<String, Object> itemInfo = new HashMap<>();
@@ -58,11 +73,6 @@ public class Item extends BaseItem implements DbMethodsInterface {
 
         return itemInfo;
     }
-
-    // Create
-//    public void writeToDb(Map<String, Object> itemInfo){
-//        DbMethods.writeToDb(itemInfo , "item", "ITEM", 4);
-//    }
 
     // Modify
     public <T> void editInDb(String id, int choice, T newValue){

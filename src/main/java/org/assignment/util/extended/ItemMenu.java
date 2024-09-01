@@ -3,6 +3,7 @@ package org.assignment.util.extended;
 import org.assignment.util.base.BaseMenu;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class ItemMenu extends BaseMenu {
 
@@ -43,5 +44,14 @@ public class ItemMenu extends BaseMenu {
     private void quit() {
         System.out.println("Exiting the menu...");
         System.exit(0);
+    }
+
+    public static boolean cofirmSave(Item item){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter 1 to confirm...");
+        if(scanner.nextInt()==1){
+            return true;
+        }
+        return false;
     }
 }

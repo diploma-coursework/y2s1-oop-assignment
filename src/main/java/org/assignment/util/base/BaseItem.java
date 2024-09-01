@@ -1,9 +1,7 @@
 package org.assignment.util.base;
 
-import org.assignment.util.extended.Supplier;
-
 abstract public class BaseItem {
-    private String id;
+    protected String id;
     protected String name;
     protected double unitPrice;
     protected int quantity;
