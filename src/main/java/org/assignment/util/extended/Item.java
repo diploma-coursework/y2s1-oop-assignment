@@ -15,15 +15,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Item extends BaseItem implements DbMethodsInterface {
-    private DocumentReference itemCategory;
-    private DocumentReference supplier;
+    private ItemCategory itemCategory;
+    private String supplier;
+
 
     public Item(){
         this(null,0.0,0,null,null);
     }
 
-    public Item(String name, double unitPrice, int quantity, DocumentReference itemCategory, DocumentReference supplier) {
+    public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, String supplier) {
         super(name, unitPrice, quantity); // Call the superclass constructor
+        Firestore db = FirebaseConnection.getDb();
+        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
+        DocumentReference supplierRef = db.collection("Suppliers").document(supplier);
         this.itemCategory = itemCategory;
         this.supplier = supplier;
     }
@@ -34,7 +38,12 @@ public class Item extends BaseItem implements DbMethodsInterface {
 
     public void dbCreateNewItem(String name, double unitPrice,int quantity, DocumentReference itemCategory, DocumentReference supplier){
         // Add confirmation Message
-        writeToDb(createMap(name, unitPrice, quantity, itemCategory, supplier));
+
+
+        // create ID
+        String id = DbMethods.dbCreateNewId("item","ITEM",4);
+
+        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategory, supplier), "item", id);
     }
 
 
@@ -51,9 +60,9 @@ public class Item extends BaseItem implements DbMethodsInterface {
     }
 
     // Create
-    public void writeToDb(Map<String, Object> itemInfo){
-        DbMethods.writeToDb(itemInfo , "item", "ITEM", 4);
-    }
+//    public void writeToDb(Map<String, Object> itemInfo){
+//        DbMethods.writeToDb(itemInfo , "item", "ITEM", 4);
+//    }
 
     // Modify
     public <T> void editInDb(String id, int choice, T newValue){

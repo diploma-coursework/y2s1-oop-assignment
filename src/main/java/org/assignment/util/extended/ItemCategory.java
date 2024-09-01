@@ -16,4 +16,9 @@ public class ItemCategory extends BaseItemCategory {
         super(name,description);
         this.items = new ArrayList<Item>(Arrays.asList(items));
     }
+
+    public String getId(){
+
+        return "";
+    }
 }

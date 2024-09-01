@@ -59,7 +59,8 @@ public class Staff extends BaseStaff {
     // Write staff data to Firestore
     public void writeToDb() {
         Map<String, Object> staffData = this.toFirestoreMap();
-        DbMethods.writeToDb(staffData, "staff", "STF", 5);
+        String id = DbMethods.dbCreateNewId("item","ITEM",4);
+        DbMethods.writeToDb(staffData, "staff", id);
     }
 
     // Modify staff data in Firestore

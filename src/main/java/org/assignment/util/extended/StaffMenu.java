@@ -84,7 +84,8 @@ public class StaffMenu extends BaseMenu {
             if (newStaff.isValid()) {
                 // Convert to a map and write to Firestore
                 Map<String, Object> staffData = convertStaffToMap(newStaff);
-                DbMethods.writeToDb(staffData, "staff", "STF", 5);
+                String id = DbMethods.dbCreateNewId("item","ITEM",4);
+                DbMethods.writeToDb(staffData, "staff", id);
                 System.out.println("Staff successfully signed up and saved to the database.");
             } else {
                 System.out.println("Failed to sign up: Invalid staff data.");
