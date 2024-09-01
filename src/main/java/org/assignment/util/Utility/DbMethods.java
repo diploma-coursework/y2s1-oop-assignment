@@ -6,6 +6,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
+import org.assignment.util.extended.ItemCategory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,10 +16,10 @@ import java.util.Map;
 public class DbMethods {
 
     // Write
-    public static void writeToDb(Map<String, Object> itemInfo , String collection, String idFormat, int idSize){
+    public static void writeToDb(Map<String, Object> itemInfo , String collection, String id){
         Firestore db = FirebaseConnection.getDb();
         try {
-            ApiFuture<WriteResult> future = db.collection(collection).document(dbCreateNewId(collection,idFormat,idSize)).set(itemInfo);
+            ApiFuture<WriteResult> future = db.collection(collection).document(id).set(itemInfo);
             WriteResult result = future.get();
 
             System.out.println(result.getUpdateTime());
@@ -119,15 +120,20 @@ public class DbMethods {
         }
     }
 
-    //
+    // getters
+    public static <T> String generateOrRetrieveCategoryId(T itemCategory) {
+        // Implement logic to generate or retrieve an ID for the ItemCategory
+        return "newCategoryId"; // Replace with actual ID generation logic
+    }
+
 
     // No. of Item
-    private static int dbGetIdCount(String Class){
+    private static int dbGetIdCount(String collection){
         Firestore db = FirebaseConnection.getDb();
 
         try {
             // Retrieve the document snapshot
-            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(Class).get();
+            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
             DocumentSnapshot document = future.get();
 
             if (document.exists()) {
@@ -148,12 +154,12 @@ public class DbMethods {
     }
 
     // No. of item +1
-    private static void dbIncrementCount(String Class) {
+    private static void dbIncrementCount(String collection) {
         Firestore db = FirebaseConnection.getDb();
 
         try {
             // Retrieve the document snapshot
-            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(Class).get();
+            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
             DocumentSnapshot document = future.get();
 
             if (document.exists()) {
@@ -167,7 +173,7 @@ public class DbMethods {
                     Map<String, Object> updatedData = new HashMap<>();
                     updatedData.put("amount", newAmount);
 
-                    ApiFuture<WriteResult> updateFuture = db.collection("idNumber").document(Class).set(updatedData);
+                    ApiFuture<WriteResult> updateFuture = db.collection("idNumber").document(collection).set(updatedData);
                     WriteResult result = updateFuture.get();
                 } else {
                     System.out.println("Field 'amount' is not a number.");
@@ -181,11 +187,11 @@ public class DbMethods {
     }
 
     // create Item ID
-    private static String dbCreateNewId(String Class, String idFormat, int idSize){
+    public static String dbCreateNewId(String collection, String idFormat, int idSize){
         String idFormatSize = "%0" + idSize + "d";
-        if(dbGetIdCount(Class) != -1){
-            dbIncrementCount(Class);
-            return idFormat +String.format(idFormatSize,dbGetIdCount(Class));
+        if(dbGetIdCount(collection) != -1){
+            dbIncrementCount(collection);
+            return idFormat +String.format(idFormatSize,dbGetIdCount(collection));
         }
         else{
             return "ERROR";
