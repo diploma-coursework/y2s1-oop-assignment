@@ -20,6 +20,29 @@ abstract public class BaseStaff {
     }
 
     public BaseStaff(String id, String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
+
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("ID cannot be null or empty.");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        }
+        if (position == null) {
+            throw new IllegalArgumentException("Position cannot be null.");
+        }
+        if (contactNumber == null || contactNumber.isEmpty()) {
+            throw new IllegalArgumentException("Contact number cannot be null or empty.");
+        }
+        if (dateJoined == null) {
+            throw new IllegalArgumentException("Date joined cannot be null.");
+        }
+        if (salary <= 0) {
+            throw new IllegalArgumentException("Salary must be greater than zero.");
+        }
+        if (address == null || address.isEmpty()) {
+            throw new IllegalArgumentException("Address cannot be null or empty.");
+        }
+
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -97,9 +120,13 @@ abstract public class BaseStaff {
 
     // REQUIRED operation to make sure the object have important data that represent them BEFORE storing into firestore
     public boolean isValid() {
-        return name != null && !name.isEmpty() &&
-                email != null && !email.isEmpty() &&
-                position != null;
+        return id != null && !id.isEmpty() &&
+                name != null && !name.isEmpty() &&
+                position != null &&
+                contactNumber != null && !contactNumber.isEmpty() &&
+                dateJoined != null &&
+                salary > 0 &&
+                address != null && !address.isEmpty();
     }
 
     // make the class more functional and easier to work with
