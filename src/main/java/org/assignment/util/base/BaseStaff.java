@@ -6,7 +6,7 @@ import java.time.LocalDate;
 abstract public class BaseStaff {
     protected String id;
     protected String name;
-    protected char gender;
+    protected String gender;
     protected StaffPosition position;
     protected String contactNumber;
     protected String email;
@@ -16,14 +16,11 @@ abstract public class BaseStaff {
 
     // constructors
     public BaseStaff() {
-        this(null, '\u0000', null, null, null, null, 0, null);
+        this(null, null, null, null, null, null, 0, null);
     }
 
-    public BaseStaff(String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
+    public BaseStaff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
 
-//        if (id == null || id.isEmpty()) {
-//            throw new IllegalArgumentException("ID cannot be null or empty.");
-//        }
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
         }
@@ -61,7 +58,7 @@ abstract public class BaseStaff {
     public void setName(String name) {
         this.name = name;
     }
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
     public void setPosition(StaffPosition position) {
@@ -94,7 +91,7 @@ abstract public class BaseStaff {
     public String getName() {
         return this.name;
     }
-    public char getGender() {
+    public String getGender() {
         return this.gender;
     }
     public StaffPosition getPosition() {
@@ -118,8 +115,7 @@ abstract public class BaseStaff {
 
     // REQUIRED operation to make sure the object have important data that represent them BEFORE storing into firestore
     public boolean isValid() {
-        return id != null && !id.isEmpty() &&
-                name != null && !name.isEmpty() &&
+        return  name != null && !name.isEmpty() &&
                 position != null &&
                 contactNumber != null && !contactNumber.isEmpty() &&
                 dateJoined != null &&

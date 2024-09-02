@@ -46,9 +46,16 @@ public class StaffMenu extends BaseMenu {
             }
 
             System.out.print("Enter Gender (M/F): ");
-            char gender = scanner.next().toUpperCase().charAt(0);
-            if (gender != 'M' && gender != 'F') {
-                throw new IllegalArgumentException("Invalid gender");
+            char genderInput = scanner.next().toUpperCase().charAt(0);
+
+            // Validate and map gender input to a string
+            String gender;
+            if (genderInput == 'M') {
+                gender = "Male";
+            } else if (genderInput == 'F') {
+                gender = "Female";
+            } else {
+                throw new IllegalArgumentException("Invalid gender input. Please enter 'M' or 'F'.");
             }
 
             System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
@@ -77,7 +84,7 @@ public class StaffMenu extends BaseMenu {
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
             // Create a Staff object
-            Staff newStaff = new Staff(null, name, gender, position, contactNumber, email, dateJoined, salary, address);
+            Staff newStaff = new Staff(name, gender, position, contactNumber, email, dateJoined, salary, address);
 
             // Validate staff object
             if (newStaff.isValid()) {
