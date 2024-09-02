@@ -20,7 +20,7 @@ public abstract class BaseMenu {
             final String enterValue = scanner.next();
 
             if (options.containsKey(enterValue)) {
-                options.get(enterValue).execute();
+                options.get(enterValue).execute.run();
                 break;
             }
             System.out.println("Invalid option, please try again.");
