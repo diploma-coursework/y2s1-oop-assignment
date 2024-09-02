@@ -25,9 +25,6 @@ public class Item extends BaseItem implements DbMethodsInterface {
 
     public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
         super(name, unitPrice, quantity); // Call the superclass constructor
-//        Firestore db = FirebaseConnection.getDb();
-//        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
-//        DocumentReference supplierRef = db.collection("Suppliers").document(supplier.getId());
         this.itemCategory = itemCategory;
         this.supplier = supplier;
     }
@@ -44,6 +41,7 @@ public class Item extends BaseItem implements DbMethodsInterface {
     public boolean secureInstance(Item item){
         if(ItemMenu.cofirmSave(item)) {
             dbCreateNewItem(item.getName(), item.getUnitPrice(), item.getQuantity(), item.getItemCategory(), item.getSupplier());
+            return true;
         }
         return false;
     }
@@ -55,11 +53,11 @@ public class Item extends BaseItem implements DbMethodsInterface {
     // create New Item
     public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
         Firestore db = FirebaseConnection.getDb();
-        String id = DbMethods.dbCreateNewId("item","ITEM",4);
+        setId(DbMethods.dbCreateNewId("item","ITEM",4));
         DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
         DocumentReference supplierRef = db.collection("Suppliers").document(supplier.getId());
 
-        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategoryRef, supplierRef), "item", id);
+        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategoryRef, supplierRef), "item", getId());
     }
 
     public Map<String, Object> createMap(String name, double unitPrice, int quantity, DocumentReference itemCategory, DocumentReference supplier) {

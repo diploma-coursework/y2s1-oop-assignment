@@ -17,6 +17,9 @@ abstract public class BaseItem {
     }
 
     // setters
+    protected void setId(String id) {
+        this.id = id;
+    }
     protected void setName(String name) {
         this.name = name;
     }
@@ -28,7 +31,9 @@ abstract public class BaseItem {
     }
 
     // getters
-    protected String getId() {return this.id;}
+    protected String getId() {
+        return this.id;
+    }
     protected String getName() {
         return this.name;
     }

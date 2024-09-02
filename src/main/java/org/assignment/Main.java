@@ -20,7 +20,7 @@ public class Main {
 //        item.editInDb("ITEM0004",1,"Chair");
 //        System.out.println(item.getClass().getSimpleName());
 
-        Staff staff = new Staff("001", "Ong Jia E", 'M', StaffPosition.INVENTORY_CLERK, "1234567890", "john.doe@example.com", LocalDate.now(), 50000, "71-k Lintang...");
+        Staff staff = new Staff("Ong Jia E", 'M', StaffPosition.INVENTORY_CLERK, "1234567890", "john.doe@example.com", LocalDate.now(), 50000, "71-k Lintang...");
         staff.writeToDb();
     }
 

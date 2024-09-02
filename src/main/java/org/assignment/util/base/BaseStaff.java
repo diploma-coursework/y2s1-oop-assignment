@@ -16,14 +16,14 @@ abstract public class BaseStaff {
 
     // constructors
     public BaseStaff() {
-        this(null, null, '\u0000', null, null, null, null, 0, null);
+        this(null, '\u0000', null, null, null, null, 0, null);
     }
 
-    public BaseStaff(String id, String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
+    public BaseStaff(String name, char gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
 
-        if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID cannot be null or empty.");
-        }
+//        if (id == null || id.isEmpty()) {
+//            throw new IllegalArgumentException("ID cannot be null or empty.");
+//        }
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
         }
@@ -43,7 +43,7 @@ abstract public class BaseStaff {
             throw new IllegalArgumentException("Address cannot be null or empty.");
         }
 
-        this.id = id;
+//        this.id = id;
         this.name = name;
         this.gender = gender;
         this.position = position;
@@ -90,9 +90,7 @@ abstract public class BaseStaff {
     }
 
     // getters
-    public String getId() {
-        return this.id;
-    }
+    public String getId() {return this.id;}
     public String getName() {
         return this.name;
     }
