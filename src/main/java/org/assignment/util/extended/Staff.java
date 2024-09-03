@@ -19,21 +19,13 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
     private StaffPosition position;
 
     public Staff(){
-        this(null, null, null, null, null, null, 0, null);
+        this(null, null, null, null, null, null, 0, null, null);
     }
 
-    public Staff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
-        super(name, gender, position, contactNumber, email, dateJoined, salary, address);
+    public Staff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password) {
+        super(name, gender, position, contactNumber, email, dateJoined, salary, address, password);
         // Optional: Validation during initialization
 
-        System.out.println("Name: " + name);
-        System.out.println("Gender: " + gender);
-        System.out.println("Position: " + position);
-        System.out.println("Contact Number: " + contactNumber);
-        System.out.println("Email: " + email);
-        System.out.println("Date Joined: " + dateJoined);
-        System.out.println("Salary: " + salary);
-        System.out.println("Address: " + address);
 
         if (!isValid()) {
             throw new IllegalArgumentException("Invalid staff details.");
@@ -74,6 +66,7 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
         staffData.put("dateJoined", getDateJoined().toString()); // LocalDate to string
         staffData.put("salary", getSalary());
         staffData.put("address", getAddress());
+        staffData.put("password". getPassword());
 
         return staffData;
     }

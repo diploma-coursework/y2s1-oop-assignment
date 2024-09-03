@@ -81,10 +81,22 @@ public class StaffMenu extends BaseMenu {
                 throw new IllegalArgumentException("Salary cannot be negative");
             }
 
+            System.out.print("Enter a password: ");
+            String password = scanner.nextLine();
+            if (password.length() < 5) {
+                throw new IllegalArgumentException("The password length must be 4 above!");
+            } else if(!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
+                throw new IllegalArgumentException("The password is too weak! Consider adding the following requirement: " +
+                        "At least one alphabetic character (A-Z or a-z).\n" +
+                        "At least one digit (0-9).\n" +
+                        "At least one special character from the set @$!%*#?&.\n" +
+                        "Minimum length of 8 characters.");
+            }
+
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
             // Create a Staff object
-            Staff newStaff = new Staff(name, gender, position, contactNumber, email, dateJoined, salary, address);
+            Staff newStaff = new Staff(name, gender, position, contactNumber, email, dateJoined, salary, address, password);
 
             // Validate staff object
             if (newStaff.isValid()) {
@@ -101,6 +113,7 @@ public class StaffMenu extends BaseMenu {
     }
 
     private void Login() {
+        System.out.print("Enter Id: ");
     }
 
     private void delete() {
