@@ -13,13 +13,14 @@ abstract public class BaseStaff {
     protected LocalDate dateJoined;
     protected int salary;
     protected String address;
+    protected String password;
 
     // constructors
     public BaseStaff() {
-        this(null, null, null, null, null, null, 0, null);
+        this(null, null, null, null, null, null, 0, null, null);
     }
 
-    public BaseStaff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address) {
+    public BaseStaff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password) {
 
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
@@ -40,6 +41,10 @@ abstract public class BaseStaff {
             throw new IllegalArgumentException("Address cannot be null or empty.");
         }
 
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty.");
+        }
+
 //        this.id = id;
         this.name = name;
         this.gender = gender;
@@ -49,6 +54,7 @@ abstract public class BaseStaff {
         this.dateJoined = dateJoined;
         this.salary = salary;
         this.address = address;
+        this.password = password;
     }
 
     // setters
@@ -86,6 +92,10 @@ abstract public class BaseStaff {
         this.address = address;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     // getters
     public String getId() {return this.id;}
     public String getName() {
@@ -112,6 +122,11 @@ abstract public class BaseStaff {
     public String getAddress() {
         return this.address;
     }
+    public String getPassword() {
+        return this.password;
+    }
+
+
 
     // REQUIRED operation to make sure the object have important data that represent them BEFORE storing into firestore
     public boolean isValid() {
@@ -120,7 +135,8 @@ abstract public class BaseStaff {
                 contactNumber != null && !contactNumber.isEmpty() &&
                 dateJoined != null &&
                 salary > 0 &&
-                address != null && !address.isEmpty();
+                address != null && !address.isEmpty() &&
+                password != null;
     }
 
     // make the class more functional and easier to work with
@@ -137,6 +153,6 @@ abstract public class BaseStaff {
 
     @Override
     public String toString() {
-        return String.format("Staff[id=%s, name=%s, gender=%c, position=%s, contactNumber=%s, email=%s, dateJoined=%s, salary=%d, address=%s]", id, name, gender, position, contactNumber, email, dateJoined, salary, address);
+        return String.format("Staff[id=%s, name=%s, gender=%c, position=%s, contactNumber=%s, email=%s, dateJoined=%s, salary=%d, address=%s, password=%s]", id, name, gender, position, contactNumber, email, dateJoined, salary, address, password);
     }
 }
