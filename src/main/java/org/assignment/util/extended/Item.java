@@ -39,7 +39,7 @@ public class Item extends BaseItem implements DbMethodsInterface {
     }
 
     public boolean secureInstance(Item item){
-        if(ItemMenu.cofirmSave(item)) {
+        if(ItemMenu.confirmSave(item)) {
             dbCreateNewItem(item.getName(), item.getUnitPrice(), item.getQuantity(), item.getItemCategory(), item.getSupplier());
             return true;
         }
