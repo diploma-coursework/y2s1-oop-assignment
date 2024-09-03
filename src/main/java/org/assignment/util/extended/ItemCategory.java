@@ -59,19 +59,23 @@ public class ItemCategory extends BaseItemCategory {
         Firestore db = FirebaseConnection.getDb();
         setId(DbMethods.dbCreateNewId("item","ITEM",4));
 
-        DbMethods.writeToDb(createMap(items), "itemCategory", getId());
+        List<DocumentReference> itemRefs = createArray(items);
+        Map<String, Object> itemInfo = new HashMap<>();
+        itemInfo.put("items", itemRefs);
+
+        DbMethods.writeToDb(itemInfo, "itemCategory", getId());
     }
 
-    public Map<String, Object> createMap(List<Item> items) {
+    public List<DocumentReference> createArray(List<Item> items) {
         Firestore db = FirebaseConnection.getDb();
-        Map<String, Object> itemInfo = new HashMap<>();
+        List<DocumentReference> itemRefs = new ArrayList<>();
 
         for (Item item : items) {
             DocumentReference docRef = db.collection("item").document(item.getId());
-            itemInfo.put(item.getId(), docRef);
+            itemRefs.add(docRef);
         }
 
-        return itemInfo;
+        return itemRefs;
     }
 
     // Modify

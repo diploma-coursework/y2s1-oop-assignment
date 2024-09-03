@@ -11,6 +11,7 @@ import org.assignment.util.extended.ItemCategory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DbMethods {
@@ -24,7 +25,7 @@ public class DbMethods {
 
             System.out.println(result.getUpdateTime());
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
