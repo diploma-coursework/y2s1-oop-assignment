@@ -38,7 +38,7 @@ public class ItemCategory extends BaseItemCategory {
     //-----
 
     public boolean secureInstance(ItemCategory itemCategory){
-        if(ItemCategoryMenu.cofirmSave(itemCategory)) {
+        if(ItemCategoryMenu.confirmSave(itemCategory)) {
             dbCreateNewCategory(itemCategory.getItems());
             return true;
         }
