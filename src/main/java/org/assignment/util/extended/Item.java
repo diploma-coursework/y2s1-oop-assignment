@@ -54,8 +54,8 @@ public class Item extends BaseItem implements DbMethodsInterface {
     public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
         Firestore db = FirebaseConnection.getDb();
         setId(DbMethods.dbCreateNewId("item","ITEM",4));
-        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(itemCategory.getId());
-        DocumentReference supplierRef = db.collection("Suppliers").document(supplier.getId());
+        DocumentReference itemCategoryRef = db.collection("itemCategories").document(itemCategory.getId());
+        DocumentReference supplierRef = db.collection("suppliers").document(supplier.getId());
 
         DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategoryRef, supplierRef), "item", getId());
     }

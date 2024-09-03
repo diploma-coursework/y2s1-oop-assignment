@@ -46,7 +46,7 @@ public class ItemMenu extends BaseMenu {
         System.exit(0);
     }
 
-    public static boolean cofirmSave(Item item){
+    public static boolean confirmSave(Item item){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter 1 to confirm...");
         if(scanner.nextInt()==1){

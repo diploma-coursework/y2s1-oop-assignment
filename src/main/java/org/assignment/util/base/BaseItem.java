@@ -31,7 +31,7 @@ abstract public class BaseItem {
     }
 
     // getters
-    protected String getId() {
+    public String getId() {
         return this.id;
     }
     protected String getName() {
