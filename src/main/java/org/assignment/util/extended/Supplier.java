@@ -3,6 +3,7 @@ package org.assignment.util.extended;
 import org.assignment.util.base.BaseSupplier;
 
 public class Supplier extends BaseSupplier {
+    // Shift letters and big/small + shift numbers to encrypt/decrypt
     public String encryptData (String data) {
         StringBuilder encrypted = new StringBuilder();
 
