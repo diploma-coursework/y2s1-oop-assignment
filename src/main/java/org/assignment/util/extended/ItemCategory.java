@@ -1,12 +1,18 @@
 package org.assignment.util.extended;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseItemCategory;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+
+import static org.assignment.util.Utility.DbMethods.db;
 
 public class ItemCategory extends BaseItemCategory {
     private List<Item> items;
@@ -22,7 +28,11 @@ public class ItemCategory extends BaseItemCategory {
 
     // Getter
     public List<Item> getItems() {
-        return Collections.unmodifiableList(this.items);
+        return this.items;
+    }
+
+    public int getSize(){
+        return getItems().size();
     }
 
     // Setter
@@ -36,42 +46,32 @@ public class ItemCategory extends BaseItemCategory {
     }
 
     //-----
-
     public boolean secureInstance(ItemCategory itemCategory){
         if(ItemCategoryMenu.confirmSave(itemCategory)) {
-            dbCreateNewCategory(itemCategory.getItems());
+            dbCreateNewCategory();
             return true;
         }
         return false;
     }
 
-    public void dbCreateNewCategory(){
-        try {
-            dbCreateNewCategory(null);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
     // create New Item
-    public void dbCreateNewCategory(List<Item> items){
-        Firestore db = FirebaseConnection.getDb();
-        setId(DbMethods.dbCreateNewId("item","ITEM",4));
+    public void dbCreateNewCategory(){
+        setId(DbMethods.dbCreateNewId("ItemCategory","CAT",4));
 
-        List<DocumentReference> itemRefs = createArray(items);
+        List<DocumentReference> itemRefs = createArray(getItems());
         Map<String, Object> itemInfo = new HashMap<>();
-        itemInfo.put("items", itemRefs);
+        itemInfo.put("name",getId());
+        itemInfo.put("description",getDescription());
+        itemInfo.put("Items", itemRefs);
 
-        DbMethods.writeToDb(itemInfo, "itemCategory", getId());
+        DbMethods.writeToDb(itemInfo, "ItemCategory", getId());
     }
 
     public List<DocumentReference> createArray(List<Item> items) {
-        Firestore db = FirebaseConnection.getDb();
         List<DocumentReference> itemRefs = new ArrayList<>();
 
         for (Item item : items) {
-            DocumentReference docRef = db.collection("item").document(item.getId());
+            DocumentReference docRef = db.collection("Item").document(item.getId());
             itemRefs.add(docRef);
         }
 
@@ -79,18 +79,54 @@ public class ItemCategory extends BaseItemCategory {
     }
 
     // Modify
-    // need change
-    public <T> void editInDb(String id, int choice, T newValue){
-        DbMethods.editInDb(id, "itemCategory", choice, newValue);
+    public <T> void modifyInDb(String id, int choice, int index, T newValue) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = db.collection("yourCollection").document(id);
+        String field = editChoice(choice, DbMethods.deserialized(id, ItemCategory.class));
+
+        if (choice >= 3 && choice <= Objects.requireNonNull(DbMethods.deserialized(id, ItemCategory.class)).getSize() + 2) {
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot document = future.get();
+
+            // Retrieve the array field
+            List<DocumentReference> items = (List<DocumentReference>) document.get("Item");
+
+            if (index >= 0 && index < Objects.requireNonNull(items).size()) {
+                items.set(index, (DocumentReference) newValue); // Update the specific index with DocumentReference
+
+                // Prepare the update map
+                Map<String, Object> updateMap = new HashMap<>();
+                updateMap.put("Item", items);
+
+                // Update the document with the modified array
+                DbMethods.modifyInDb(id, "ItemCategory", "Item", updateMap);
+                return; // Exit after successful update
+            } else {
+                System.err.println("Index out of bounds");
+            }
+        }
+
+        // Handle non-array updates
+        DbMethods.modifyInDb(id, "ItemCategory", field, newValue);
     }
 
     // Delete
     public void deleteInDb(String id){
-        DbMethods.deleteInDb(id, "itemCategory");
+        DbMethods.deleteInDb(id, "ItemCategory");
     }
 
     // View
     public void viewInDb(String id){
-        DbMethods.viewInDb(id,"itemCategory");
+        DbMethods.viewInDb(id,"ItemCategory");
     }
+
+    public static String editChoice(int choice,ItemCategory itemCategory) {
+        if (choice >= 1 && choice <=2){
+            return "name";
+        }
+        else if (choice >= 3 && choice <= itemCategory.getSize() + 2) {
+            return "Item";
+        }
+        return null;
+    }
+
 }

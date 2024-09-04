@@ -2,7 +2,6 @@ package org.assignment.util.extended;
 
 import com.google.cloud.firestore.DocumentReference;
 import org.assignment.util.Utility.DbMethods;
-import org.assignment.util.Utility.DbMethodsInterface;
 import org.assignment.util.base.BaseItem;
 
 // IDK if needed
@@ -14,7 +13,9 @@ import org.assignment.util.FirebaseConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item extends BaseItem implements DbMethodsInterface {
+import static org.assignment.util.Utility.DbMethods.db;
+
+public class Item extends BaseItem {
     private ItemCategory itemCategory;
     private Supplier supplier;
 
@@ -40,55 +41,49 @@ public class Item extends BaseItem implements DbMethodsInterface {
 
     public boolean secureInstance(Item item){
         if(ItemMenu.confirmSave(item)) {
-            dbCreateNewItem(item.getName(), item.getUnitPrice(), item.getQuantity(), item.getItemCategory(), item.getSupplier());
+            dbCreateNewItem();
             return true;
         }
         return false;
     }
 
-    public void dbCreateNewItem(){
-        dbCreateNewItem("Example",0.0,0,null,null);
-    }
-
     // create New Item
-    public void dbCreateNewItem(String name, double unitPrice,int quantity, ItemCategory itemCategory, Supplier supplier){
-        Firestore db = FirebaseConnection.getDb();
-        setId(DbMethods.dbCreateNewId("item","ITEM",4));
-        DocumentReference itemCategoryRef = db.collection("itemCategories").document(itemCategory.getId());
-        DocumentReference supplierRef = db.collection("suppliers").document(supplier.getId());
-
-        DbMethods.writeToDb(createMap(name, unitPrice, quantity, itemCategoryRef, supplierRef), "item", getId());
+    public void dbCreateNewItem(){
+        setId(DbMethods.dbCreateNewId("Item","ITEM",4));
+        DbMethods.writeToDb(createMap(), "Item", getId());
     }
 
-    public Map<String, Object> createMap(String name, double unitPrice, int quantity, DocumentReference itemCategory, DocumentReference supplier) {
-        Map<String, Object> itemInfo = new HashMap<>();
+    public Map<String, Object> createMap() {
+        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(getItemCategory().getId());
+        DocumentReference supplierRef = db.collection("Suppliers").document(getSupplier().getId());
 
-        itemInfo.put("name", name);
-        itemInfo.put("unitPrice", unitPrice);
-        itemInfo.put("quantity", quantity);
-        itemInfo.put("itemCategory", itemCategory);
-        itemInfo.put("supplier", supplier);
+        Map<String, Object> itemInfo = new HashMap<>();
+        itemInfo.put("name", getName());
+        itemInfo.put("unitPrice", getUnitPrice());
+        itemInfo.put("quantity", getQuantity());
+        itemInfo.put("ItemCategory", itemCategoryRef);
+        itemInfo.put("Supplier", supplierRef);
 
         return itemInfo;
     }
 
     // Modify
-    public <T> void editInDb(String id, int choice, T newValue){
-        DbMethods.editInDb(id, "item", choice, newValue);
+    public <T> void modifyInDb(String id, int choice, T newValue){
+        DbMethods.modifyInDb(id,"Item",editChoice(choice),newValue);
     }
 
     // Delete
     public void deleteInDb(String id){
-        DbMethods.deleteInDb(id, "item");
+        DbMethods.deleteInDb(id, "Item");
     }
 
     // View
     public void viewInDb(String id){
-        DbMethods.viewInDb(id,"item");
+        DbMethods.viewInDb(id,"Item");
     }
 
     // Will be used in DbMethods;
-    public static String Choice(int choice) {
+    public String editChoice(int choice) {
         switch (choice) {
             case 1:
                 return "name";

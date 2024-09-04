@@ -11,99 +11,74 @@ import org.assignment.util.extended.ItemCategory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DbMethods {
+    public static Firestore db = FirebaseConnection.getDb();
+
+    // Deserialize
+    public static <T>T deserialized(String id,Class<T> tClass) {
+
+        ApiFuture<DocumentSnapshot> future = db.collection(tClass.getSimpleName()).document(id).get();
+        try {
+            DocumentSnapshot document = future.get();
+            if (document.exists()) {
+                return document.toObject(tClass);
+            } else {
+                System.err.println("No such document!");
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting document: " + e.getMessage());
+            return null;
+        }
+    }
 
     // Write
     public static void writeToDb(Map<String, Object> itemInfo , String collection, String id){
-        Firestore db = FirebaseConnection.getDb();
-        try {
-            ApiFuture<WriteResult> future = db.collection(collection).document(id).set(itemInfo);
-            WriteResult result = future.get();
-
-            System.out.println(result.getUpdateTime());
-        } catch (Exception e) {
-//            e.printStackTrace();
-        }
+        ApiFuture<WriteResult> future = db.collection(collection).document(id).set(itemInfo);
+        dbVerification("created",future);
     }
 
     // find Class, Choice method, fieldName, Modify
-    public static <T> void editInDb( String id, String collection, int choice, T newValue) {
-        String callingClassName = new Throwable().getStackTrace()[1].getClassName();
-
-        Class<?> callingClass;
-        try {
-            callingClass = Class.forName(callingClassName);
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class not found: " + e.getMessage());
-            return;
-        }
-
-        if (!DbMethodsInterface.class.isAssignableFrom(callingClass)) {
-            System.err.println(callingClass.getSimpleName() + "did not implement DbMethodsInterface");
-            return;
-        }
-
-        String fieldName = null;
-        try {
-            Method choiceMethod = callingClass.getMethod("Choice", int.class);
-            fieldName = (String) choiceMethod.invoke(null, choice);
-
-        } catch (NoSuchMethodException e) {
-            System.err.println("Choice method not found: " + e.getMessage());
-        } catch (InvocationTargetException e) {
-            System.err.println("Error invoking Choice method: " + e.getMessage());
-        } catch (IllegalAccessException e) {
-            System.err.println("Illegal access to Choice method: " + e.getMessage());
-        }
-
-        if (fieldName == null) {
+    public static <T> void modifyInDb(String id, String collection, String field, T newValue) {
+        DocumentReference docRef = db.collection(collection).document(id);
+        if (field == null) {
             System.err.println("Invalid choice");
             return;
         }
-
+        // need add try catch statement
         Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put(fieldName, newValue);
+        updateMap.put(field, newValue);
 
-        modifyInDb(updateMap, id, collection);
+        ApiFuture<WriteResult> future = docRef.update(updateMap);
+        dbVerification("modified",future);
     }
 
-    // Modify method
-    public static void modifyInDb(Map<String, Object> itemInfo, String id, String collection) {
-        Firestore db = FirebaseConnection.getDb();
-
+    public static <T> void modifyInDb(String id, String collection, String field,int index, T newValue) {
         DocumentReference docRef = db.collection(collection).document(id);
-        ApiFuture<WriteResult> future = docRef.update(itemInfo);
-
-        try {
-            WriteResult result = future.get();
-            System.out.println("Document successfully updated at: " + result.getUpdateTime());
-        } catch (Exception e) {
-            System.err.println("Error updating document: " + e.getMessage());
+        if (field == null) {
+            System.err.println("Invalid choice");
+            return;
         }
+        // need add try catch statement
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put(field, newValue);
+
+        ApiFuture<WriteResult> future = docRef.update(updateMap);
+        dbVerification("modified",future);
     }
 
     // Delete
     public static void deleteInDb(String id, String collection) {
-        Firestore db = FirebaseConnection.getDb();
-
         DocumentReference docRef = db.collection(collection).document(id);
         ApiFuture<WriteResult> future = docRef.delete();
 
-        try {
-            WriteResult result = future.get();
-            System.out.println("Document successfully deleted at: " + result.getUpdateTime());
-        } catch (Exception e) {
-            System.err.println("Error deleting document: " + e.getMessage());
-        }
+        dbVerification("deleted",future);
     }
 
     // View
     public static void viewInDb(String id, String collection) {
-        Firestore db = FirebaseConnection.getDb();
-
         DocumentReference docRef = db.collection(collection).document(id);
         ApiFuture<DocumentSnapshot> future = docRef.get();
 
@@ -122,16 +97,10 @@ public class DbMethods {
     }
 
     // getters
-    public static <T> String generateOrRetrieveCategoryId(T itemCategory) {
-        // Implement logic to generate or retrieve an ID for the ItemCategory
-        return "newCategoryId"; // Replace with actual ID generation logic
-    }
 
 
     // No. of Item
     private static int dbGetIdCount(String collection){
-        Firestore db = FirebaseConnection.getDb();
-
         try {
             // Retrieve the document snapshot
             ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
@@ -156,8 +125,6 @@ public class DbMethods {
 
     // No. of item +1
     private static void dbIncrementCount(String collection) {
-        Firestore db = FirebaseConnection.getDb();
-
         try {
             // Retrieve the document snapshot
             ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
@@ -189,6 +156,7 @@ public class DbMethods {
 
     // create Item ID
     public static String dbCreateNewId(String collection, String idFormat, int idSize){
+        // improve with StringBuilder
         String idFormatSize = "%0" + idSize + "d";
         if(dbGetIdCount(collection) != -1){
             dbIncrementCount(collection);
@@ -196,6 +164,16 @@ public class DbMethods {
         }
         else{
             return "ERROR";
+        }
+    }
+
+    public static void dbVerification(String action, ApiFuture<WriteResult> future){
+        try {
+            WriteResult result = future.get();
+            System.out.println("Document successfully " + action  + " at: " + result.getUpdateTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error " + action  + " document: " + e.getMessage());
         }
     }
 }

@@ -1,9 +1,5 @@
 package org.assignment.util.extended;
 
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import org.assignment.util.FirebaseConnection;
-import org.assignment.util.Utility.DbMethodsInterface;
 import org.assignment.util.base.BaseStaff;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.enums.AccessLevel;
@@ -14,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Staff extends BaseStaff implements DbMethodsInterface {
+public class Staff extends BaseStaff {
 
     private StaffPosition position;
 
@@ -66,8 +62,7 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
         staffData.put("dateJoined", getDateJoined().toString()); // LocalDate to string
         staffData.put("salary", getSalary());
         staffData.put("address", getAddress());
-        staffData.put("password". getPassword());
-
+        staffData.put("password", getPassword());
         return staffData;
     }
 
@@ -91,18 +86,18 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
     // Write staff data to Firestore
     public void writeToDb() {
         try {
-            setId(DbMethods.dbCreateNewId("staff", "STF", 4));
+            setId(DbMethods.dbCreateNewId("Staff", "STF", 4));
             Map<String, Object> staffData = this.toFirestoreMap();
-            DbMethods.writeToDb(staffData, "staff", getId());
+            DbMethods.writeToDb(staffData, "Staff", getId());
         } catch (Exception e) {
             System.err.println("Error writing staff data to database: " + e.getMessage());
         }
     }
 
     // Modify staff data in Firestore
-    public void modifyInDb(Map<String, Object> itemInfo) {
+    public <T>void modifyInDb(String id, int choice, T newValue) {
         try {
-            DbMethods.modifyInDb(itemInfo, getId(), "staff");
+            DbMethods.modifyInDb(getId(), "Staff",editChoice(choice), newValue);
         } catch (Exception e) {
             System.err.println("Error modifying staff data in database: " + e.getMessage());
         }
@@ -111,7 +106,7 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
     // Delete staff data from Firestore
     public static void deleteInDb(String id) {
         try {
-            DbMethods.deleteInDb(id, "staff");
+            DbMethods.deleteInDb(id, "Staff");
         } catch (Exception e) {
             System.err.println("Error deleting staff data from database: " + e.getMessage());
         }
@@ -120,9 +115,21 @@ public class Staff extends BaseStaff implements DbMethodsInterface {
     // View staff data from Firestore
     public static void viewInDb(String id) {
         try {
-            DbMethods.viewInDb(id, "staff");
+            DbMethods.viewInDb(id, "Staff");
         } catch (Exception e) {
             System.err.println("Error viewing staff data from database: " + e.getMessage());
+        }
+    }
+
+    public String editChoice(int choice) {
+        switch (choice) {
+            case 1:
+                return "name";
+            case 2:
+                return "gender";
+            // continue onwards
+            default:
+                return null;
         }
     }
 }
