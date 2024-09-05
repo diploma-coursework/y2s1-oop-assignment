@@ -71,6 +71,9 @@ abstract public class BaseStaff {
         this.position = position;
     }
     public void setContactNumber(String contactNumber) {
+        if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)[1]-*[0-9]{8}$")) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
         this.contactNumber = contactNumber;
     }
     public void setEmail(String email) {
@@ -92,11 +95,16 @@ abstract public class BaseStaff {
         this.address = address;
     }
     public void setPassword(String password) {
+        if(!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
+            throw new IllegalArgumentException("The password is too weak!");
+        }
         this.password = password;
     }
 
     // getters
-    public String getId() {return this.id;}
+    public String getId() {
+        return this.id;
+    }
     public String getName() {
         return this.name;
     }

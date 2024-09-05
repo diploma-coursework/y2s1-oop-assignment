@@ -47,7 +47,6 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Gender (M/F): ");
             char genderInput = scanner.next().toUpperCase().charAt(0);
-
             // Validate and map gender input to a string
             String gender;
             if (genderInput == 'M') {
@@ -63,6 +62,9 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Contact Number: ");
             String contactNumber = scanner.next();
+            if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)[1]-*[0-9]{8}$")) {
+                throw new IllegalArgumentException("Invalid email format");
+            }
 
             System.out.print("Enter Email: ");
             String email = scanner.next();
