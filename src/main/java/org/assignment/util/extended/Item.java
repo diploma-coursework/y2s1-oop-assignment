@@ -16,8 +16,8 @@ import java.util.Map;
 import static org.assignment.util.Utility.DbMethods.db;
 
 public class Item extends BaseItem {
-    private ItemCategory itemCategory;
-    private Supplier supplier;
+    private ItemCategory ItemCategory;
+    private Supplier Supplier;
 
 
     public Item(){
@@ -26,17 +26,37 @@ public class Item extends BaseItem {
 
     public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
         super(name, unitPrice, quantity); // Call the superclass constructor
-        this.itemCategory = itemCategory;
-        this.supplier = supplier;
+        this.ItemCategory = itemCategory;
+        this.Supplier = supplier;
     }
 
     // getters and setters
     public ItemCategory getItemCategory(){
-        return this.itemCategory;
+        return this.ItemCategory;
     }
 
     public Supplier getSupplier(){
-        return this.supplier;
+        return this.Supplier;
+    }
+
+    public void setItemCategory(ItemCategory itemCategory){
+        this.ItemCategory=itemCategory;
+    }
+
+    public void setSupplier(Supplier supplier){
+        this.Supplier=supplier;
+    }
+
+    // setters
+    @Override
+    protected void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    // getters
+    @Override
+    protected double getUnitPrice() {
+        return this.unitPrice;
     }
 
     public boolean secureInstance(Item item){
@@ -55,6 +75,7 @@ public class Item extends BaseItem {
 
     public Map<String, Object> createMap() {
         DocumentReference itemCategoryRef = db.collection("ItemCategories").document(getItemCategory().getId());
+        System.out.println("MAP issue");
         DocumentReference supplierRef = db.collection("Suppliers").document(getSupplier().getId());
 
         Map<String, Object> itemInfo = new HashMap<>();

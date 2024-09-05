@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.extended.*;
 import org.assignment.util.enums.*;
 
@@ -19,5 +20,11 @@ public class Main {
 //        item.dbCreateNewItem();
 //        item.editInDb("ITEM0004",1,"Chair");
 //        System.out.println(item.getClass().getSimpleName());
+
+        Item item = DbMethods.deserialized("ITEM0000", Item.class);
+        System.out.println("Made it here");
+        ItemCategory itemCategory = new ItemCategory("Test", "test", item);  // Pass the item directly
+        itemCategory.dbCreateNewCategory();
     }
+
 }

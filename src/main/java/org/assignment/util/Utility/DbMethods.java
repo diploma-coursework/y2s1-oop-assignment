@@ -6,23 +6,33 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import org.assignment.util.FirebaseConnection;
+import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
+import org.assignment.util.extended.Supplier;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class DbMethods {
     public static Firestore db = FirebaseConnection.getDb();
 
-    // Deserialize
-    public static <T>T deserialized(String id,Class<T> tClass) {
+
+    // Original Deserialize
+    public static <T>T deserializeds(String id,Class<T> tClass) {
 
         ApiFuture<DocumentSnapshot> future = db.collection(tClass.getSimpleName()).document(id).get();
         try {
+            System.out.println("Fetching document with ID: " + id + " from collection: " + tClass.getSimpleName());
             DocumentSnapshot document = future.get();
             if (document.exists()) {
+                System.out.println("Document exists, attempting to deserialize into class: " + tClass.getSimpleName());
                 return document.toObject(tClass);
             } else {
                 System.err.println("No such document!");
@@ -33,6 +43,115 @@ public class DbMethods {
             return null;
         }
     }
+
+    // TODO: Fix deserialized
+
+    public static <T> T deserialized(String id, Class<T> tClass) {
+        ApiFuture<DocumentSnapshot> future = db.collection(tClass.getSimpleName()).document(id).get();
+        try {
+            DocumentSnapshot document = future.get();
+            if (document.exists()) {
+//                T obj = document.toObject(tClass);
+                System.out.println("Issue Here?");
+                resolveReferences(document, tClass); // TODO: Dynamically resolve DocumentReferences
+                return document.toObject(tClass);
+            } else {
+                System.err.println("No such document!");
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting document: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static<T> void resolveReferences(DocumentSnapshot document, T tClass) throws ExecutionException, InterruptedException, ClassNotFoundException {
+        // tClass.getClass().getDeclaredFields()
+
+        if (document.exists()) {
+            // Get all fields as a Map
+            Map<String, Object> fields = document.getData();
+
+            // Iterate over the Map entries
+            assert fields != null;
+            for (Map.Entry<String, Object> entry : fields.entrySet()) {
+                String field = entry.getKey();
+                Object fieldValue = entry.getValue();
+
+                // Print field name and value
+                System.out.println("Field name: " + field);
+                System.out.println("Field value: " + fieldValue);
+
+                // Optionally handle different types of values
+                if (fieldValue instanceof DocumentReference) {
+                    System.out.println("Have Doc Ref");
+                    Class<?> clazz = Class.forName(field); // TODO: trying to mask fieldValue with a class of name of the field
+//                    Item hello = (clazz.getClass()) fieldValue;
+//                    clazz docRef = (clazz) document.get(field);
+//
+//                    if (docRef != null) {
+//                        Object resolvedObject = resolveReference(docRef, field.getType());
+//                        field.set(tClass, resolvedObject); // Set the resolved object
+//                    }
+                }
+                else{
+                    System.out.println("Shitter");
+                }
+            }
+        } else {
+            System.out.println("No such document!");
+        }
+
+//        for (Field field : document.getData()) {
+//            field.setAccessible(true); // Allow access to private fields
+//
+//            try {
+//                Object fieldValue = field.get(tClass); // Get the current field's value
+//
+//                // Check if the field is a DocumentReference
+//                if (fieldValue instanceof DocumentReference) {
+//                    System.out.println("Have Doc Ref");
+//                    DocumentReference docRef = (DocumentReference) document.get(field.getName());
+//                    if (docRef != null) {
+//                        Object resolvedObject = resolveReference(docRef, field.getType());
+//                        field.set(tClass, resolvedObject); // Set the resolved object
+//                    }
+//                }
+//
+//                // Check if the field is a collection of DocumentReferences (List, etc.)
+//                if (fieldValue instanceof List) {
+//                    List<DocumentReference> docRefs = (List<DocumentReference>) document.get(field.getName());
+//                    if (docRefs != null) {
+//                        List<Object> resolvedObjects = new ArrayList<>();
+//                        for (DocumentReference docRef : docRefs) {
+//                            Object resolvedObject = resolveReference(docRef, getListType(field));
+//                            resolvedObjects.add(resolvedObject);
+//                        }
+//                        field.set(tClass, resolvedObjects); // Set the resolved list of objects
+//                    }
+//                }
+//            } catch (IllegalAccessException e) {
+//                System.err.println("Error accessing field: " + e.getMessage());
+//            }
+//        }
+    }
+
+    public static <T> T resolveReference(DocumentReference docRef, Class<T> tClass) throws ExecutionException, InterruptedException {
+        if (docRef != null) {
+            DocumentSnapshot snapshot = docRef.get().get();
+            if (snapshot.exists()) {
+                return snapshot.toObject(tClass);
+            }
+        }
+        return null;
+    }
+
+    private static Class<?> getListType(Field field) {
+        ParameterizedType listType = (ParameterizedType) field.getGenericType();
+        return (Class<?>) listType.getActualTypeArguments()[0];
+    }
+
+    // ---------------
 
     // Write
     public static void writeToDb(Map<String, Object> itemInfo , String collection, String id){

@@ -23,6 +23,7 @@ public class ItemCategory extends BaseItemCategory {
 
     public ItemCategory(String name, String description, Item... items) {
         super(name, description);
+        System.out.println("Reach 1");
         this.items = new ArrayList<>(Arrays.asList(items));
     }
 
@@ -62,7 +63,7 @@ public class ItemCategory extends BaseItemCategory {
         Map<String, Object> itemInfo = new HashMap<>();
         itemInfo.put("name",getId());
         itemInfo.put("description",getDescription());
-        itemInfo.put("Items", itemRefs);
+        itemInfo.put("Item", itemRefs);
 
         DbMethods.writeToDb(itemInfo, "ItemCategory", getId());
     }
@@ -73,6 +74,13 @@ public class ItemCategory extends BaseItemCategory {
         for (Item item : items) {
             DocumentReference docRef = db.collection("Item").document(item.getId());
             itemRefs.add(docRef);
+
+            if (item.getId() != null && !item.getId().isEmpty()) {
+                itemRefs.add(db.collection("Item").document(item.getId()));
+            } else {
+                System.out.println("Item ID is null");
+                throw new IllegalArgumentException("Item ID is null or empty.");
+            }
         }
 
         return itemRefs;
