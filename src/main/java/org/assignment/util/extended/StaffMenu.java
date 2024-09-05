@@ -6,11 +6,13 @@ import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseStaff;
 import org.assignment.util.enums.AccessLevel;
 import org.assignment.util.extended.Staff;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.time.LocalDate;
+
 
 public class StaffMenu extends BaseMenu {
 
@@ -62,12 +64,14 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Contact Number: ");
             String contactNumber = scanner.next();
+
             if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)[1]-*[0-9]{8}$")) {
                 throw new IllegalArgumentException("Invalid email format");
             }
 
             System.out.print("Enter Email: ");
             String email = scanner.next();
+
             if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                 throw new IllegalArgumentException("Invalid email format");
             }
@@ -79,21 +83,25 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Salary: ");
             int salary = scanner.nextInt();
+
             if (salary < 0) {
                 throw new IllegalArgumentException("Salary cannot be negative");
             }
 
             System.out.print("Enter a password: ");
-            String password = scanner.nextLine();
-            if (password.length() < 5) {
+            String inputPassword = scanner.nextLine();
+
+            if (inputPassword.length() < 5) {
                 throw new IllegalArgumentException("The password length must be 4 above!");
-            } else if(!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
+            } else if(!inputPassword.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
                 throw new IllegalArgumentException("The password is too weak! Consider adding the following requirement: " +
                         "At least one alphabetic character (A-Z or a-z).\n" +
                         "At least one digit (0-9).\n" +
                         "At least one special character from the set @$!%*#?&.\n" +
                         "Minimum length of 8 characters.");
             }
+            String password = BCrypt.hashpw(inputPassword, BCrypt.gensalt());
+
 
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 

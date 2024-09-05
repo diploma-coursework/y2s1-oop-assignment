@@ -16,7 +16,6 @@
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
-
         <dependency>
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
@@ -30,5 +29,13 @@
             <version>2.0.15</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- https://www.mindrot.org/projects/jBCrypt/ -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 </project>

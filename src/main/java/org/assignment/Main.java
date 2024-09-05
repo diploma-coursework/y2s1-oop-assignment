@@ -19,7 +19,5 @@ public class Main {
 //        item.dbCreateNewItem();
 //        item.editInDb("ITEM0004",1,"Chair");
 //        System.out.println(item.getClass().getSimpleName());
-
     }
-
 }
