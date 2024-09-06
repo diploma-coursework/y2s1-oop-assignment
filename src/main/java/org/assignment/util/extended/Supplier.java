@@ -56,7 +56,23 @@ public class Supplier extends BaseSupplier {
         }
     }
 
+    // Search
+    public ArrayList<Supplier> searchSupplier (String keyword) {
+        ArrayList<Supplier> result = new ArrayList<>();
 
+        // Get database info idk (next line will be changed)
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        for (Supplier supplier : suppliers) {
+            String name = supplier.getName();
+            String id = supplier.getId();
+            if (name.contains(keyword))
+                result.add(supplier);
+            else if (id.contains(keyword));
+                result.add(supplier);
+         }
+
+        return result;
+    }
 
 
 
