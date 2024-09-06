@@ -15,17 +15,25 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        Item item = new Item();
-        item.dbCreateNewItem();
-        System.out.println(item);
-//        item.modifyInDb("ITEM0004",1,"Chair");
-        System.out.println(item.getClass().getSimpleName());
-
-//        Item item = DbMethods.deserialized("ITEM0000", Item.class);
-//        System.out.println("Made it here");
-//        ItemCategory itemCategory = new ItemCategory("Test", "test", item);  // Pass the item directly
+//        Supplier supplier = new Supplier("Sup","Place","ContactNo.","Joel@email");
+//        ItemCategory itemCategory = new ItemCategory("Cat","Category");
 //        itemCategory.dbCreateNewCategory();
+//        supplier.dbCreateNewSupplier();
+//
+//        Item item = new Item("Test", 2.00, 2, itemCategory, supplier);
+//        item.dbCreateNewItem();
+//        System.out.println(item);
+//        Item.modifyInDb("ITEM0001",1,"Chair");
+//        System.out.println(item.getClass().getSimpleName());
+
+        Item item = DbMethods.deserialized("ITEM0001", Item.class);
+        System.out.println("Made it here");
+        ItemCategory itemCategory = new ItemCategory("Test", "test", item);
+        System.out.println("Item is "+ item);
+        itemCategory.addItem(item);
+        itemCategory.dbCreateNewCategory();
+
+        // TODO: item-> deserialized, enter ItemCategory as respective class, serialized into documentReference in db
     }
 
 }

@@ -11,11 +11,10 @@ abstract public class BaseSupplier {
     protected ArrayList<BaseItem> items;
 
     public BaseSupplier() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
 
-    public BaseSupplier(String id, String name, String address, String contactNumber, String email) {
-        this.id = id;
+    public BaseSupplier(String name, String address, String contactNumber, String email) {
         this.name= name;
         this.address = address;
         this.contactNumber = contactNumber;

@@ -23,6 +23,11 @@ public class Item extends BaseItem {
     public Item(){
         this(null,0.0,0,null,null);
     }
+    public Item(String name, double unitPrice, int quantity, Supplier supplier) {
+        super(name, unitPrice, quantity); // Call the superclass constructor
+        // testing without itemCategory
+        this.Supplier = supplier;
+    }
 
     public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
         super(name, unitPrice, quantity); // Call the superclass constructor
@@ -47,6 +52,20 @@ public class Item extends BaseItem {
         this.Supplier=supplier;
     }
 
+    @Override
+    public double getUnitPrice() {
+        // Custom behavior: log access or modify the return value
+        System.out.println("Accessing unitPrice in Item class");
+        return super.getUnitPrice();
+    }
+
+    @Override
+    public void setUnitPrice(double unitPrice) {
+        // Custom behavior: add validation or modify input
+        System.out.println("Setting unitPrice in Item class");
+        super.setUnitPrice(unitPrice);
+    }
+
     // setters
 //    @Override
 //    protected void setUnitPrice(double unitPrice) {
@@ -69,14 +88,16 @@ public class Item extends BaseItem {
 
     // create New Item
     public void dbCreateNewItem(){
-        setId(DbMethods.dbCreateNewId("Item","ITEM",4));
+        this.setId(DbMethods.dbCreateNewId("Item","ITEM",4));
+        System.out.println("set id?");
+        System.out.println(getId());
         DbMethods.writeToDb(createMap(), "Item", getId());
     }
 
     public Map<String, Object> createMap() {
-        DocumentReference itemCategoryRef = db.collection("ItemCategories").document(getItemCategory().getId());
+        DocumentReference itemCategoryRef = db.collection("ItemCategory").document(getItemCategory().getId());
         System.out.println("MAP issue");
-        DocumentReference supplierRef = db.collection("Suppliers").document(getSupplier().getId());
+        DocumentReference supplierRef = db.collection("Supplier").document(getSupplier().getId());
 
         Map<String, Object> itemInfo = new HashMap<>();
         itemInfo.put("name", getName());
@@ -89,7 +110,7 @@ public class Item extends BaseItem {
     }
 
     // Modify
-    public <T> void modifyInDb(String id, int choice, T newValue){
+    public static <T> void modifyInDb(String id, int choice, T newValue){
         DbMethods.modifyInDb(id,"Item",editChoice(choice),newValue);
     }
 
@@ -104,7 +125,7 @@ public class Item extends BaseItem {
     }
 
     // Will be used in DbMethods;
-    public String editChoice(int choice) {
+    public static String editChoice(int choice) {
         switch (choice) {
             case 1:
                 return "name";
@@ -113,9 +134,9 @@ public class Item extends BaseItem {
             case 3:
                 return "quantity";
             case 4:
-                return "itemCategory";
+                return "ItemCategory";
             case 5:
-                return "supplier";
+                return "Supplier";
             default:
                 return null;
         }

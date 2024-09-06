@@ -39,7 +39,7 @@ public class DbMethods {
                 return null;
             }
         } catch (Exception e) {
-            System.err.println("Error getting document: " + e.getMessage());
+            System.err.println("1) Error getting document: " + e.getMessage());
             return null;
         }
     }
@@ -50,6 +50,7 @@ public class DbMethods {
         ApiFuture<DocumentSnapshot> future = db.collection(tClass.getSimpleName()).document(id).get();
         try {
             DocumentSnapshot document = future.get();
+            System.out.println("Doc = " + document);
             if (document.exists()) {
 //                T obj = document.toObject(tClass);
                 System.out.println("Issue Here?");
@@ -60,12 +61,12 @@ public class DbMethods {
                 return null;
             }
         } catch (Exception e) {
-            System.err.println("Error getting document: " + e.getMessage());
+            System.err.println("2) Error getting document: " + e.getMessage());
             return null;
         }
     }
 
-    private static<T> void resolveReferences(DocumentSnapshot document, T tClass) throws ExecutionException, InterruptedException, ClassNotFoundException {
+    private static<T> void resolveReferences(DocumentSnapshot document, T tClass) throws ExecutionException, InterruptedException, ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         // tClass.getClass().getDeclaredFields()
 
         if (document.exists()) {
@@ -73,8 +74,12 @@ public class DbMethods {
             Map<String, Object> fields = document.getData();
 
             // Iterate over the Map entries
-            assert fields != null;
+//            assert fields != null;
             for (Map.Entry<String, Object> entry : fields.entrySet()) {
+                if(entry == null){
+                    System.out.println("Entry is null here");
+                }
+                System.out.println("Index. " + entry);
                 String field = entry.getKey();
                 Object fieldValue = entry.getValue();
 
@@ -85,8 +90,54 @@ public class DbMethods {
                 // Optionally handle different types of values
                 if (fieldValue instanceof DocumentReference) {
                     System.out.println("Have Doc Ref");
-                    Class<?> clazz = Class.forName(field); // TODO: trying to mask fieldValue with a class of name of the field
-                    clazz.cast(fieldValue);
+
+                    DocumentReference docRef = (DocumentReference) fieldValue;
+
+                    // Fetch the referenced document
+                    DocumentSnapshot refDocument = docRef.get().get();
+
+                    System.out.println("DOCREF =" + docRef);
+                    System.out.println("REFDOC =" + refDocument);
+
+                    // Based on the field name, determine the class to deserialize into
+                    if (field.equals("ItemCategory")) {
+                        System.out.println("IS ItemCategory datatype");
+                        // Manually create ItemCategory if direct deserialization fails
+                        Map<String, Object> data = refDocument.getData();
+                        if (data != null) {
+                            ItemCategory itemCategory = new ItemCategory();
+                            itemCategory.setName((String) data.get("name"));
+                            itemCategory.setDescription((String) data.get("description"));
+                            itemCategory.setItems((List<Item>) data.get("Item"));
+                            setField(tClass, field, itemCategory);
+                        } else {
+                            System.out.println("ItemCategory document has no data!");
+                        }
+
+//                        ItemCategory itemCategory = refDocument.toObject(ItemCategory.class);
+                        // Assign the deserialized object to the field in the tClass
+//                        setField(tClass, field, itemCategory); // Helper method to set the field value
+                    } else if (field.equals("Supplier")) {
+                        Supplier supplier = refDocument.toObject(Supplier.class);
+                        setField(tClass, field, supplier);
+                    } else if (field.equals("Item")){
+                        System.out.println("IS Item datatype");
+                        Item item = refDocument.toObject(Item.class);
+                        setField(tClass, field, item);
+                    }
+//                    Class<?> clazz = Class.forName(field); // TODO: trying to mask fieldValue with a class of name of the field
+//                    clazz.cast(fieldValue);
+
+                    // Handle DocumentReference
+//                    DocumentReference docRef = (DocumentReference) fieldValue;
+                    // Resolve the document reference (if you have a method for this)
+//                    Object resolvedObject = resolveReference(docRef, getFieldType(tClass, field));
+                    // Set the resolved object to tClass
+//                    setField(tClass, field, clazz);
+
+//                    Class<?> clazz = Class.forName(field); // TODO: trying to mask fieldValue with a class of name of the field
+//                    clazz.cast(fieldValue);
+
 //                    Item hello = (clazz.getClass()) fieldValue;
 //                    clazz docRef = (clazz) document.get(field);
 //
@@ -147,6 +198,13 @@ public class DbMethods {
         return null;
     }
 
+    private static void setField(Object obj, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+        System.out.println("Entered setField");
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(obj, value);
+    }
+
     private static Class<?> getListType(Field field) {
         ParameterizedType listType = (ParameterizedType) field.getGenericType();
         return (Class<?>) listType.getActualTypeArguments()[0];
@@ -156,6 +214,7 @@ public class DbMethods {
 
     // Write
     public static void writeToDb(Map<String, Object> itemInfo , String collection, String id){
+//        System.out.println("reached writeToDb");
         ApiFuture<WriteResult> future = db.collection(collection).document(id).set(itemInfo);
         dbVerification("created",future);
     }
@@ -212,7 +271,7 @@ public class DbMethods {
                 System.out.println("No Document");
             }
         } catch (Exception e) {
-            System.err.println("Error getting document: " + e.getMessage());
+            System.err.println("3) Error getting document: " + e.getMessage());
         }
     }
 

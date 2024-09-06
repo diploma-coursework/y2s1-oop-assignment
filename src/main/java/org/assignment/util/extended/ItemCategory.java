@@ -15,21 +15,26 @@ import java.util.concurrent.ExecutionException;
 import static org.assignment.util.Utility.DbMethods.db;
 
 public class ItemCategory extends BaseItemCategory {
-    private List<Item> items;
+    private List<Item> item;
 
-    public ItemCategory(){
-        this(null,null, (Item) null);
+    public ItemCategory() {
+        this.item = new ArrayList<>();  // Initialize to avoid null pointer issues
     }
 
-    public ItemCategory(String name, String description, Item... items) {
+    public ItemCategory(String name, String description) {
         super(name, description);
         System.out.println("Reach 1");
-        this.items = new ArrayList<>(Arrays.asList(items));
+    }
+
+    public ItemCategory(String name, String description, Item... item) {
+        super(name, description);
+        System.out.println("Reach 1");
+        this.item = new ArrayList<>(Arrays.asList(item));
     }
 
     // Getter
     public List<Item> getItems() {
-        return this.items;
+        return this.item;
     }
 
     public int getSize(){
@@ -38,12 +43,19 @@ public class ItemCategory extends BaseItemCategory {
 
     // Setter
     public void setItems(List<Item> items) {
-        this.items = new ArrayList<>(items);
+        this.item = new ArrayList<>(items);
+    }
+
+    public void setItems(Item item) {
+        if (this.item == null) {
+            this.item = new ArrayList<>();
+        }
+        this.item.add(item);
     }
 
     // add an item to existing list
     public void addItem(Item item) {
-        this.items.add(item);
+        this.item.add(item);
     }
 
     //-----
@@ -59,12 +71,14 @@ public class ItemCategory extends BaseItemCategory {
     public void dbCreateNewCategory(){
         setId(DbMethods.dbCreateNewId("ItemCategory","CAT",4));
 
-        List<DocumentReference> itemRefs = createArray(getItems());
         Map<String, Object> itemInfo = new HashMap<>();
         itemInfo.put("name",getId());
         itemInfo.put("description",getDescription());
-        itemInfo.put("Item", itemRefs);
-
+        if(getItems() != null){
+            List<DocumentReference> itemRefs = createArray(getItems());
+            itemInfo.put("Item", itemRefs);
+        }
+        System.out.println("Getting ID here");
         DbMethods.writeToDb(itemInfo, "ItemCategory", getId());
     }
 
@@ -72,13 +86,12 @@ public class ItemCategory extends BaseItemCategory {
         List<DocumentReference> itemRefs = new ArrayList<>();
 
         for (Item item : items) {
-            DocumentReference docRef = db.collection("Item").document(item.getId());
-            itemRefs.add(docRef);
-
             if (item.getId() != null && !item.getId().isEmpty()) {
-                itemRefs.add(db.collection("Item").document(item.getId()));
+                System.out.println("Each item id: " + item.getId());
+                DocumentReference docRef = db.collection("Item").document(item.getId());
+                itemRefs.add(docRef);
             } else {
-                System.out.println("Item ID is null");
+                System.out.println("Item ID is null or empty.");
                 throw new IllegalArgumentException("Item ID is null or empty.");
             }
         }

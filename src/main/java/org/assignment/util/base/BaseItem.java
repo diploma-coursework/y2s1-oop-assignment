@@ -17,16 +17,16 @@ abstract public class BaseItem {
     }
 
     // setters
-    protected void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
-    protected void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
-    protected void setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -34,13 +34,15 @@ abstract public class BaseItem {
     public String getId() {
         return this.id;
     }
-    protected String getName() {
+    public String getName() {
         return this.name;
     }
-    protected double getUnitPrice() {
+
+    public double getUnitPrice() {
         return this.unitPrice;
     }
-    protected int getQuantity() {
+
+    public int getQuantity() {
         return this.quantity;
     }
 }
