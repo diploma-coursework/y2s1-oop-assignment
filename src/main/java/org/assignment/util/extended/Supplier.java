@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class Supplier extends BaseSupplier {
 
+    public Supplier(){
+    }
+
     public Supplier(String name, String address, String contactNumber, String email){
         super(name, address, contactNumber, email);
     }

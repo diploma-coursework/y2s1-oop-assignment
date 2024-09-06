@@ -33,6 +33,8 @@ public class Main {
         itemCategory.addItem(item);
         itemCategory.dbCreateNewCategory();
 
+        // TODO: reason of error, Item no have ItemCategory
+
         // TODO: item-> deserialized, enter ItemCategory as respective class, serialized into documentReference in db
     }
 

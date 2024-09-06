@@ -37,33 +37,86 @@ public class Item extends BaseItem {
 
     // getters and setters
     public ItemCategory getItemCategory(){
+        System.out.println("extended setter/getters");
         return this.ItemCategory;
     }
 
     public Supplier getSupplier(){
+        System.out.println("extended setter/getters");
         return this.Supplier;
     }
 
     public void setItemCategory(ItemCategory itemCategory){
+        System.out.println("extended setter/getters");
         this.ItemCategory=itemCategory;
     }
 
     public void setSupplier(Supplier supplier){
+        System.out.println("extended setter/getters");
         this.Supplier=supplier;
     }
 
+//    @Override
+//    public double getUnitPrice() {
+//        // Custom behavior: log access or modify the return value
+//        System.out.println("Accessing unitPrice in Item class");
+//        return super.getUnitPrice();
+//    }
+//
+//    @Override
+//    public void setUnitPrice(double unitPrice) {
+//        // Custom behavior: add validation or modify input
+//        System.out.println("Setting unitPrice in Item class");
+//        super.setUnitPrice(unitPrice);
+//    }
+
+    // Base setters
     @Override
-    public double getUnitPrice() {
-        // Custom behavior: log access or modify the return value
-        System.out.println("Accessing unitPrice in Item class");
-        return super.getUnitPrice();
+    public void setId(String id) {
+        System.out.println("Overrided setter/getters");
+        this.id = id;
+    }
+
+    @Override
+    public void setName(String name) {
+        System.out.println("Overrided setter/getters");
+        this.name = name;
     }
 
     @Override
     public void setUnitPrice(double unitPrice) {
-        // Custom behavior: add validation or modify input
-        System.out.println("Setting unitPrice in Item class");
-        super.setUnitPrice(unitPrice);
+        System.out.println("Overrided setter/getters");
+        this.unitPrice = unitPrice;
+    }
+
+    @Override
+    public void setQuantity(int quantity) {
+        System.out.println("Overrided setter/getters");
+        this.quantity = quantity;
+    }
+
+    // Base getters
+    @Override
+    public String getId() {
+        System.out.println("Overrided setter/getters");
+        return this.id;
+    }
+    @Override
+    public String getName() {
+        System.out.println("Overrided setter/getters");
+        return this.name;
+    }
+
+    @Override
+    public double getUnitPrice() {
+        System.out.println("Overrided setter/getters");
+        return this.unitPrice;
+    }
+
+    @Override
+    public int getQuantity() {
+        System.out.println("Overrided setter/getters");
+        return this.quantity;
     }
 
     // setters

@@ -104,12 +104,37 @@ public class DbMethods {
                         System.out.println("IS ItemCategory datatype");
                         // Manually create ItemCategory if direct deserialization fails
                         Map<String, Object> data = refDocument.getData();
+                        System.out.println("Data : " + data);
                         if (data != null) {
                             ItemCategory itemCategory = new ItemCategory();
                             itemCategory.setName((String) data.get("name"));
                             itemCategory.setDescription((String) data.get("description"));
-                            itemCategory.setItems((List<Item>) data.get("Item"));
-                            setField(tClass, field, itemCategory);
+                            System.out.println("Reach here before listDocRef");
+                            List<DocumentReference> listDocRef = (List<DocumentReference>) data.get("Item");
+                            System.out.println("Reach here after listDocRef");
+                            if (listDocRef != null) {
+                                System.out.println("ListDocRef is not null :" + listDocRef);
+                                List<Item> items = new ArrayList<>();
+                                for (DocumentReference index : listDocRef) {
+                                    try {
+                                        System.out.println("an iteration");
+                                        System.out.println("index = " + index);
+                                        DocumentSnapshot itemSnapshot = index.get().get();
+                                        if (itemSnapshot.exists()) {
+                                            Item item = itemSnapshot.toObject(Item.class);
+                                            System.out.println("the iteration Item is -" + item);
+                                            items.add(item);
+                                        } else {
+                                            System.out.println("Item document does not exist for reference: " + index.getPath());
+                                        }
+                                    } catch (ExecutionException | InterruptedException e) {
+                                        System.err.println("Error fetching referenced document: " + e.getMessage());
+                                    }
+                                }
+                                itemCategory.setItems(items);
+                                System.out.println("Entering setField");
+                                setField(tClass, field, itemCategory);
+                            }
                         } else {
                             System.out.println("ItemCategory document has no data!");
                         }
@@ -203,6 +228,7 @@ public class DbMethods {
         Field field = obj.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(obj, value);
+        System.out.println("Success setField");
     }
 
     private static Class<?> getListType(Field field) {
