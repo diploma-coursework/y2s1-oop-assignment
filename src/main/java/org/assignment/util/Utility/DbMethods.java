@@ -86,6 +86,7 @@ public class DbMethods {
                 if (fieldValue instanceof DocumentReference) {
                     System.out.println("Have Doc Ref");
                     Class<?> clazz = Class.forName(field); // TODO: trying to mask fieldValue with a class of name of the field
+                    clazz.cast(fieldValue);
 //                    Item hello = (clazz.getClass()) fieldValue;
 //                    clazz docRef = (clazz) document.get(field);
 //

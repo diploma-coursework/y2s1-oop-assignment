@@ -48,16 +48,16 @@ public class Item extends BaseItem {
     }
 
     // setters
-    @Override
-    protected void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    // getters
-    @Override
-    protected double getUnitPrice() {
-        return this.unitPrice;
-    }
+//    @Override
+//    protected void setUnitPrice(double unitPrice) {
+//        this.unitPrice = unitPrice;
+//    }
+//
+//    // getters
+//    @Override
+//    protected double getUnitPrice() {
+//        return this.unitPrice;
+//    }
 
     public boolean secureInstance(Item item){
         if(ItemMenu.confirmSave(item)) {

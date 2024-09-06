@@ -16,15 +16,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-//        Item item = new Item();
-//        item.dbCreateNewItem();
-//        item.editInDb("ITEM0004",1,"Chair");
-//        System.out.println(item.getClass().getSimpleName());
+        Item item = new Item();
+        item.dbCreateNewItem();
+        System.out.println(item);
+//        item.modifyInDb("ITEM0004",1,"Chair");
+        System.out.println(item.getClass().getSimpleName());
 
-        Item item = DbMethods.deserialized("ITEM0000", Item.class);
-        System.out.println("Made it here");
-        ItemCategory itemCategory = new ItemCategory("Test", "test", item);  // Pass the item directly
-        itemCategory.dbCreateNewCategory();
+//        Item item = DbMethods.deserialized("ITEM0000", Item.class);
+//        System.out.println("Made it here");
+//        ItemCategory itemCategory = new ItemCategory("Test", "test", item);  // Pass the item directly
+//        itemCategory.dbCreateNewCategory();
     }
 
 }
