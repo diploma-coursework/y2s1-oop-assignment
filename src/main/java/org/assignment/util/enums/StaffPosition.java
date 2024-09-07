@@ -5,7 +5,6 @@ public enum StaffPosition {
     INVENTORY_CLERK(AccessLevel.STAFF),
     STOCK_CONTROLLER(AccessLevel.STAFF),
     WAREHOUSE_MANAGER(AccessLevel.MANAGER),
-    PURCHASING_AGENT(AccessLevel.STAFF),
     INVENTORY_SUPERVISOR(AccessLevel.MANAGER),
     ADMIN(AccessLevel.ADMIN);
 

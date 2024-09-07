@@ -4,6 +4,7 @@ import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
 
 abstract public class BaseStaff {
+
     protected String id;
     protected String name;
     protected String gender;
@@ -14,13 +15,14 @@ abstract public class BaseStaff {
     protected int salary;
     protected String address;
     protected String password;
+    protected int age;
 
     // constructors
     public BaseStaff() {
-        this(null, null, null, null, null, null, 0, null, null);
+        this(null, null, null, null, null, null, 0, null, null, 0);
     }
 
-    public BaseStaff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password) {
+    public BaseStaff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password, int age) {
 
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
@@ -40,12 +42,13 @@ abstract public class BaseStaff {
         if (address == null || address.isEmpty()) {
             throw new IllegalArgumentException("Address cannot be null or empty.");
         }
-
         if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty.");
         }
+        if (age < 18) {
+            throw new IllegalArgumentException("Age cannot be less than 18.");
+        }
 
-//        this.id = id;
         this.name = name;
         this.gender = gender;
         this.position = position;
@@ -55,9 +58,10 @@ abstract public class BaseStaff {
         this.salary = salary;
         this.address = address;
         this.password = password;
+        this.age = age;
     }
 
-    // setters
+    // setters <-- validation checks included
     public void setId(String id) {
         this.id = id;
     }
@@ -100,6 +104,12 @@ abstract public class BaseStaff {
         }
         this.password = password;
     }
+    public void setAge(int age) {
+        if(age < 18) {
+            throw new IllegalArgumentException("The age must be more than 18!");
+        }
+        this.age = age;
+    }
 
     // getters
     public String getId() {
@@ -129,9 +139,12 @@ abstract public class BaseStaff {
     public String getAddress() {
         return this.address;
     }
-    public String getPassword() {return this.password;}
-
-
+    public String getPassword() {
+        return this.password;
+    }
+    public int getAge() {
+        return this.age;
+    }
 
     // REQUIRED operation to make sure the object have important data that represent them BEFORE storing into firestore
     public boolean isValid() {
@@ -141,7 +154,7 @@ abstract public class BaseStaff {
                 dateJoined != null &&
                 salary > 0 &&
                 address != null && !address.isEmpty() &&
-                password != null;
+                password != null && age > 18;
     }
 
     // make the class more functional and easier to work with
@@ -150,7 +163,6 @@ abstract public class BaseStaff {
             this.salary += increment;
         }
     }
-
     public void updateContactDetails(String newContactNumber, String newEmail) {
         setContactNumber(newContactNumber);
         setEmail(newEmail);

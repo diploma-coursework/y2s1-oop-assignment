@@ -1,12 +1,10 @@
-package org.assignment.util.extended;
+package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.enums.StaffPosition;
-import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseStaff;
-import org.assignment.util.enums.AccessLevel;
 import org.assignment.util.extended.Staff;
-import org.mindrot.jbcrypt.BCrypt;
+import org.assignment.util.Utility.validationCheck;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -36,77 +34,63 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
+
     private void signUp() {
 
         Scanner scanner = new Scanner(System.in);
 
         try {
+
             System.out.print("Enter Name: ");
             String name = scanner.nextLine();
-            if (name.isEmpty()) {
-                throw new IllegalArgumentException("Name cannot be empty");
-            }
+            validationCheck.checkEmail(name);
+
 
             System.out.print("Enter Gender (M/F): ");
             char genderInput = scanner.next().toUpperCase().charAt(0);
-            // Validate and map gender input to a string
-            String gender;
-            if (genderInput == 'M') {
-                gender = "Male";
-            } else if (genderInput == 'F') {
-                gender = "Female";
-            } else {
-                throw new IllegalArgumentException("Invalid gender input. Please enter 'M' or 'F'.");
-            }
+            String gender = validationCheck.checkGender(genderInput);
+
 
             System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
             StaffPosition position = StaffPosition.valueOf(scanner.next().toUpperCase());
 
+
             System.out.print("Enter Contact Number: ");
             String contactNumber = scanner.next();
+            validationCheck.checkContactNumber(contactNumber);
 
-            if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)[1]-*[0-9]{8}$")) {
-                throw new IllegalArgumentException("Invalid email format");
-            }
 
             System.out.print("Enter Email: ");
             String email = scanner.next();
+            validationCheck.checkEmail(email);
 
-            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-                throw new IllegalArgumentException("Invalid email format");
-            }
 
             scanner.nextLine(); // Consume newline
 
+
             System.out.print("Enter Address: ");
             String address = scanner.nextLine();
+            validationCheck.checkAddress(address);
 
             System.out.print("Enter Salary: ");
-            int salary = scanner.nextInt();
+            int inputSalary = scanner.nextInt();
+            int salary = validationCheck.checkSalary(inputSalary);
 
-            if (salary < 0) {
-                throw new IllegalArgumentException("Salary cannot be negative");
-            }
 
             System.out.print("Enter a password: ");
             String inputPassword = scanner.nextLine();
+            String password = validationCheck.checkPassword(inputPassword);
 
-            if (inputPassword.length() < 5) {
-                throw new IllegalArgumentException("The password length must be 4 above!");
-            } else if(!inputPassword.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
-                throw new IllegalArgumentException("The password is too weak! Consider adding the following requirement: " +
-                        "At least one alphabetic character (A-Z or a-z).\n" +
-                        "At least one digit (0-9).\n" +
-                        "At least one special character from the set @$!%*#?&.\n" +
-                        "Minimum length of 8 characters.");
-            }
-            String password = BCrypt.hashpw(inputPassword, BCrypt.gensalt());
+
+            System.out.print("enter age");
+            int inputAge = scanner.nextInt();
+            int age = validationCheck.checkAge(inputAge);
 
 
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
             // Create a Staff object
-            Staff newStaff = new Staff(name, gender, position, contactNumber, email, dateJoined, salary, address, password);
+            Staff newStaff = new Staff(name, gender, position, contactNumber, email, dateJoined, salary, address, password, age);
 
             // Validate staff object
             if (newStaff.isValid()) {

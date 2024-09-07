@@ -15,11 +15,11 @@ public class Staff extends BaseStaff {
     private StaffPosition position;
 
     public Staff(){
-        this(null, null, null, null, null, null, 0, null, null);
+        this(null, null, null, null, null, null, 0, null, null, 0);
     }
 
-    public Staff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password) {
-        super(name, gender, position, contactNumber, email, dateJoined, salary, address, password);
+    public Staff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password, int age) {
+        super(name, gender, position, contactNumber, email, dateJoined, salary, address, password, age);
         // Optional: Validation during initialization
 
 
@@ -63,6 +63,8 @@ public class Staff extends BaseStaff {
         staffData.put("salary", getSalary());
         staffData.put("address", getAddress());
         staffData.put("password", getPassword());
+        staffData.put("age", getAge());
+
         return staffData;
     }
 
