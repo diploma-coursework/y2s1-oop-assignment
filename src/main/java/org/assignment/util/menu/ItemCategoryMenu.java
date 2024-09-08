@@ -1,4 +1,6 @@
-package org.assignment.util.extended;
+package org.assignment.util.menu;
+
+import org.assignment.util.extended.ItemCategory;
 
 import java.util.Scanner;
 

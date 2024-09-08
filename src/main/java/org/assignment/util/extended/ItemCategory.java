@@ -3,11 +3,9 @@ package org.assignment.util.extended;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
-import org.assignment.util.FirebaseConnection;
 import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseItemCategory;
+import org.assignment.util.menu.ItemCategoryMenu;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;

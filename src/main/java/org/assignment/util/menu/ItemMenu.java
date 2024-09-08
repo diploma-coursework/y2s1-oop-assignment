@@ -1,6 +1,7 @@
-package org.assignment.util.extended;
+package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.extended.Item;
 
 import java.util.HashMap;
 import java.util.Scanner;

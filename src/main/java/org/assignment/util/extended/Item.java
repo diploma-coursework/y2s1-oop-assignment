@@ -7,8 +7,7 @@ import org.assignment.util.base.BaseItem;
 // IDK if needed
 
 // imports from example
-import com.google.cloud.firestore.Firestore;
-import org.assignment.util.FirebaseConnection;
+import org.assignment.util.menu.ItemMenu;
 
 import java.util.HashMap;
 import java.util.Map;
