@@ -8,7 +8,6 @@ abstract public class BaseSupplier {
     protected String address;
     protected String contactNumber;
     protected String email;
-    protected ArrayList<BaseItem> items;
 
     public BaseSupplier() {
         this(null, null, null, null);
@@ -19,7 +18,6 @@ abstract public class BaseSupplier {
         this.address = address;
         this.contactNumber = contactNumber;
         this.email = email;
-        this.items = new ArrayList<>();
     }
 
     // setters

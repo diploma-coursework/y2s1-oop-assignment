@@ -3,36 +3,58 @@ package org.assignment.util.extended;
 import org.assignment.util.Utility.DbMethods;
 import org.assignment.util.base.BaseSupplier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Supplier extends BaseSupplier {
+    private List<String> item;
 
     public Supplier(){
     }
 
-    public Supplier(String name, String address, String contactNumber, String email){
+    public Supplier(String name, String address, String contactNumber, String email, String... item){
         super(name, address, contactNumber, email);
+        this.item = new ArrayList<>(Arrays.asList(item));
+    }
+
+    // Getter
+    public List<String> getItems() {
+        return this.item;
+    }
+
+    public int getSize(){
+        return getItems().size();
+    }
+
+    // Setter
+    public void setItems(List<String> items) {
+        this.item = new ArrayList<>(items);
+    }
+
+    // add an item to existing list
+    public void addItem(String item) {
+        this.item.add(item);
     }
 
     // TODO: Db related stuff
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", getName());
+        map.put("address", getAddress());
+        map.put("contactNumber", getContactNumber());
+        map.put("email",getEmail());
+        if(getItems() != null){
+            for (String item : getItems()) {
+                if (DbMethods.deserialized(item, Item.class) != null) {
+                    map.put("item", getItems());
+                }
+            }
+        }
+        return map;
+    }
 
     public void dbCreateNewSupplier(){
         this.setId(DbMethods.dbCreateNewId("Supplier","SUP",4));
-        System.out.println("set id?");
-        System.out.println(getId());
-        DbMethods.writeToDb(createMap(), "Supplier", getId());
-    }
-
-    public Map<String, Object> createMap() {
-        Map<String, Object> supInfo = new HashMap<>();
-        supInfo.put("name", getName());
-        supInfo.put("address", getAddress());
-        supInfo.put("contactNumber", getContactNumber());
-        supInfo.put("email",getEmail());
-        // Array of Items
-        return supInfo;
+        DbMethods.writeToDb(toHashMap(), "Supplier", getId());
     }
 
     // Modify
@@ -40,7 +62,7 @@ public class Supplier extends BaseSupplier {
         DbMethods.modifyInDb(id,"Item",editChoice(choice),newValue);
     }
 
-    // TODO: Choice method
+    // TODO: Choice method, change to fit ur Supplier Class
     // Will be used in DbMethods;
     public String editChoice(int choice) {
         switch (choice) {

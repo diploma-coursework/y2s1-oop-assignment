@@ -120,7 +120,9 @@ public class DbMethods {
                                         System.out.println("an iteration");
                                         System.out.println("index = " + index);
                                         DocumentSnapshot itemSnapshot = index.get().get();
+                                        System.out.println("finish index.get().get() :" + itemSnapshot);
                                         if (itemSnapshot.exists()) {
+                                            System.out.println("itemSnapshot exist :" + index);
                                             Item item = itemSnapshot.toObject(Item.class);
                                             System.out.println("the iteration Item is -" + item);
                                             items.add(item);
@@ -131,7 +133,7 @@ public class DbMethods {
                                         System.err.println("Error fetching referenced document: " + e.getMessage());
                                     }
                                 }
-                                itemCategory.setItems(items);
+//                                itemCategory.setItems(items);  TODO: fix
                                 System.out.println("Entering setField");
                                 setField(tClass, field, itemCategory);
                             }

@@ -28,10 +28,10 @@ public class Main {
 
         Item item = DbMethods.deserialized("ITEM0001", Item.class);
         System.out.println("Made it here");
-        ItemCategory itemCategory = new ItemCategory("Test", "test", item);
-        System.out.println("Item is "+ item);
-        itemCategory.addItem(item);
-        itemCategory.dbCreateNewCategory();
+//        ItemCategory itemCategory = new ItemCategory("Test", "test", item);
+//        System.out.println("Item is "+ item);
+//        itemCategory.addItem(item);
+//        itemCategory.dbCreateNewCategory();
 
         // TODO: reason of error, Item no have ItemCategory
 

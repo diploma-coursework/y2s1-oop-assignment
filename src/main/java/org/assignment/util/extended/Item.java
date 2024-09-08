@@ -119,17 +119,13 @@ public class Item extends BaseItem {
         return this.quantity;
     }
 
-    // setters
-//    @Override
-//    protected void setUnitPrice(double unitPrice) {
-//        this.unitPrice = unitPrice;
-//    }
-//
-//    // getters
-//    @Override
-//    protected double getUnitPrice() {
-//        return this.unitPrice;
-//    }
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", this.name);
+        map.put("categoryRef", ItemCategory.getId()); // Store only the ID
+        map.put("supplierRef", Supplier.getId()); // Store only the ID
+        return map;
+    }
 
     public boolean secureInstance(Item item){
         if(ItemMenu.confirmSave(item)) {

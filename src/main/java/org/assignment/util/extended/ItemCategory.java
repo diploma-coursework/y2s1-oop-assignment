@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 import static org.assignment.util.Utility.DbMethods.db;
 
 public class ItemCategory extends BaseItemCategory {
-    private List<Item> item;
+    private List<String> item;
 
     public ItemCategory() {
         this.item = new ArrayList<>();  // Initialize to avoid null pointer issues
@@ -23,17 +23,15 @@ public class ItemCategory extends BaseItemCategory {
 
     public ItemCategory(String name, String description) {
         super(name, description);
-        System.out.println("Reach 1");
     }
 
-    public ItemCategory(String name, String description, Item... item) {
+    public ItemCategory(String name, String description, String... item) {
         super(name, description);
-        System.out.println("Reach 1");
         this.item = new ArrayList<>(Arrays.asList(item));
     }
 
     // Getter
-    public List<Item> getItems() {
+    public List<String> getItems() {
         return this.item;
     }
 
@@ -42,7 +40,7 @@ public class ItemCategory extends BaseItemCategory {
     }
 
     // Setter
-    public void setItems(List<Item> items) {
+    public void setItems(List<String> items) {
         this.item = new ArrayList<>(items);
     }
 
@@ -54,7 +52,7 @@ public class ItemCategory extends BaseItemCategory {
 //    }
 
     // add an item to existing list
-    public void addItem(Item item) {
+    public void addItem(String item) {
         this.item.add(item);
     }
 
@@ -67,37 +65,23 @@ public class ItemCategory extends BaseItemCategory {
         return false;
     }
 
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", getName());
+        if(getItems() != null){
+            for (String item : getItems()) {
+                if (DbMethods.deserialized(item, Item.class) != null) {
+                    map.put("item", getItems());
+                }
+            }
+        }
+        return map;
+    }
+
     // create New Item
     public void dbCreateNewCategory(){
         setId(DbMethods.dbCreateNewId("ItemCategory","CAT",4));
-
-        Map<String, Object> itemInfo = new HashMap<>();
-        itemInfo.put("name",getId());
-        itemInfo.put("description",getDescription());
-        if(getItems() != null){
-            System.out.println("getItems() is not null");
-            List<DocumentReference> itemRefs = createArray(getItems());
-            itemInfo.put("Item", itemRefs);
-        }
-        System.out.println("Getting ID here");
-        DbMethods.writeToDb(itemInfo, "ItemCategory", getId());
-    }
-
-    public List<DocumentReference> createArray(List<Item> items) {
-        List<DocumentReference> itemRefs = new ArrayList<>();
-
-        for (Item item : items) {
-            if (item.getId() != null && !item.getId().isEmpty()) {
-                System.out.println("Each item id: " + item.getId());
-                DocumentReference docRef = db.collection("Item").document(item.getId());
-                itemRefs.add(docRef);
-            } else {
-                System.out.println("Item ID is null or empty.");
-                throw new IllegalArgumentException("Item ID is null or empty.");
-            }
-        }
-
-        return itemRefs;
+        DbMethods.writeToDb(toHashMap(), "ItemCategory", getId());
     }
 
     // Modify
