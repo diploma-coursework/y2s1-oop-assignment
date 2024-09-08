@@ -69,13 +69,11 @@ public class Supplier extends BaseSupplier {
             case 1:
                 return "name";
             case 2:
-                return "unitPrice";
+                return "address";
             case 3:
-                return "quantity";
+                return "contactNumber";
             case 4:
-                return "ItemCategory";
-            case 5:
-                return "Supplier";
+                return "email";
             default:
                 return null;
         }
@@ -99,8 +97,11 @@ public class Supplier extends BaseSupplier {
         return result;
     }
 
-
-
+    // Renew Contract
+    public void renewContract() {
+        contractStartDate = contractEndDate;
+        contractEndDate = contractStartDate.plusYears(2);
+    }
 
     // Shift letters and big/small + shift numbers to encrypt/decrypt
     public String encryptData (String data) {

@@ -1,6 +1,7 @@
 package org.assignment.util.base;
 
 import java.util.ArrayList;
+import java.time.*;
 
 abstract public class BaseSupplier {
     protected String id;
@@ -8,6 +9,8 @@ abstract public class BaseSupplier {
     protected String address;
     protected String contactNumber;
     protected String email;
+    protected LocalDate contractStartDate;
+    protected LocalDate contractEndDate;
 
     public BaseSupplier() {
         this(null, null, null, null);
@@ -18,6 +21,8 @@ abstract public class BaseSupplier {
         this.address = address;
         this.contactNumber = contactNumber;
         this.email = email;
+        this.contractStartDate = LocalDate.now();
+        this.contractEndDate = contractStartDate.plusYears(2);
     }
 
     // setters
@@ -36,6 +41,8 @@ abstract public class BaseSupplier {
     public void setEmail(String email) {
         this.email = email;
     }
+    public void setContractStartDate (LocalDate contractStartDate) { this.contractStartDate = contractStartDate; }
+    public void setContractEndDate (LocalDate contractEndDate) { this.contractEndDate = contractEndDate; }
 
     // getters
     public String getId() {
@@ -53,4 +60,6 @@ abstract public class BaseSupplier {
     public String getEmail() {
         return this.email;
     }
+    public LocalDate getContractStartDate() { return this.contractStartDate; }
+    public LocalDate getContractEndDate() { return this.contractEndDate; }
 }
