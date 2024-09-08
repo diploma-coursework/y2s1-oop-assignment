@@ -44,13 +44,6 @@ public class ItemCategory extends BaseItemCategory {
         this.item = new ArrayList<>(items);
     }
 
-//    public void setItems(Item item) {
-//        if (this.item == null) {
-//            this.item = new ArrayList<>();
-//        }
-//        this.item.add(item);
-//    }
-
     // add an item to existing list
     public void addItem(String item) {
         this.item.add(item);
