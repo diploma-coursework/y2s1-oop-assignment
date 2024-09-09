@@ -32,5 +32,5 @@ public abstract class BaseMenu {
         System.out.flush();
     }
 
-    protected record Option(String description, Runnable execute) {}
+    public record Option(String description, Runnable execute) {}
 }
