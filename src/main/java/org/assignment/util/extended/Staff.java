@@ -1,138 +1,40 @@
 package org.assignment.util.extended;
 
-import org.assignment.util.base.BaseStaff;
+import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
-import org.assignment.util.enums.AccessLevel;
-import org.assignment.util.Utility.DbMethods;
-
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
+public class Staff extends Person {
+    protected char gender;
+    protected StaffPosition position;
+    protected LocalDate dateJoined;
+    protected double salary;
+    protected String password;
 
-public class Staff extends BaseStaff {
-
-    private StaffPosition position;
-
-    public Staff(){
-        this(null, null, null, null, null, null, 0, null, null, 0);
+    public Staff() {
+        this("", "", "", "", "", '\u0000', null, null, 0, "");
     }
 
-    public Staff(String name, String gender, StaffPosition position, String contactNumber, String email, LocalDate dateJoined, int salary, String address, String password, int age) {
-        super(name, gender, position, contactNumber, email, dateJoined, salary, address, password, age);
-        // Optional: Validation during initialization
-
-
-        if (!isValid()) {
-            throw new IllegalArgumentException("Invalid staff details.");
-        }
-
-        if (position == null || dateJoined == null) {
-            throw new IllegalArgumentException("Position and dateJoined cannot be null.");
-        }
-
+    public Staff(String id, String name, String contactNumber, String email, String address, char gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
+        super(id, name, contactNumber, email, address);
+        this.gender = gender;
         this.position = position;
         this.dateJoined = dateJoined;
+        this.salary = salary;
+        this.password = password;
     }
 
-    //accessor
-    public StaffPosition getPosition() {
-        return position;
-    }
+    // setters
+    public void setGender(char gender) { this.gender = gender; }
+    public void setPosition(StaffPosition position) { this.position = position; }
+    public void setDateJoined(LocalDate dateJoined) { this.dateJoined = dateJoined; }
+    public void setSalary(double salary) { this.salary = salary; }
+    public void setPassword(String password) { this.password = password; }
 
-    //mutator
-    public void setPosition(StaffPosition position) {
-        this.position = position;
-    }
-
-    //get access level based on position of staff
-    public AccessLevel getAccessLevel() {
-        return position.getAccessLevel();
-    }
-
-
-    // Convert Staff object to Firestore map
-    public Map<String, Object> toFirestoreMap() {
-        Map<String, Object> staffData = new HashMap<>();
-        staffData.put("name", getName());
-        staffData.put("gender", String.valueOf(getGender())); // Convert char to string
-        staffData.put("position", getPosition().name()); // Enum to string
-        staffData.put("contactNumber", getContactNumber());
-        staffData.put("email", getEmail());
-        staffData.put("dateJoined", getDateJoined().toString()); // LocalDate to string
-        staffData.put("salary", getSalary());
-        staffData.put("address", getAddress());
-        staffData.put("password", getPassword());
-        staffData.put("age", getAge());
-
-        return staffData;
-    }
-
-    public void performTask() {
-        switch (getAccessLevel()) {
-            case STAFF:
-                // Actions for STAFF level
-                System.out.println("Performing staff-level actions.");
-                break;
-            case MANAGER:
-                // Actions for MANAGER level
-                System.out.println("Performing manager-level actions.");
-                break;
-            case ADMIN:
-                // Actions for ADMIN level
-                System.out.println("Performing admin-level actions.");
-                break;
-        }
-    }
-
-    // Write staff data to Firestore
-    public void writeToDb() {
-        try {
-            setId(DbMethods.dbCreateNewId("Staff", "STF", 4));
-            Map<String, Object> staffData = this.toFirestoreMap();
-            DbMethods.writeToDb(staffData, "Staff", getId());
-        } catch (Exception e) {
-            System.err.println("Error writing staff data to database: " + e.getMessage());
-        }
-    }
-
-    // Modify staff data in Firestore
-    public <T>void modifyInDb(String id, int choice, T newValue) {
-        try {
-            DbMethods.modifyInDb(getId(), "Staff",editChoice(choice), newValue);
-        } catch (Exception e) {
-            System.err.println("Error modifying staff data in database: " + e.getMessage());
-        }
-    }
-
-    // Delete staff data from Firestore
-    public static void deleteInDb(String id) {
-        try {
-            DbMethods.deleteInDb(id, "Staff");
-        } catch (Exception e) {
-            System.err.println("Error deleting staff data from database: " + e.getMessage());
-        }
-    }
-
-    // View staff data from Firestore
-    public static void viewInDb(String id) {
-        try {
-            DbMethods.viewInDb(id, "Staff");
-        } catch (Exception e) {
-            System.err.println("Error viewing staff data from database: " + e.getMessage());
-        }
-    }
-
-    public String editChoice(int choice) {
-        switch (choice) {
-            case 1:
-                return "name";
-            case 2:
-                return "gender";
-            // continue onwards
-            default:
-                return null;
-        }
-    }
+    // getters
+    public char getGender() { return this.gender; }
+    public StaffPosition getPosition() { return this.position; }
+    public LocalDate getDateJoined() { return this.dateJoined; }
+    public double getSalary() { return this.salary; }
+    public String getPassword() { return this.password; }
 }
-

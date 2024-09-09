@@ -1,13 +1,13 @@
 package org.assignment.util.base;
 
-abstract public class BaseItem {
+public abstract class BaseItem {
     protected String id;
     protected String name;
     protected double unitPrice;
     protected int quantity;
 
     public BaseItem() {
-        this(null, 0.0, 0);
+        this("", 0.0, 0);
     }
 
     public BaseItem(String name, double unitPrice, int quantity) {
@@ -37,11 +37,9 @@ abstract public class BaseItem {
     public String getName() {
         return this.name;
     }
-
     public double getUnitPrice() {
         return this.unitPrice;
     }
-
     public int getQuantity() {
         return this.quantity;
     }

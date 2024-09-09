@@ -1,15 +1,16 @@
 package org.assignment.util.base;
 
-abstract public class BaseItemCategory {
+public abstract class BaseItemCategory {
     protected String id;
     protected String name;
     protected String description;
 
     public BaseItemCategory(){
-        this(null, null);
+        this("", "", "");
     }
 
-    public BaseItemCategory(String name, String description) {
+    public BaseItemCategory(String id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
