@@ -4,7 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
-import org.assignment.util.Utility.DbMethods;
+import org.assignment.util.DbMethodsTest;
 import org.assignment.util.extended.*;
 import org.assignment.util.enums.*;
 
@@ -26,8 +26,9 @@ public class Main {
 //        Item.modifyInDb("ITEM0001",1,"Chair");
 //        System.out.println(item.getClass().getSimpleName());
 
-        Item item = DbMethods.deserialized("ITEM0001", Item.class);
-        System.out.println("Made it here");
+        Item item = DbMethodsTest.getDocAsClassObject("ITEM0001", Item.class);
+        //System.out.println("Made it here");
+        System.out.printf("Item Id: %s\nname: %s", item.getId(), item.getName());
 //        ItemCategory itemCategory = new ItemCategory("Test", "test", item);
 //        System.out.println("Item is "+ item);
 //        itemCategory.addItem(item);

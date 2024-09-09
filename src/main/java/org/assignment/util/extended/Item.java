@@ -2,6 +2,8 @@ package org.assignment.util.extended;
 
 import org.assignment.util.base.BaseItem;
 
+import java.util.HashMap;
+
 public class Item extends BaseItem {
     private ItemCategory itemCategory;
     private Supplier supplier;
@@ -23,4 +25,15 @@ public class Item extends BaseItem {
     // getters
     public ItemCategory getItemCategory(){ return this.itemCategory; }
     public Supplier getSupplier(){ return this.supplier; }
+
+    public static Item fromHashMap(HashMap<String, Object> map) {
+        return new Item(
+                (String) map.get("id"),
+                (String) map.get("name"),
+                (double) map.get("unitPrice"),
+                (int) map.get("quantity"),
+                (ItemCategory) map.get("ItemCategory"),
+                (Supplier) map.get("Supplier")
+                );
+    }
 }
