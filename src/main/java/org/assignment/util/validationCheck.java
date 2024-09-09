@@ -1,4 +1,4 @@
-package org.assignment.util.Utility;
+package org.assignment.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 

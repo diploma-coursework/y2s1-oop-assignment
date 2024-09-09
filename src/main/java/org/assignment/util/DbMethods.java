@@ -1,18 +1,15 @@
-package org.assignment.util.Utility;
+package org.assignment.util;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
-import org.assignment.util.FirebaseConnection;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +23,6 @@ public class DbMethods {
 
     // Original Deserialize
     public static <T>T deserializeds(String id,Class<T> tClass) {
-
         ApiFuture<DocumentSnapshot> future = db.collection(tClass.getSimpleName()).document(id).get();
         try {
             System.out.println("Fetching document with ID: " + id + " from collection: " + tClass.getSimpleName());

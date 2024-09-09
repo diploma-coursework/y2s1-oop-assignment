@@ -1,10 +1,9 @@
-package org.assignment.util.Utility;
+package org.assignment.util;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
-import org.assignment.util.FirebaseConnection;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
 
