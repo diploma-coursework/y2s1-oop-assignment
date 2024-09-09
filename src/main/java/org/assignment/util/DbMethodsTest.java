@@ -4,7 +4,9 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
+import org.assignment.util.extended.Staff;
 import org.assignment.util.extended.Supplier;
 
 import java.util.List;
@@ -88,4 +90,46 @@ public class DbMethodsTest {
             System.out.println("No such document!");
         }
     }
+
+    public static <T> T getDocAsClassObject(String id, Class<T> tClass) {
+        try {
+            // get requested document snapshot
+            DocumentSnapshot document = db.collection(tClass.getSimpleName()).document(id).get().get();
+            if (!document.exists()) {
+                return null;
+            }
+
+            // get document references
+            Map<String, Object> documentData = document.getData();
+            if (documentData == null) return null;
+
+            for (Map.Entry<String, Object> entry : documentData.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                if (value instanceof DocumentReference) {
+                    DocumentSnapshot referencedDoc = ((DocumentReference) value).get().get();
+                    documentData.put(key, getClassObjectFromName(key));
+                }
+            }
+
+            // convert Map data to provided T class
+
+
+        } catch (Exception e) {
+            System.err.println("2) Error getting document: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static Object getClassObjectFromName(String name) {
+        return switch (name) {
+            case "Item" -> new Item();
+            case "ItemCategory" -> new ItemCategory();
+            case "Staff" -> new Staff();
+            case "Supplier" -> new Supplier();
+            default -> null;
+        };
+    }
+
 }

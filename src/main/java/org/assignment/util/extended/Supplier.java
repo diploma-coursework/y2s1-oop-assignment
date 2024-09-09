@@ -3,7 +3,7 @@ package org.assignment.util.extended;
 import org.assignment.util.base.Person;
 import java.util.ArrayList;
 
-public abstract class Supplier extends Person {
+public class Supplier extends Person {
     public Supplier() {
         this("", "", "", "", "");
     }
