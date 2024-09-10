@@ -5,6 +5,7 @@ import org.assignment.util.base.Person;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Supplier extends Person implements DatabaseOperations {
     protected LocalDate contractStartDate;
@@ -83,5 +84,12 @@ public class Supplier extends Person implements DatabaseOperations {
     public boolean deleteFromDb(String id) {
         // delete from db where id is matching
         return true;
+    }
+
+    public HashMap<String, Object> toHashMapExcludeId() {
+        HashMap<String, Object> map = new HashMap<>();
+        // map.put() stuff
+
+        return map;
     }
 }

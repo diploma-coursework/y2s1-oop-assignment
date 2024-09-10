@@ -80,7 +80,7 @@ public class ItemCategory implements DatabaseOperations {
         return true;
     }
 
-    private HashMap<String, Object> toHashMapExcludeId() {
+    public HashMap<String, Object> toHashMapExcludeId() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", this.name);
         map.put("description", this.description);

@@ -4,6 +4,7 @@ import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class Staff extends Person implements DatabaseOperations {
     protected char gender;
@@ -59,5 +60,12 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean deleteFromDb(String id) {
         // delete from db where id is matching
         return true;
+    }
+
+    public HashMap<String, Object> toHashMapExcludeId() {
+        HashMap<String, Object> map = new HashMap<>();
+        // map.put() stuff
+
+        return map;
     }
 }

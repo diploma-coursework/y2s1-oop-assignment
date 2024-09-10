@@ -64,4 +64,11 @@ public class Item extends BaseItem implements DatabaseOperations {
         // delete from db where id is matching
         return true;
     }
+
+    public HashMap<String, Object> toHashMapExcludeId() {
+        HashMap<String, Object> map = new HashMap<>();
+        // map.put() stuff
+
+        return map;
+    }
 }
