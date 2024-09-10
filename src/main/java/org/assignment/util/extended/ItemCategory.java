@@ -1,5 +1,6 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
@@ -8,9 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemCategory implements DatabaseOperations {
-    protected String id;
-    protected String name;
-    protected String description;
+    private String id;
+    private String name;
+    private String description;
+    private static final CollectionReference itemCategoryCollection = FirebaseConnection.getDb().collection("ItemCategory");
 
     public ItemCategory() {
         this("", "", "");
@@ -57,7 +59,7 @@ public class ItemCategory implements DatabaseOperations {
     // Database Operation Methods
     public boolean addToDb() {
         try {
-            FirebaseConnection.getDb().collection("ItemCategory").document(this.id).set(this.toHashMapExcludeId()).get();
+            itemCategoryCollection.document(this.id).set(this.toHashMapExcludeId()).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -66,8 +68,14 @@ public class ItemCategory implements DatabaseOperations {
     }
 
     public boolean getFromDb(String id) {
-        // fetch using id and store in self
-        return true;
+        try {
+            itemCategoryCollection.document(id).get().get();
+            // TODO: assign data to self
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
     public boolean updateToDb() {
