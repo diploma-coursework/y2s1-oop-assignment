@@ -26,9 +26,9 @@ public class Main {
 //        Item.modifyInDb("ITEM0001",1,"Chair");
 //        System.out.println(item.getClass().getSimpleName());
 
-        Item item = DbMethodsTest.getDocAsClassObject("ITEM0001", Item.class);
+        Item item = DbMethodsTest.getDocAsClassObject("ITEM0000", Item.class);
         //System.out.println("Made it here");
-        System.out.printf("Item Id: %s\nname: %s", item.getId(), item.getName());
+//        System.out.printf("Item Id: %s\nname: %s", item.getId(), item.getName());
 //        ItemCategory itemCategory = new ItemCategory("Test", "test", item);
 //        System.out.println("Item is "+ item);
 //        itemCategory.addItem(item);
