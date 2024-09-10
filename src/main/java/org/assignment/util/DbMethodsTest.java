@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public class DbMethodsTest {
     public static Firestore db = FirebaseConnection.getDb();
@@ -78,6 +79,34 @@ public class DbMethodsTest {
             case "Supplier" -> Supplier.class;
             default -> null;
         };
+    }
+
+//    public static <T> T test(String id, Class<T> tClass) {
+//        try {
+//            DocumentSnapshot document = db.collection(tClass.getSimpleName()).document(id).get().get();
+//            if (!document.exists()) return null;
+//
+//            T item = T.fromDocumentSnapshot(document);
+//            System.out.println(item);
+//            return item;
+//        } catch (Exception e) {
+//            System.err.println("Error getting document: " + e.getMessage());
+//            return null;
+//        }
+//    }
+
+    public static <T> T test2(String id, Class<T> tClass, Function<DocumentSnapshot, T> factory) {
+        try {
+            DocumentSnapshot document = db.collection(tClass.getSimpleName()).document(id).get().get();
+            if (!document.exists()) return null;
+
+            // Use the provided factory to convert the document to an object of type T
+            T item = factory.apply(document);
+            return item;
+        } catch (Exception e) {
+            System.err.println("Error getting document: " + e.getMessage());
+            return null;
+        }
     }
 
 }

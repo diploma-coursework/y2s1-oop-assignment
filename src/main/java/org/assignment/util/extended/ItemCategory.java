@@ -1,5 +1,7 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
 
 public class ItemCategory {
@@ -39,5 +41,13 @@ public class ItemCategory {
 
     public ArrayList<Item> getItems() {
         return new ArrayList<>();
+    }
+
+    public static ItemCategory fromDocumentSnapshot(DocumentSnapshot docSnapshot) {
+        ItemCategory itemCategory = new ItemCategory();
+        itemCategory.setId(docSnapshot.getId());
+        itemCategory.setName(docSnapshot.get("name").toString());
+        itemCategory.setDescription(docSnapshot.get("description").toString());
+        return itemCategory;
     }
 }

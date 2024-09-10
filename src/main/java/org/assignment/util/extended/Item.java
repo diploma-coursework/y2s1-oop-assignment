@@ -1,5 +1,7 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.base.BaseItem;
 
 import java.util.HashMap;
@@ -35,5 +37,19 @@ public class Item extends BaseItem {
                 (ItemCategory) map.get("ItemCategory"),
                 (Supplier) map.get("Supplier")
                 );
+    }
+
+    public static Item fromDocumentSnapshot(DocumentSnapshot docSnapshot) {
+        Item item = new Item();
+        item.setId(docSnapshot.getId());
+        item.setName(docSnapshot.get("name").toString());
+        item.setUnitPrice((double) docSnapshot.get("unitPrice"));
+        item.setQuantity(((Long) docSnapshot.get("quantity")).intValue());
+        try {
+            item.setItemCategory(ItemCategory.fromDocumentSnapshot(((DocumentReference) docSnapshot.get("ItemCategory")).get().get()));
+        } catch (Exception e) {
+            System.out.println("error here abc");
+        }
+        return item;
     }
 }
