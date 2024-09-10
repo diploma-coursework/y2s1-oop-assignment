@@ -1,10 +1,11 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.base.DatabaseOperations;
 
 import java.util.ArrayList;
 
-public class ItemCategory {
+public class ItemCategory implements DatabaseOperations {
     protected String id;
     protected String name;
     protected String description;

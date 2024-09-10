@@ -1,10 +1,11 @@
 package org.assignment.util.extended;
 
+import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
 
-public class Staff extends Person {
+public class Staff extends Person implements DatabaseOperations {
     protected char gender;
     protected StaffPosition position;
     protected LocalDate dateJoined;

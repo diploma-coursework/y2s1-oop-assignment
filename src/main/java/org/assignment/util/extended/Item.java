@@ -3,10 +3,11 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.base.BaseItem;
+import org.assignment.util.base.DatabaseOperations;
 
 import java.util.HashMap;
 
-public class Item extends BaseItem {
+public class Item extends BaseItem implements DatabaseOperations {
     private ItemCategory itemCategory;
     private Supplier supplier;
 
@@ -28,16 +29,6 @@ public class Item extends BaseItem {
     public ItemCategory getItemCategory(){ return this.itemCategory; }
     public Supplier getSupplier(){ return this.supplier; }
 
-    public static Item fromHashMap(HashMap<String, Object> map) {
-        return new Item(
-                (String) map.get("id"),
-                (String) map.get("name"),
-                (double) map.get("unitPrice"),
-                (int) map.get("quantity"),
-                (ItemCategory) map.get("ItemCategory"),
-                (Supplier) map.get("Supplier")
-                );
-    }
 
     public static Item fromDocumentSnapshot(DocumentSnapshot docSnapshot) {
         Item item = new Item();

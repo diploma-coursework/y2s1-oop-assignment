@@ -1,11 +1,12 @@
 package org.assignment.util.extended;
 
+import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Supplier extends Person {
+public class Supplier extends Person implements DatabaseOperations {
     protected LocalDate contractStartDate;
     protected LocalDate contractEndDate;
     protected final int contractYear = 2;
