@@ -1,9 +1,11 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ItemCategory implements DatabaseOperations {
     protected String id;
@@ -54,8 +56,13 @@ public class ItemCategory implements DatabaseOperations {
 
     // Database Operation Methods
     public boolean addToDb() {
-        // add self to db
-        return true;
+        try {
+            FirebaseConnection.getDb().collection("ItemCategory").document(this.id).set(this.toHashMapExcludeId()).get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
     public boolean getFromDb(String id) {
@@ -71,5 +78,13 @@ public class ItemCategory implements DatabaseOperations {
     public boolean deleteFromDb(String id) {
         // delete from db where id is matching
         return true;
+    }
+
+    private HashMap<String, Object> toHashMapExcludeId() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", this.name);
+        map.put("description", this.description);
+
+        return map;
     }
 }
