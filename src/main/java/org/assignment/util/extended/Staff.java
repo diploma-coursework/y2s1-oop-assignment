@@ -38,4 +38,26 @@ public class Staff extends Person implements DatabaseOperations {
     public LocalDate getDateJoined() { return this.dateJoined; }
     public double getSalary() { return this.salary; }
     public String getPassword() { return this.password; }
+
+
+    // Database Operation Methods
+    public boolean addToDb() {
+        // add self to db
+        return true;
+    }
+
+    public boolean getFromDb(String id) {
+        // fetch using id and store in self
+        return true;
+    }
+
+    public boolean updateToDb() {
+        // update self to db
+        return true;
+    }
+
+    public boolean deleteFromDb(String id) {
+        // delete from db where id is matching
+        return true;
+    }
 }

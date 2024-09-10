@@ -63,4 +63,25 @@ public class Supplier extends Person implements DatabaseOperations {
     public ArrayList<Item> getSupplyingItems() {
         return new ArrayList<>();
     }
+
+    // Database Operation Methods
+    public boolean addToDb() {
+        // add self to db
+        return true;
+    }
+
+    public boolean getFromDb(String id) {
+        // fetch using id and store in self
+        return true;
+    }
+
+    public boolean updateToDb() {
+        // update self to db
+        return true;
+    }
+
+    public boolean deleteFromDb(String id) {
+        // delete from db where id is matching
+        return true;
+    }
 }
