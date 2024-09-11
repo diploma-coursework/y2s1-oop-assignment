@@ -8,5 +8,4 @@ public interface DatabaseOperations {
     boolean getFromDb(String id);
     boolean updateToDb(String fieldName);
     boolean deleteFromDb();
-    HashMap<String, Object> toHashMapExcludeId();
 }

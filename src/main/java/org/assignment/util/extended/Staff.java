@@ -57,14 +57,8 @@ public class Staff extends Person implements DatabaseOperations {
         return true;
     }
 
-    public boolean deleteFromDb(String id) {
+    public boolean deleteFromDb() {
         // delete from db where id is matching
         return true;
-    }
-
-    public HashMap<String, Object> toHashMapExcludeId() {
-        HashMap<String, Object> map = new HashMap<>();
-        // map.put() stuff
-        return map;
     }
 }

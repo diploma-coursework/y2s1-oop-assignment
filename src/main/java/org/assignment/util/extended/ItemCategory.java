@@ -62,7 +62,11 @@ public class ItemCategory implements DatabaseOperations {
     // database operations implementation
     public boolean addToDb() {
         try {
-            itemCategoryCollection.document(this.id).set(this.toHashMapExcludeId()).get();
+            HashMap<String, Object> docValues = new HashMap<>();
+            docValues.put("name", this.name);
+            docValues.put("description", this.description);
+
+            itemCategoryCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -110,13 +114,6 @@ public class ItemCategory implements DatabaseOperations {
             System.err.println(e.getMessage());
             return false;
         }
-    }
-
-    public HashMap<String, Object> toHashMapExcludeId() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("name", this.name);
-        map.put("description", this.description);
-        return map;
     }
 
     // features
