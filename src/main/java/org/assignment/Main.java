@@ -27,8 +27,17 @@ public class Main {
 //        System.out.println(item.getClass().getSimpleName());
 
 //        Item item = DbMethodsTest.getDocAsClassObject("ITEM0000", Item.class);
-        Item item = DbMethodsTest.test2("ITEM0001", Item.class, Item::fromDocumentSnapshot);
-        System.out.println(item.getItemCategory().getId());
+//        Item item = DbMethodsTest.test2("ITEM0001", Item.class, Item::fromDocumentSnapshot);
+//        System.out.println(item.getItemCategory().getId());
+
+
+        ItemCategory itemcat = new ItemCategory();
+        boolean getSuccess = itemcat.getFromDb("CAT0000");
+        System.out.println("get success: " + getSuccess);
+        boolean setSuccess = itemcat.setName("test", true);
+        System.out.println("set success: " + setSuccess);
+
+
         //System.out.println("Made it here");
 //        System.out.printf("Item Id: %s\nname: %s", item.getId(), item.getName());
 //        ItemCategory itemCategory = new ItemCategory("Test", "test", item);

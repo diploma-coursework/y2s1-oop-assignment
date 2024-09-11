@@ -44,7 +44,7 @@ public class Item extends BaseItem implements DatabaseOperations {
         return item;
     }
 
-    // Database Operation Methods
+    // database operations implementation
     public boolean addToDb() {
         // add self to db
         return true;
@@ -55,7 +55,7 @@ public class Item extends BaseItem implements DatabaseOperations {
         return true;
     }
 
-    public boolean updateToDb() {
+    public boolean updateToDb(String fieldName) {
         // update self to db
         return true;
     }
@@ -68,7 +68,6 @@ public class Item extends BaseItem implements DatabaseOperations {
     public HashMap<String, Object> toHashMapExcludeId() {
         HashMap<String, Object> map = new HashMap<>();
         // map.put() stuff
-
         return map;
     }
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 public interface DatabaseOperations {
     boolean addToDb();
     boolean getFromDb(String id);
-    boolean updateToDb();
+    boolean updateToDb(String fieldName);
     boolean deleteFromDb(String id);
     HashMap<String, Object> toHashMapExcludeId();
 }

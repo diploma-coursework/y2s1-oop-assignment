@@ -41,7 +41,7 @@ public class Staff extends Person implements DatabaseOperations {
     public String getPassword() { return this.password; }
 
 
-    // Database Operation Methods
+    // database operations implementation
     public boolean addToDb() {
         // add self to db
         return true;
@@ -52,7 +52,7 @@ public class Staff extends Person implements DatabaseOperations {
         return true;
     }
 
-    public boolean updateToDb() {
+    public boolean updateToDb(String fieldName) {
         // update self to db
         return true;
     }
@@ -65,7 +65,6 @@ public class Staff extends Person implements DatabaseOperations {
     public HashMap<String, Object> toHashMapExcludeId() {
         HashMap<String, Object> map = new HashMap<>();
         // map.put() stuff
-
         return map;
     }
 }
