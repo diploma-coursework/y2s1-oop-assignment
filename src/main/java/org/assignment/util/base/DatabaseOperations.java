@@ -7,6 +7,6 @@ public interface DatabaseOperations {
     boolean addToDb();
     boolean getFromDb(String id);
     boolean updateToDb(String fieldName);
-    boolean deleteFromDb(String id);
+    boolean deleteFromDb();
     HashMap<String, Object> toHashMapExcludeId();
 }
