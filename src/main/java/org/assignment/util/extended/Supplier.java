@@ -2,10 +2,12 @@ package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,22 @@ public class Supplier extends Person implements DatabaseOperations {
     // database operations implementation
     public boolean addToDb() {
         // add self to db
-        return true;
+        try {
+            HashMap<String, Object> docValues = new HashMap<>();
+            docValues.put("name", this.name);
+            docValues.put("conTactNumber", getContactNumber());
+            docValues.put("address", getAddress());
+            docValues.put("email", getEmail());
+            docValues.put("contractStartDate", getContractStartDate());
+            docValues.put("contractedDate", getContractEndDate());
+            docValues.put("contractYear", getContractYear());
+
+            supplierCollection.document(DbMethods.dbCreateNewId("Item","ITEM",4)).set(docValues).get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
     public static Supplier getFromDb(String id) {
@@ -76,14 +93,26 @@ public class Supplier extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean updateToDb(String fieldName) {
-        // update self to db
-        return true;
+    public boolean updateToDb(String fieldName)  {
+        try {
+            Field field = this.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            supplierCollection.document(this.id).update(fieldName, field.get(this)).get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
-    public boolean deleteFromDb() {
-        // delete from db where id is matching
-        return true;
+    public boolean deleteFromDb()  {
+        try {
+            supplierCollection.document(this.id).delete().get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
     // Extend Contract

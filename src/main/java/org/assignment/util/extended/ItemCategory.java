@@ -2,6 +2,7 @@ package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
@@ -18,11 +19,11 @@ public class ItemCategory implements DatabaseOperations {
     private static final CollectionReference itemCategoryCollection = FirebaseConnection.getDb().collection("ItemCategory");
 
     public ItemCategory() {
-        this("", "", "");
+        this("", "");
     }
 
-    public ItemCategory(String id, String name, String description) {
-        this.id = id;
+    public ItemCategory(String name, String description) {
+//        this.id = id;
         this.name = name;
         this.description = description;
     }
@@ -65,7 +66,7 @@ public class ItemCategory implements DatabaseOperations {
             docValues.put("name", this.name);
             docValues.put("description", this.description);
 
-            itemCategoryCollection.document(this.id).set(docValues).get();
+            itemCategoryCollection.document(DbMethods.dbCreateNewId("ItemCategory","CAT",4)).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
