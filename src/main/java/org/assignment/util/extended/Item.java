@@ -7,6 +7,7 @@ import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.BaseItem;
 import org.assignment.util.base.DatabaseOperations;
 
+import javax.swing.text.Document;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,25 +55,33 @@ public class Item extends BaseItem implements DatabaseOperations {
         }
     }
 
-    public boolean getFromDb(String id) {
+    public static Item getFromDb(String id) {
         try {
-            DocumentSnapshot doc = itemCollection.document(this.id).get().get();
-            if (!doc.exists()) return false;
+            // get from cache if available
+            Item cachedItemObject = (Item) FirebaseConnection.getCachedDocument(itemCollection, itemCollection.document(id));
+            if (cachedItemObject != null) return cachedItemObject;
 
+            // fetch from db
+            DocumentSnapshot doc = itemCollection.document(id).get().get();
+            if (!doc.exists()) return null;
             Map<String, Object> docData = doc.getData();
-            if (docData == null) return false;
+            if (docData == null) return null;
 
-            this.id = doc.getId();
-            this.name = Optional.ofNullable(docData.get("name")).orElse("").toString();
-            this.unitPrice = Double.parseDouble(Optional.ofNullable(docData.get("unitPrice")).orElse(0.0).toString());
-            this.quantity = Integer.parseInt(Optional.ofNullable(docData.get("quantity")).orElse(0).toString());
-//            this.itemCategory = ;
-//            this.supplier = Optional.ofNullable(docData.get("supplier"));
+            // create new instance and assign values
+            Item fetchedItem = new Item();
+            fetchedItem.setId(doc.getId());
+            fetchedItem.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
+            fetchedItem.setUnitPrice(Double.parseDouble(Optional.ofNullable(docData.get("unitPrice")).orElse(0.0).toString()));
+            fetchedItem.setQuantity(Integer.parseInt(Optional.ofNullable(docData.get("quantity")).orElse(0).toString()));
+            fetchedItem.setItemCategory(ItemCategory.getFromDb(((DocumentReference) docData.get("itemCategory")).getId()));
+            fetchedItem.setSupplier(Supplier.getFromDb(((DocumentReference) docData.get("supplier")).getId()));
 
-            return true;
+            // cache and return
+            FirebaseConnection.cacheNewDocument(itemCollection, itemCollection.document(id), fetchedItem);
+            return fetchedItem;
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return false;
+            return null;
         }
     }
 

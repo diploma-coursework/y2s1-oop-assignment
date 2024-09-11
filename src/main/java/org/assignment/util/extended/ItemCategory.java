@@ -73,29 +73,30 @@ public class ItemCategory implements DatabaseOperations {
         }
     }
 
-    public boolean getFromDb(String id) {
+    public static ItemCategory getFromDb(String id) {
         try {
             // get from cache if available
-            ItemCategory cachedItemCategoryObject = (ItemCategory) FirebaseConnection.getCachedDocument(itemCategoryCollection, itemCategoryCollection.document(this.id));
-            if (cachedItemCategoryObject != null) {
-                // TODO LATER: change to static method and return ItemCategory object
-                // if not, new keyword is required to create and access this method which does not share cached object's
-                // memory location
-            }
-            DocumentSnapshot doc = itemCategoryCollection.document(this.id).get().get();
-            if (!doc.exists()) return false;
+            ItemCategory cachedItemCategoryObject = (ItemCategory) FirebaseConnection.getCachedDocument(itemCategoryCollection, itemCategoryCollection.document(id));
+            if (cachedItemCategoryObject != null) return cachedItemCategoryObject;
 
+            // fetch from db
+            DocumentSnapshot doc = itemCategoryCollection.document(id).get().get();
+            if (!doc.exists()) return null;
             Map<String, Object> docData = doc.getData();
-            if (docData == null) return false;
+            if (docData == null) return null;
 
-            this.id = doc.getId();
-            this.name = Optional.ofNullable(docData.get("name")).orElse("").toString();
-            this.description = Optional.ofNullable(docData.get("description")).orElse("").toString();
+            // create new instance and assign values
+            ItemCategory fetchedItemCategory = new ItemCategory();
+            fetchedItemCategory.setId(doc.getId());
+            fetchedItemCategory.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
+            fetchedItemCategory.setDescription(Optional.ofNullable(docData.get("description").toString()).orElse(""));
 
-            return true;
+            // cache and return
+            FirebaseConnection.cacheNewDocument(itemCategoryCollection, itemCategoryCollection.document(id), fetchedItemCategory);
+            return fetchedItemCategory;
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return false;
+            return null;
         }
     }
 

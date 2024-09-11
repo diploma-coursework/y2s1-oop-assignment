@@ -1,12 +1,16 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Staff extends Person implements DatabaseOperations {
     protected char gender;
@@ -50,9 +54,38 @@ public class Staff extends Person implements DatabaseOperations {
         return true;
     }
 
-    public boolean getFromDb(String id) {
-        // fetch using id and store in self
-        return true;
+    public static Staff getFromDb(String id) {
+        try {
+            // get from cache if available
+            Staff cachedStaffObject = (Staff) FirebaseConnection.getCachedDocument(staffCollection, staffCollection.document(id));
+            if (cachedStaffObject != null) return cachedStaffObject;
+
+            // fetch from db
+            DocumentSnapshot doc = staffCollection.document(id).get().get();
+            if (!doc.exists()) return null;
+            Map<String, Object> docData = doc.getData();
+            if (docData == null) return null;
+
+            // create new instance and assign values
+            Staff fetchedStaff = new Staff();
+            fetchedStaff.setId(doc.getId());
+            fetchedStaff.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
+            fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber").toString()).orElse(""));
+            fetchedStaff.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
+            fetchedStaff.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
+            fetchedStaff.setGender(Optional.ofNullable((char) docData.get("gender")).orElse('\u0000'));
+            fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
+//            fetchedStaff.setDateJoined(Optional.ofNullable(docData.get("dateJoined").toString()).orElse("")); TODO: parse to LocalDate
+            fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
+            fetchedStaff.setPassword(Optional.ofNullable(docData.get("password").toString()).orElse(""));
+
+            // cache and return
+            FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);
+            return fetchedStaff;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     public boolean updateToDb(String fieldName) {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 public interface DatabaseOperations {
     boolean addToDb();
-    boolean getFromDb(String id);
     boolean updateToDb(String fieldName);
     boolean deleteFromDb();
 }
