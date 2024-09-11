@@ -17,4 +17,11 @@ public enum StaffPosition {
     public AccessLevel getAccessLevel() {
         return this.accessLevel;
     }
+
+    public static StaffPosition fromString(String positionName) {
+        for (StaffPosition position : StaffPosition.values()) {
+            if (position.name().equalsIgnoreCase(positionName)) return position;
+        }
+        return null;
+    }
 }
