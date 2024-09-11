@@ -31,11 +31,12 @@ public class Main {
 //        System.out.println(item.getItemCategory().getId());
 
 
-        ItemCategory itemcat = new ItemCategory();
-        boolean getSuccess = itemcat.getFromDb("CAT0000");
-        System.out.println("get success: " + getSuccess);
-        boolean setSuccess = itemcat.setName("test", true);
-        System.out.println("set success: " + setSuccess);
+//        ItemCategory itemcat = new ItemCategory();
+//        boolean getSuccess = itemcat.getFromDb("CAT0000");
+//        System.out.println("get success: " + getSuccess);
+//        boolean setSuccess = itemcat.setName("test", true);
+//        System.out.println("set success: " + setSuccess);
+        System.out.println(ItemCategory.getItemCategoryCollection().getPath());
 
 
         //System.out.println("Made it here");

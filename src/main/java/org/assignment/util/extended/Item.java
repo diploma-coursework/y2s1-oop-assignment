@@ -34,15 +34,19 @@ public class Item extends BaseItem implements DatabaseOperations {
     // getters
     public ItemCategory getItemCategory() { return this.itemCategory; }
     public Supplier getSupplier() { return this.supplier; }
+    public static CollectionReference getItemCollection() { return Item.itemCollection; }
 
     // database operations implementation
     public boolean addToDb() {
         try {
             HashMap<String, Object> docValues = new HashMap<>();
             docValues.put("name", this.name);
-            docValues.put("description", this.description);
+            docValues.put("unitPrice", this.unitPrice);
+            docValues.put("quantity", this.quantity);
+            docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
+            docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
-            itemCategoryCollection.document(this.id).set(docValues).get();
+            itemCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -52,7 +56,7 @@ public class Item extends BaseItem implements DatabaseOperations {
 
     public boolean getFromDb(String id) {
         try {
-            DocumentSnapshot doc = itemCategoryCollection.document(this.id).get().get();
+            DocumentSnapshot doc = itemCollection.document(this.id).get().get();
             if (!doc.exists()) return false;
 
             Map<String, Object> docData = doc.getData();
@@ -60,7 +64,10 @@ public class Item extends BaseItem implements DatabaseOperations {
 
             this.id = doc.getId();
             this.name = Optional.ofNullable(docData.get("name")).orElse("").toString();
-            this.description = Optional.ofNullable(docData.get("description")).orElse("").toString();
+            this.unitPrice = Double.parseDouble(Optional.ofNullable(docData.get("unitPrice")).orElse(0.0).toString());
+            this.quantity = Integer.parseInt(Optional.ofNullable(docData.get("quantity")).orElse(0).toString());
+//            this.itemCategory = ;
+//            this.supplier = Optional.ofNullable(docData.get("supplier"));
 
             return true;
         } catch (Exception e) {
@@ -69,26 +76,28 @@ public class Item extends BaseItem implements DatabaseOperations {
         }
     }
 
-    public boolean updateToDb(String fieldName) {
-        try {
-            Field field = this.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-
-            itemCategoryCollection.document(this.id).update(fieldName, field.get(this)).get();
-            return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+    public boolean updateToDb(String fieldName) { // TODO: method body
+        return true;
+//        try {
+//            Field field = this.getClass().getDeclaredField(fieldName);
+//            field.setAccessible(true);
+//
+//            itemCategoryCollection.document(this.id).update(fieldName, field.get(this)).get();
+//            return true;
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//            return false;
+//        }
     }
 
-    public boolean deleteFromDb() {
-        try {
-            itemCategoryCollection.document(this.id).delete().get();
-            return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+    public boolean deleteFromDb() { // TODO: method body
+        return true;
+//        try {
+//            itemCategoryCollection.document(this.id).delete().get();
+//            return true;
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//            return false;
+//        }
     }
 }

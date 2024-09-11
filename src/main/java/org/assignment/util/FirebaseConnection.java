@@ -46,23 +46,23 @@ public class FirebaseConnection {
         return db;
     }
 
-    public void cacheNewDocument(CollectionReference collectionReference, DocumentReference documentReference, Object object) {
+    public static void cacheNewDocument(CollectionReference collectionReference, DocumentReference documentReference, Object object) {
         // check if collection is cached before
-        if (FirebaseConnection.cachedDocumentsByCollection.containsKey(collectionReference)) {
+        if (cachedDocumentsByCollection.containsKey(collectionReference)) {
             // cache the document
-            FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).put(documentReference, object);
+            cachedDocumentsByCollection.get(collectionReference).put(documentReference, object);
         } else {
             // create a hashmap for the new collection and cache
             HashMap<DocumentReference, Object> newCollectionCache = new HashMap<>();
             newCollectionCache.put(documentReference, object);
 
-            FirebaseConnection.cachedDocumentsByCollection.put(collectionReference, newCollectionCache);
+            cachedDocumentsByCollection.put(collectionReference, newCollectionCache);
         }
     }
 
-    public Object getCachedDocument(CollectionReference collectionReference, DocumentReference documentReference) {
-        if (!FirebaseConnection.cachedDocumentsByCollection.containsKey(collectionReference)) return null;
-        if (!FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).containsKey(documentReference)) return null;
-        return FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).get(documentReference);
+    public static Object getCachedDocument(CollectionReference collectionReference, DocumentReference documentReference) {
+        if (!cachedDocumentsByCollection.containsKey(collectionReference)) return null;
+        if (!cachedDocumentsByCollection.get(collectionReference).containsKey(documentReference)) return null;
+        return cachedDocumentsByCollection.get(collectionReference).get(documentReference);
     }
 }

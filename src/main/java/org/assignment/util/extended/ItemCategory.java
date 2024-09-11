@@ -54,10 +54,9 @@ public class ItemCategory implements DatabaseOperations {
 
     // getters
     public String getId(){ return this.id;}
-    public String getName() {
-        return this.name;
-    }
+    public String getName() { return this.name; }
     public String getDescription() { return this.description;}
+    public static CollectionReference getItemCategoryCollection() { return ItemCategory.itemCategoryCollection; }
 
     // database operations implementation
     public boolean addToDb() {
@@ -76,6 +75,13 @@ public class ItemCategory implements DatabaseOperations {
 
     public boolean getFromDb(String id) {
         try {
+            // get from cache if available
+            ItemCategory cachedItemCategoryObject = (ItemCategory) FirebaseConnection.getCachedDocument(itemCategoryCollection, itemCategoryCollection.document(this.id));
+            if (cachedItemCategoryObject != null) {
+                // TODO LATER: change to static method and return ItemCategory object
+                // if not, new keyword is required to create and access this method which does not share cached object's
+                // memory location
+            }
             DocumentSnapshot doc = itemCategoryCollection.document(this.id).get().get();
             if (!doc.exists()) return false;
 

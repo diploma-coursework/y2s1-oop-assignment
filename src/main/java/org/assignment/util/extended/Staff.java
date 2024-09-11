@@ -1,5 +1,7 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.firestore.CollectionReference;
+import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
@@ -12,6 +14,7 @@ public class Staff extends Person implements DatabaseOperations {
     protected LocalDate dateJoined;
     protected double salary;
     protected String password;
+    private static final CollectionReference staffCollection = FirebaseConnection.getDb().collection("Staff");
 
     public Staff() {
         this("", "", "", "", "", '\u0000', null, null, 0, "");
@@ -39,7 +42,7 @@ public class Staff extends Person implements DatabaseOperations {
     public LocalDate getDateJoined() { return this.dateJoined; }
     public double getSalary() { return this.salary; }
     public String getPassword() { return this.password; }
-
+    public static CollectionReference getStaffCollection() { return Staff.staffCollection; }
 
     // database operations implementation
     public boolean addToDb() {

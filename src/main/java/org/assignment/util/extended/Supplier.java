@@ -1,5 +1,7 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.firestore.CollectionReference;
+import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 
@@ -11,6 +13,7 @@ public class Supplier extends Person implements DatabaseOperations {
     protected LocalDate contractStartDate;
     protected LocalDate contractEndDate;
     protected final int contractYear = 2;
+    private static final CollectionReference supplierCollection = FirebaseConnection.getDb().collection("Supplier");
 
     // Constructors
     public Supplier() {
@@ -27,6 +30,7 @@ public class Supplier extends Person implements DatabaseOperations {
     public LocalDate getContractStartDate() { return contractStartDate; }
     public LocalDate getContractEndDate()   { return contractEndDate;   }
     public int getContractYear()            { return contractYear;      }
+    public static CollectionReference getSupplierCollection() { return Supplier.supplierCollection; }
 
     // Setter
     public void setContractStartDate(LocalDate contractStartDate) {
