@@ -1,5 +1,6 @@
 package org.assignment.util.extended;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.DbMethods;
@@ -9,6 +10,7 @@ import org.assignment.util.base.Person;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +53,7 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("conTactNumber", getContactNumber());
             docValues.put("address", getAddress());
             docValues.put("email", getEmail());
+            // TODO: it needs to be stored as either String or Timestamp in db, below need change
             docValues.put("contractStartDate", getContractStartDate());
             docValues.put("contractedDate", getContractEndDate());
             docValues.put("contractYear", getContractYear());
@@ -82,7 +85,15 @@ public class Supplier extends Person implements DatabaseOperations {
             fetchedSupplier.setContactNumber(Optional.ofNullable(docData.get("contactNumber").toString()).orElse(""));
             fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
             fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
-            // TODO: ur contract thing maybe
+            // TODO: ur contract stuff (idk correct or not), can make them into a method, and call it here,so less redundant
+            Timestamp timestamp = (Timestamp) docData.get("contractStartDate");
+            LocalDate contractStartDate = Optional.ofNullable(timestamp)
+                    .map(ts -> ts.toDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate())
+                    .orElse(null);
+
+            fetchedSupplier.setContractStartDate(contractStartDate);
 
             // cache and return
             FirebaseConnection.cacheNewDocument(supplierCollection, supplierCollection.document(id), fetchedSupplier);
