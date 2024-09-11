@@ -1,6 +1,8 @@
 package org.assignment.util;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -8,9 +10,11 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 public class FirebaseConnection {
     private static Firestore db;
+    private static final HashMap<CollectionReference, HashMap<DocumentReference, Object>> cachedDocumentsByCollection = new HashMap<>();
 
     private static synchronized void initializeDb() throws IOException {
         // read service account key json
@@ -40,5 +44,25 @@ public class FirebaseConnection {
             }
         }
         return db;
+    }
+
+    public void cacheNewDocument(CollectionReference collectionReference, DocumentReference documentReference, Object object) {
+        // check if collection is cached before
+        if (FirebaseConnection.cachedDocumentsByCollection.containsKey(collectionReference)) {
+            // cache the document
+            FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).put(documentReference, object);
+        } else {
+            // create a hashmap for the new collection and cache
+            HashMap<DocumentReference, Object> newCollectionCache = new HashMap<>();
+            newCollectionCache.put(documentReference, object);
+
+            FirebaseConnection.cachedDocumentsByCollection.put(collectionReference, newCollectionCache);
+        }
+    }
+
+    public Object getCachedDocument(CollectionReference collectionReference, DocumentReference documentReference) {
+        if (!FirebaseConnection.cachedDocumentsByCollection.containsKey(collectionReference)) return null;
+        if (!FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).containsKey(documentReference)) return null;
+        return FirebaseConnection.cachedDocumentsByCollection.get(collectionReference).get(documentReference);
     }
 }
