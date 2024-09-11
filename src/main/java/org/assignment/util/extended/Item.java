@@ -7,8 +7,6 @@ import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.BaseItem;
 import org.assignment.util.base.DatabaseOperations;
 
-import javax.swing.text.Document;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
