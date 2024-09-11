@@ -8,13 +8,13 @@ public abstract class BaseMenu {
 
     public void start() {};
 
-    protected static void displayOptions(HashMap<String, Option> options) {
+    protected static synchronized void displayOptions(HashMap<String, Option> options) {
         options.forEach((optionIdentifier, option) -> {
             System.out.printf("%s - %s\n", optionIdentifier, option.description);
         });
     }
 
-    protected static void getUserOptions(HashMap<String, Option> options) {
+    protected static synchronized void getUserOptions(HashMap<String, Option> options) {
         while (true) {
             System.out.print("> ");
             final String enterValue = scanner.next();
