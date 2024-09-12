@@ -4,42 +4,34 @@ import org.assignment.util.base.BaseMenu;
 import java.util.HashMap;
 
 public class MainMenu extends BaseMenu {
-    private final HashMap<String, Option> option1, option2C, option2S;
+    private static final HashMap<String, Option> options = new HashMap<>();
 
     public MainMenu() {
-        this.option1 = new HashMap<>();
-        this.option2C = new HashMap<>();
-        this.option2S = new HashMap<>();
+        MainMenu.options.put("1", new Option("Staff Login", this::staffLogin));
+        MainMenu.options.put("0", new Option("Exit", this::exit));
 
-        this.option1.put("1", new Option("Customer Account", this::customerActionSelection));
-        this.option1.put("2", new Option("Staff Account", this::staffActionSelection));
-        this.option1.put("0", new Option("Exit", () -> {}));
-
-        // TODO: provide correct option runnable
-        this.option2C.put("1", new Option("Login", this::customerActionSelection));
-        this.option2C.put("2", new Option("Signup", this::staffActionSelection));
-        this.option2C.put("0", new Option("Exit", () -> {}));
-
-        this.option2S.put("1", new Option("Login", this::customerActionSelection));
-        this.option2S.put("0", new Option("Exit", () -> {}));
+        exitFlag = false;
     }
 
     @Override
     public void start() {
-        System.out.println("Welcome to XXX Furniture Store!\n===============================");
-        displayOptions(this.option1);
-        getUserOptions(this.option1);
+        if (!exitFlag) {
+            System.out.println("Welcome to XXX Furniture Store!\n===============================");
+            displayOptions(MainMenu.options);
+            getUserOptions(MainMenu.options);
+        }
     }
 
-    private void customerActionSelection() {
-        // TODO
+    private void staffLogin() {
+        System.out.println("login....");
+        pause();
+        clearScreen();
+        pause();
     }
 
 
-    private void staffActionSelection() {
-        // TODO
+    private void exit() {
+        System.out.println("Thank you for using ....");
+        exitFlag = true;
     }
-
-
-
 }

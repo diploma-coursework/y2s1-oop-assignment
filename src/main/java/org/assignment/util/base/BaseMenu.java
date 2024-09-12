@@ -3,9 +3,12 @@ package org.assignment.util.base;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Scanner;
+import org.fusesource.jansi.Ansi;
+import static org.fusesource.jansi.Ansi.*;
 
 public abstract class BaseMenu {
     protected static final Scanner scanner = new Scanner(System.in);
+    protected boolean exitFlag;
 
     public void start() {};
 
@@ -29,8 +32,7 @@ public abstract class BaseMenu {
     }
 
     protected static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        System.out.println(ansi().eraseScreen());
     }
 
     protected static void pause() {
