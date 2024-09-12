@@ -37,6 +37,7 @@ public class Supplier extends Person implements DatabaseOperations {
     public LocalDate getContractStartDate() { return contractStartDate; }
     public LocalDate getContractEndDate()   { return contractEndDate;   }
     public int getContractYear()            { return contractYear;      }
+    public ArrayList<Item> getSupplyingItems() { return new ArrayList<>(); }
     public static CollectionReference getSupplierCollection() { return Supplier.supplierCollection; }
 
     // Setter
@@ -155,7 +156,5 @@ public class Supplier extends Person implements DatabaseOperations {
         return (!today.isBefore(this.contractStartDate) && !today.isAfter(this.contractEndDate));
     }
 
-    public ArrayList<Item> getSupplyingItems() {
-        return new ArrayList<>();
-    }
+
 }
