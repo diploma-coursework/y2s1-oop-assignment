@@ -50,7 +50,7 @@ public class Supplier extends Person implements DatabaseOperations {
         try {
             HashMap<String, Object> docValues = new HashMap<>();
             docValues.put("name", this.name);
-            docValues.put("conTactNumber", getContactNumber());
+            docValues.put("contactNumber", getContactNumber());
             docValues.put("address", getAddress());
             docValues.put("email", getEmail());
             // TODO: it needs to be stored as either String or Timestamp in db, below need change
@@ -58,7 +58,7 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("contractedDate", getContractEndDate());
             docValues.put("contractYear", getContractYear());
 
-            this.id = DbMethods.dbCreateNewId("Item","ITEM",4);
+            this.id = DbMethods.dbCreateNewId("Supplier","SUP",4);
             supplierCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {

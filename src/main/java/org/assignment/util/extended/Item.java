@@ -87,7 +87,6 @@ public class Item extends BaseItem implements DatabaseOperations {
             System.err.println(e.getMessage());
             return false;
         }
-
     }
 
     public static Item getFromDb(String id) {

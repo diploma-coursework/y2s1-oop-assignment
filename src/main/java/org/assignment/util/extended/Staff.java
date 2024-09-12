@@ -3,10 +3,13 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
+
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +53,25 @@ public class Staff extends Person implements DatabaseOperations {
 
     // database operations implementation
     public boolean addToDb() {
-        // add self to db
-        return true;
+        try {
+            HashMap<String, Object> docValues = new HashMap<>();
+            docValues.put("name", this.name);
+            docValues.put("contactNumber", getContactNumber());
+            docValues.put("address", getAddress());
+            docValues.put("email", getEmail());
+            docValues.put("gender", getGender());
+            docValues.put("position", getPosition().toString());
+            docValues.put("dateJoined", getDateJoined());
+            docValues.put("salary", getSalary());
+            docValues.put("password", getPassword());
+
+            this.id = DbMethods.dbCreateNewId("Staff","STF",4);
+            staffCollection.document(this.id).set(docValues).get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
     public static Staff getFromDb(String id) {
@@ -88,13 +108,25 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean updateToDb(String fieldName) {
-        // update self to db
-        return true;
+    public boolean updateToDb(String fieldName)  {
+        try {
+            Field field = this.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            staffCollection.document(this.id).update(fieldName, field.get(this)).get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
-    public boolean deleteFromDb() {
-        // delete from db where id is matching
-        return true;
+    public boolean deleteFromDb()  {
+        try {
+            staffCollection.document(this.id).delete().get();
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 }
