@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.assignment.util.DbMethodsTest;
 import org.assignment.util.extended.*;
 import org.assignment.util.enums.*;
+import org.assignment.util.menu.ItemMenu;
 
 import java.time.LocalDate;
 import java.io.FileInputStream;
@@ -39,8 +40,10 @@ public class Main {
 //        System.out.println("set success: " + setSuccess);
 //        System.out.println(ItemCategory.getItemCategoryCollection().getPath());
 
-        ItemCategory itemCat = new ItemCategory("horticultural tools","Essentials for  cultivating and maintaining a lush, thriving garden");
-        itemCat.addToDb();
+//        ItemCategory itemCat = new ItemCategory("horticultural tools","Essentials for  cultivating and maintaining a lush, thriving garden");
+//        itemCat.addToDb();
+        ItemMenu itemMenu = new ItemMenu();
+        itemMenu.start();
 
 
         //System.out.println("Made it here");

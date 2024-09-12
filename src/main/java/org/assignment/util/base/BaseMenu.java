@@ -1,6 +1,7 @@
 package org.assignment.util.base;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Scanner;
 
 public abstract class BaseMenu {
@@ -30,6 +31,23 @@ public abstract class BaseMenu {
     protected static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    protected static void pause() {
+        try {
+            Optional.of(System.in.read()).ifPresent(value -> {});
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void timedPause(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public record Option(String description, Runnable execute) {}
