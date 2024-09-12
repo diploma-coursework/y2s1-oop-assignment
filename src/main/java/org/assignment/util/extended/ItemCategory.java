@@ -66,7 +66,8 @@ public class ItemCategory implements DatabaseOperations {
             docValues.put("name", this.name);
             docValues.put("description", this.description);
 
-            itemCategoryCollection.document(DbMethods.dbCreateNewId("ItemCategory","CAT",4)).set(docValues).get();
+            this.id = DbMethods.dbCreateNewId("ItemCategory","CAT",4);
+            itemCategoryCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());

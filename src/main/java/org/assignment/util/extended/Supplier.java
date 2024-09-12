@@ -58,7 +58,8 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("contractedDate", getContractEndDate());
             docValues.put("contractYear", getContractYear());
 
-            supplierCollection.document(DbMethods.dbCreateNewId("Item","ITEM",4)).set(docValues).get();
+            this.id = DbMethods.dbCreateNewId("Item","ITEM",4);
+            supplierCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());

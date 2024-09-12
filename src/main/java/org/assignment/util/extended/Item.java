@@ -31,8 +31,39 @@ public class Item extends BaseItem implements DatabaseOperations {
     }
 
     // setters
+    public boolean setName(String name, boolean updateToDb) {
+        this.name = name;
+        if (updateToDb) return this.updateToDb("name");
+        return false;
+    }
+
+    public boolean setUnitPrice(double unitPrice, boolean updateToDb) {
+        this.unitPrice = unitPrice;
+        if (updateToDb) return this.updateToDb("unitPrice");
+        return false;
+    }
+
+    public boolean setQuantity(int quantity, boolean updateToDb) {
+        this.quantity = quantity;
+        if (updateToDb) return this.updateToDb("quantity");
+        return false;
+    }
+
     public void setItemCategory(ItemCategory itemCategory) { this.itemCategory = itemCategory; }
+
+    public boolean setItemCategory(ItemCategory itemCategory, boolean updateToDb) {
+        this.itemCategory = itemCategory;
+        if (updateToDb) return this.updateToDb("itemCategory");
+        return false;
+    }
+
     public void setSupplier(Supplier supplier) { this.supplier = supplier; }
+
+    public boolean setSupplier(Supplier supplier, boolean updateToDb) {
+        this.supplier = supplier;
+        if (updateToDb) return this.updateToDb("supplier");
+        return false;
+    }
 
     // getters
     public ItemCategory getItemCategory() { return this.itemCategory; }
@@ -49,7 +80,8 @@ public class Item extends BaseItem implements DatabaseOperations {
             docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
             docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
-            itemCollection.document(DbMethods.dbCreateNewId("Item","ITEM",4)).set(docValues).get();
+            this.id = DbMethods.dbCreateNewId("Item","ITEM",4);
+            itemCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -93,7 +125,18 @@ public class Item extends BaseItem implements DatabaseOperations {
             Field field = this.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            itemCollection.document(this.id).update(fieldName, field.get(this)).get();
+            if (fieldName.equals("itemCategory")) {
+                String docRefId = ((ItemCategory) field.get(this)).getId();
+                DocumentReference docRef = ItemCategory.getItemCategoryCollection().document(docRefId);
+                itemCollection.document(this.id).update(fieldName, docRef);
+            } else if (fieldName.equals("supplier")) {
+                String docRefId = ((Supplier) field.get(this)).getId();
+                DocumentReference docRef = Supplier.getSupplierCollection().document(docRefId);
+                itemCollection.document(this.id).update(fieldName, docRef);
+            } else {
+                itemCollection.document(this.id).update(fieldName, field.get(this)).get();
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
