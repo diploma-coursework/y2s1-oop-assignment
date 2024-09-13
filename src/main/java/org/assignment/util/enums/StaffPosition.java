@@ -2,11 +2,11 @@ package org.assignment.util.enums;
 
 
 public enum StaffPosition {
-    INVENTORY_CLERK(AccessLevel.STAFF),
-    STOCK_CONTROLLER(AccessLevel.STAFF),
-    WAREHOUSE_MANAGER(AccessLevel.MANAGER),
-    INVENTORY_SUPERVISOR(AccessLevel.MANAGER),
-    ADMIN(AccessLevel.ADMIN);
+    INVENTORY_CLERK(AccessLevel.STAFF),         // INC
+    STOCK_CONTROLLER(AccessLevel.STAFF),        // STC
+    WAREHOUSE_MANAGER(AccessLevel.MANAGER),     // WHM
+    INVENTORY_SUPERVISOR(AccessLevel.MANAGER),  // INS
+    ADMIN(AccessLevel.ADMIN);                   // ADM
 
     private final AccessLevel accessLevel;  // Changed to instance variable
 

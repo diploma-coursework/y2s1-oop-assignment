@@ -1,12 +1,13 @@
 package org.assignment.util.menu;
 
+import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
+import org.checkerframework.checker.units.qual.A;
 
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class ItemMenu extends BaseMenu {
     private static final Scanner scanner = new Scanner(System.in);
@@ -52,7 +53,38 @@ public class ItemMenu extends BaseMenu {
     private void removeItem() {
         System.out.println("Removing an item...");
         // TODO: choose by id
-        // Logic to remove item
+
+//        Map<String,Item> itemList = new HashMap<>();
+        List<Item> itemList = new ArrayList<>();
+//        int counter = 0;
+
+        while (scanner.hasNext()) { // also check for valid ID
+            String input = scanner.next();
+            if (DbMethods.isValidCode("ITEM",input)){
+//                counter++;
+                itemList.add(Item.getFromDb(input));
+//                itemList.put(String.valueOf(counter),Item.getFromDb(input));
+            }
+        }
+        int option;
+         do {
+             // TODO: print ArrayList properly
+             int counter = 0;
+             System.out.println("These are the Items that will be Deleted");
+             System.out.println("Enter the Indexes that would like to remove, Enter 0 to Confirm");
+             option = -1;
+//             itemList.
+//            itemList.forEach((index, item) -> {
+//                System.out.printf("%s - %s\n", index, item);
+//            });
+//            option = scanner.nextInt();
+
+//            if (itemList.containsKey(String.valueOf(option))){
+//
+//            }
+
+        } while(option == 0);
+
     }
 
     private void viewItems() {

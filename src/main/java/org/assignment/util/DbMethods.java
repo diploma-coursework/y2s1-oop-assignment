@@ -155,6 +155,26 @@ public class DbMethods {
         }
     }
 
+    public static boolean isValidCode(String idFormat,String input) {
+        if (input.length() != 8 && input.length() != 7) {
+            return false;
+        }
+
+        String prefix;
+        String suffix;
+
+        if (input.length() == 8){
+            prefix = input.substring(0, 4);
+            suffix = input.substring(4);
+        }
+        else {
+            prefix = input.substring(0, 3);
+            suffix = input.substring(3);
+        }
+
+        return prefix.equals(idFormat) && suffix.chars().allMatch(Character::isDigit);
+    }
+
     public static void dbVerification(String action, ApiFuture<WriteResult> future){
         try {
             WriteResult result = future.get();
