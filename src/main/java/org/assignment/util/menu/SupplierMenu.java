@@ -24,22 +24,22 @@ public class SupplierMenu extends BaseMenu {
     public void addSupplier() {
         // Name
         Supplier supplier = new Supplier();
-        System.out.println("Supplier Name  : ");
+        System.out.println("Supplier Name       : ");
         supplier.setName(scanner.nextLine());
         // Validation Check
 
         // Contact number
-        System.out.println("Contact Number : ");
+        System.out.println("Contact Number      : ");
         supplier.setContactNumber(scanner.nextLine());
         // Validation Check
 
         // Email
-        System.out.println("Email          : ");
+        System.out.println("Email               : ");
         supplier.setEmail(scanner.nextLine());
         // Validation Check
 
         // Address
-        System.out.println("Address        : ");
+        System.out.println("Address             : ");
         supplier.setAddress(scanner.nextLine());
         // Validation Check
         // Ask for confirmation,

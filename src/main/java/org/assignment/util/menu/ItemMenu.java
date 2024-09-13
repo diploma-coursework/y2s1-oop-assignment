@@ -36,15 +36,15 @@ public class ItemMenu extends BaseMenu {
         System.out.println("Adding an item...");
         Item item = new Item();
         // TODO: request for fill up of constructor parameters
-        System.out.println("Item Name :");
+        System.out.println("Item Name           :");
         item.setName(scanner.next());
-        System.out.println("Item Unit Price :");
+        System.out.println("Item Unit Price     :");
         item.setUnitPrice(scanner.nextDouble());
-        System.out.println("Item Quantity :");
+        System.out.println("Item Quantity       :");
         item.setQuantity(scanner.nextInt());
-        System.out.println("Supplier ID :");
+        System.out.println("Supplier ID         :");
         item.setSupplier(Supplier.getFromDb(scanner.next()));
-        System.out.println("ItemCategory ID :");
+        System.out.println("ItemCategory ID     :");
         item.setItemCategory(ItemCategory.getFromDb(scanner.next()));
         scanner.next();
     }
