@@ -175,6 +175,4 @@ public class Supplier extends Person implements DatabaseOperations {
         LocalDate today = LocalDate.now();
         return (!today.isBefore(this.contractStartDate) && !today.isAfter(this.contractEndDate));
     }
-
-
 }
