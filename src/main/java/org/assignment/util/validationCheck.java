@@ -6,34 +6,45 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class validationCheck {
 
-    public static void checkName(String name) {
+    public static String checkAndFormatName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty!");
+            throw new IllegalArgumentException("Name cannot be null or empty.");
         }
+
+        name = name.trim(); // Trim leading/trailing spaces
 
         if (name.length() < 2 || name.length() > 50) {
-            throw new IllegalArgumentException("Name cannot be too short or too long!");
+            throw new IllegalArgumentException("Name must be between 2 and 50 characters.");
         }
 
-        // Check for valid characters (only letters, spaces, hyphens, and apostrophes)
+        // Check for valid characters (letters, spaces, hyphens, and apostrophes)
         if (!name.matches("^[a-zA-Z\\s'-]+$")) {
-            throw new IllegalArgumentException("Name contains invalid characters!");
+            throw new IllegalArgumentException("Name can only contain letters, spaces, hyphens, or apostrophes.");
         }
 
-        // Ensure first letter is uppercase
-        if (!Character.isUpperCase(name.charAt(0))) {
-            throw new IllegalArgumentException("First letter must be uppercase!");
-        }
-
-        // Check for consecutive spaces, hyphens, or apostrophes
+        // Ensure no consecutive spaces, hyphens, or apostrophes
         if (name.matches(".*[\\s'-]{2,}.*")) {
-            throw new IllegalArgumentException("Name contains consecutive special characters (spaces, hyphens, or apostrophes)!");
+            throw new IllegalArgumentException("Name cannot contain consecutive spaces, hyphens, or apostrophes.");
         }
 
         // Ensure no digits are in the name
         if (name.matches(".*\\d.*")) {
-            throw new IllegalArgumentException("Name cannot contain digits!");
+            throw new IllegalArgumentException("Name cannot contain digits.");
         }
+
+        // Format name: Capitalize the first letter of each word
+        String[] words = name.split("\\s+");  // Split by spaces
+        StringBuilder formattedName = new StringBuilder();
+
+        for (String word : words) {
+            if (word.length() > 0) {
+                formattedName.append(Character.toUpperCase(word.charAt(0))) // Capitalize the first letter
+                        .append(word.substring(1).toLowerCase())        // Make the rest of the word lowercase
+                        .append(" ");                                   // Add a space
+            }
+        }
+
+        return formattedName.toString().trim();  // Remove trailing space
     }
 
     public static String checkGender(char genderInput) {
@@ -47,7 +58,7 @@ public class validationCheck {
     }
 
     public static void checkContactNumber(String contactNumber) {
-        if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)[1]-*[0-9]{8}$")) {
+        if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)1-*[0-9]{8}$")) {
             throw new IllegalArgumentException("Invalid contact number format");
         }
     }
@@ -77,25 +88,31 @@ public class validationCheck {
 
     // Validate and hash the password
     public static String checkPassword(String password) {
-        if (password.length() < 5) {
-            throw new IllegalArgumentException("The password length must be 5 characters or more!");
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty!");
         }
 
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$")) {
-            throw new IllegalArgumentException("The password is too weak! Consider adding the following requirement: " +
-                    "At least one alphabetic character (A-Z or a-z).\n" +
-                    "At least one digit (0-9).\n" +
-                    "At least one special character from the set @$!%*#?&.\n" +
-                    "Minimum length of 8 characters.");
+        // Check for minimum length
+        if (password.length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long.");
         }
-        // Hash the password
+
+        // Check if it contains at least one alphabetic character
+        if (!password.matches(".*[A-Za-z].*")) {
+            throw new IllegalArgumentException("Password must contain at least one alphabetic character (A-Z or a-z).");
+        }
+
+        // Check if it contains at least one digit
+        if (!password.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("Password must contain at least one digit (0-9).");
+        }
+
+        // Check if it contains at least one special character
+        if (!password.matches(".*[@$!%*#?&].*")) {
+            throw new IllegalArgumentException("Password must contain at least one special character from the set @$!%*#?&.");
+        }
+
+        // Hash the password using BCrypt
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
-
-   public static int checkAge(int age) {
-        if (age < 18) {
-            throw new IllegalArgumentException("Age cannot be under 18");
-        }
-        return age;
-   }
 }

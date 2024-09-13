@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Staff extends Person implements DatabaseOperations {
-    protected char gender;
+    protected String gender;
     protected StaffPosition position;
     protected LocalDate dateJoined;
     protected double salary;
@@ -24,10 +24,10 @@ public class Staff extends Person implements DatabaseOperations {
     private static final CollectionReference staffCollection = FirebaseConnection.getDb().collection("Staff");
 
     public Staff() {
-        this("", "", "", "", "", '\u0000', null, null, 0, "");
+        this("", "", "", "", "", "", null, null, 0, "");
     }
 
-    public Staff(String id, String name, String contactNumber, String email, String address, char gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
+    public Staff(String id, String name, String contactNumber, String email, String address, String gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
         super(id, name, contactNumber, email, address);
         this.gender = gender;
         this.position = position;
@@ -37,14 +37,14 @@ public class Staff extends Person implements DatabaseOperations {
     }
 
     // setters
-    public void setGender(char gender) { this.gender = gender; }
+    public void setGender(String gender) { this.gender = gender; }
     public void setPosition(StaffPosition position) { this.position = position; }
     public void setDateJoined(LocalDate dateJoined) { this.dateJoined = dateJoined; }
     public void setSalary(double salary) { this.salary = salary; }
     public void setPassword(String password) { this.password = password; }
 
     // getters
-    public char getGender() { return this.gender; }
+    public String getGender() { return this.gender; }
     public StaffPosition getPosition() { return this.position; }
     public LocalDate getDateJoined() { return this.dateJoined; }
     public double getSalary() { return this.salary; }
@@ -93,7 +93,7 @@ public class Staff extends Person implements DatabaseOperations {
             fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber").toString()).orElse(""));
             fetchedStaff.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
             fetchedStaff.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
-            fetchedStaff.setGender(Optional.ofNullable((char) docData.get("gender")).orElse('\u0000'));
+            fetchedStaff.setGender(Optional.ofNullable((String) docData.get("gender")).orElse(""));
             fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
 //            fetchedStaff.setDateJoined(Optional.ofNullable(docData.get("dateJoined").toString()).orElse("")); TODO: parse to LocalDate
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
