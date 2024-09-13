@@ -80,8 +80,8 @@ public class Item extends BaseItem implements DatabaseOperations {
             docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
             docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
-            this.id = DbMethods.dbCreateNewId("Item","ITEM",4);
-            itemCollection.document(this.id).set(docValues).get();
+            setId(DbMethods.dbCreateNewId("Item","ITEM",4));
+            itemCollection.document(getId()).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
