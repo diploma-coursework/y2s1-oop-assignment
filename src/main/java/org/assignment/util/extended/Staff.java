@@ -1,13 +1,13 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
+import org.assignment.util.validationCheck;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -29,19 +29,24 @@ public class Staff extends Person implements DatabaseOperations {
 
     public Staff(String name, String contactNumber, String email, String address, String gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
         super(name, contactNumber, email, address);
-        this.gender = gender;
-        this.position = position;
-        this.dateJoined = dateJoined;
-        this.salary = salary;
-        this.password = password;
+        setGender(gender);
+        setPosition(position);
+        setDateJoined(dateJoined);
+        setSalary(salary);
+        setPassword(password);
     }
 
     // setters
-    public void setGender(String gender) { this.gender = gender; }
+    public void setGender(String gender) { this.gender = validationCheck.checkGender(gender.charAt(0)); }
     public void setPosition(StaffPosition position) { this.position = position; }
-    public void setDateJoined(LocalDate dateJoined) { this.dateJoined = dateJoined; }
-    public void setSalary(double salary) { this.salary = salary; }
-    public void setPassword(String password) { this.password = password; }
+    public void setDateJoined(LocalDate dateJoined) { validationCheck.checkDateJoined(dateJoined); this.dateJoined = dateJoined; }
+    public void setSalary(double salary) { this.salary = validationCheck.checkSalary((int) salary); }
+    public void setPassword(String password) { this.password = validationCheck.checkPassword(password); }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
 
     // getters
     public String getGender() { return this.gender; }
@@ -94,8 +99,9 @@ public class Staff extends Person implements DatabaseOperations {
             fetchedStaff.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
             fetchedStaff.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
             fetchedStaff.setGender(Optional.ofNullable((String) docData.get("gender")).orElse(""));
-            fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
-//            fetchedStaff.setDateJoined(Optional.ofNullable(docData.get("dateJoined").toString()).orElse("")); TODO: parse to LocalDate
+//            fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
+            fetchedStaff.setPosition(StaffPosition.fromString(Optional.ofNullable(docData.get("position")).map(Object::toString).orElse("")));
+            fetchedStaff.setDateJoined(LocalDate.parse(Optional.ofNullable(docData.get("dateJoined")).map(Object::toString).orElse(LocalDate.now().toString())));
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
             fetchedStaff.setPassword(Optional.ofNullable(docData.get("password").toString()).orElse(""));
 

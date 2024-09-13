@@ -12,7 +12,6 @@ public abstract class Person {
     public Person() { this("", "", "", "");}
 
     public Person(String name, String contactNumber, String email, String address) {
-        this.id = id;
         this.name = name;
         this.contactNumber = contactNumber;
         this.email = email;

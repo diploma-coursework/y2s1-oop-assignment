@@ -24,4 +24,21 @@ public enum StaffPosition {
         }
         return null;
     }
+
+    public static void printPosition() {
+        System.out.println("0) INVENTORY_CLERK\n" +
+                           "1) STOCK_CONTROLLER\n" +
+                           "2) WAREHOUSE_MANAGER   \n" +
+                           "3) INVENTORY_SUPERVISOR \n" +
+                           "4) ADMIN");
+        System.out.println("========================================");
+    }
+
+    public static StaffPosition fromNumber(int number) {
+        if (number >= 0 && number < StaffPosition.values().length) {
+            return StaffPosition.values()[number];
+        } else {
+            throw new IllegalArgumentException("Invalid position number.");
+        }
+    }
 }

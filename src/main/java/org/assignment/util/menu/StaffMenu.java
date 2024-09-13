@@ -51,49 +51,35 @@ public class StaffMenu extends BaseMenu {
 
             System.out.print("Enter Name: ");
             String name = scanner.nextLine();
-            validationCheck.checkAndFormatName(name);
-
 
             System.out.print("Enter Gender (M/F): ");
             char genderInput = scanner.next().toUpperCase().charAt(0);
             String gender = validationCheck.checkGender(genderInput);
 
-
-
-            System.out.print("Enter Position (e.g., INVENTORY_CLERK): ");
-            StaffPosition position = StaffPosition.valueOf(scanner.next().toUpperCase());
-
+            System.out.print("Enter the number corresponding to the position: ");
+            int positionInput = scanner.nextInt();
+            StaffPosition position = StaffPosition.fromNumber(positionInput);
 
             System.out.print("Enter Contact Number: ");
             String contactNumber = scanner.next();
-            validationCheck.checkContactNumber(contactNumber);
-
 
             System.out.print("Enter Email: ");
             String email = scanner.next();
-            validationCheck.checkEmail(email);
-
 
             scanner.nextLine(); // Consume newline
 
-
             System.out.print("Enter Address: ");
-            String inputAddress = scanner.nextLine();
-            String address = validationCheck.checkAddress(inputAddress);
+            String address = scanner.nextLine();
 
             System.out.print("Enter Salary: ");
-            int inputSalary = scanner.nextInt();
-            int salary = validationCheck.checkSalary(inputSalary);
-
+            int salary = scanner.nextInt();
 
             System.out.print("Enter a password: ");
-            String inputPassword = scanner.nextLine();
-            String password = validationCheck.checkPassword(inputPassword);
+            String password = scanner.nextLine();
 
             LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
 
-            Staff staff = new Staff("",name, contactNumber, email, address, gender, position, dateJoined, salary, password);
-
+            Staff staff = new Staff(name, contactNumber, email, address, gender, position, dateJoined, salary, password);
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
@@ -165,6 +151,4 @@ public class StaffMenu extends BaseMenu {
             System.out.println("No staff is currently logged in. Please log in first.");
         }
     }
-
-
 }

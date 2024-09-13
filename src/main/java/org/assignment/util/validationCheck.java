@@ -1,6 +1,8 @@
 package org.assignment.util;
 
 import org.mindrot.jbcrypt.BCrypt;
+import java.time.LocalDate;
+import org.assignment.util.enums.StaffPosition;
 
 // Staff data field validations utility
 
@@ -114,5 +116,20 @@ public class validationCheck {
 
         // Hash the password using BCrypt
         return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public static void checkDateJoined(LocalDate dateJoined) {
+        if (dateJoined == null || dateJoined.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Date joined cannot be null or a future date.");
+        }
+    }
+
+    public static boolean isValidPosition(String position) {
+        for (StaffPosition pos : StaffPosition.values()) {
+            if (pos.name().equalsIgnoreCase(position)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
