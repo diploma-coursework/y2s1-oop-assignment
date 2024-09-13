@@ -53,38 +53,41 @@ public class ItemMenu extends BaseMenu {
     private void removeItem() {
         System.out.println("Removing an item...");
         // TODO: choose by id
+        List<Item> removeList = new ArrayList<>();
 
-//        Map<String,Item> itemList = new HashMap<>();
-        List<Item> itemList = new ArrayList<>();
-//        int counter = 0;
-
-        while (scanner.hasNext()) { // also check for valid ID
+        while (scanner.hasNext()) {
             String input = scanner.next();
-            if (DbMethods.isValidCode("ITEM",input)){
-//                counter++;
-                itemList.add(Item.getFromDb(input));
-//                itemList.put(String.valueOf(counter),Item.getFromDb(input));
+            if (DbMethods.isValidCode("ITEM",input) && Item.getFromDb(input)!= null){
+                removeList.add(Item.getFromDb(input));
             }
         }
         int option;
          do {
              // TODO: print ArrayList properly
+             // accept IDs'
              int counter = 0;
-             System.out.println("These are the Items that will be Deleted");
+             System.out.println("These are the Items that will be Deleting");
              System.out.println("Enter the Indexes that would like to remove, Enter 0 to Confirm");
              option = -1;
-//             itemList.
-//            itemList.forEach((index, item) -> {
-//                System.out.printf("%s - %s\n", index, item);
-//            });
-//            option = scanner.nextInt();
+             for (Item index: removeList){
+                 counter++;
+                 System.out.println(counter + ") " + index);
+             }
 
-//            if (itemList.containsKey(String.valueOf(option))){
-//
-//            }
+             // logic for removing from removeList
+             System.out.println("> ");
+             option = scanner.nextInt();
+             if (option <= counter && option != 0){
+                 removeList.remove(counter-1);
+             }
 
+             // logic for removing
+             if (option == 0){
+                 for (Item item: removeList){
+                     item.deleteFromDb();
+                 }
+             }
         } while(option == 0);
-
     }
 
     private void viewItems() {
