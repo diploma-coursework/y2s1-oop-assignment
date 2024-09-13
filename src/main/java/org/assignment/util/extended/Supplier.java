@@ -44,6 +44,9 @@ public class Supplier extends Person implements DatabaseOperations {
     public void setContractStartDate(LocalDate contractStartDate) {
         this.contractStartDate = contractStartDate;
     }
+    public void setContractEndDate(LocalDate contractEndDate) {
+        this.contractEndDate = contractStartDate;
+    }
 
     public void clear(){
         super.setId(null);
@@ -62,8 +65,8 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("address", getAddress());
             docValues.put("email", getEmail());
             // TODO: it needs to be stored as either String or Timestamp in db, below need change
-            docValues.put("contractStartDate", getContractStartDate());
-            docValues.put("contractedDate", getContractEndDate());
+            docValues.put("contractStartDate", getContractStartDate().toString());
+            docValues.put("contractedDate", getContractEndDate().toString());
             docValues.put("contractYear", getContractYear());
 
             this.id = DbMethods.dbCreateNewId("Supplier","SUP",4);
@@ -95,12 +98,22 @@ public class Supplier extends Person implements DatabaseOperations {
             fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
             fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
             // TODO: ur contract stuff (idk correct or not), can make them into a method, and call it here,so less redundant
-            Timestamp timestamp = (Timestamp) docData.get("contractStartDate");
-            LocalDate contractStartDate = Optional.ofNullable(timestamp)
-                    .map(ts -> ts.toDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate())
-                    .orElse(null);
+//            Timestamp timestamp = (Timestamp) docData.get("contractStartDate");
+//            LocalDate contractStartDate = Optional.ofNullable(timestamp)
+//                    .map(ts -> ts.toDate().toInstant()
+//                            .atZone(ZoneId.systemDefault())
+//                            .toLocalDate())
+//                    .orElse(null);
+            // Convert the stored String back to LocalDate
+            String contractStartDateStr = Optional.ofNullable(docData.get("contractStartDate").toString()).orElse(null);
+            LocalDate contractStartDate = contractStartDateStr != null ? LocalDate.parse(contractStartDateStr) : null;
+
+            String contractEndDateStr = Optional.ofNullable(docData.get("contractEndDate").toString()).orElse(null);
+            LocalDate contractEndDate = contractEndDateStr != null ? LocalDate.parse(contractEndDateStr) : null;
+
+            // Set contract dates
+            fetchedSupplier.setContractStartDate(contractStartDate);
+            fetchedSupplier.setContractEndDate(contractEndDate);
 
             fetchedSupplier.setContractStartDate(contractStartDate);
 
