@@ -24,11 +24,11 @@ public class Staff extends Person implements DatabaseOperations {
     private static final CollectionReference staffCollection = FirebaseConnection.getDb().collection("Staff");
 
     public Staff() {
-        this("", "", "", "", "", '\u0000', null, null, 0, "");
+        this("", "", "", "", '\u0000', null, null, 0, "");
     }
 
-    public Staff(String id, String name, String contactNumber, String email, String address, char gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
-        super(id, name, contactNumber, email, address);
+    public Staff(String name, String contactNumber, String email, String address, char gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
+        super(name, contactNumber, email, address);
         this.gender = gender;
         this.position = position;
         this.dateJoined = dateJoined;

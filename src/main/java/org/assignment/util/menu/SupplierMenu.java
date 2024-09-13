@@ -1,5 +1,6 @@
 package org.assignment.util.menu;
 
+import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
 
@@ -22,30 +23,36 @@ public class SupplierMenu extends BaseMenu {
 
     public void addSupplier() {
         // Name
+        Supplier supplier = new Supplier();
         System.out.println("Supplier Name  : ");
-        String name = scanner.nextLine();
+        supplier.setName(scanner.nextLine());
         // Validation Check
 
         // Contact number
         System.out.println("Contact Number : ");
-        String contactNumber = scanner.nextLine();
+        supplier.setContactNumber(scanner.nextLine());
         // Validation Check
 
         // Email
         System.out.println("Email          : ");
-        String email = scanner.nextLine();
+        supplier.setEmail(scanner.nextLine());
         // Validation Check
 
         // Address
         System.out.println("Address        : ");
-        String address = scanner.nextLine();
+        supplier.setAddress(scanner.nextLine());
         // Validation Check
+        // Ask for confirmation,
+        // TODO: if confirm skip,else run clear and loop
+        supplier.clear();
 
-        // where the create id function idk
-        String id = "";
+
+        supplier.setId(DbMethods.dbCreateNewId("Supplier","SUP0",4));
         LocalDate contractStartDate = LocalDate.now();
 
-        Supplier supplier = new Supplier(id, name, contactNumber, email, address, contractStartDate);
+//        Supplier supplier = new Supplier( name, contactNumber, email, address, contractStartDate);
+
+        supplier.addToDb();
         // add to database
     }
 

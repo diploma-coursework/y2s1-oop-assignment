@@ -24,11 +24,11 @@ public class Supplier extends Person implements DatabaseOperations {
 
     // Constructors
     public Supplier() {
-        this("", "", "", "", "", null);
+        this("", "", "", "", null);
     }
 
-    public Supplier(String id, String name, String contactNumber, String address, String email, LocalDate contractStartDate) {
-        super(id, name, contactNumber, email, address);
+    public Supplier(String name, String contactNumber, String address, String email, LocalDate contractStartDate) {
+        super(name, contactNumber, email, address);
         this.contractStartDate = contractStartDate;
         extendContract();
     }
@@ -43,6 +43,13 @@ public class Supplier extends Person implements DatabaseOperations {
     // Setter
     public void setContractStartDate(LocalDate contractStartDate) {
         this.contractStartDate = contractStartDate;
+    }
+
+    public void clear(){
+        super.setId(null);
+        super.setAddress(null);
+        super.setContactNumber(null);
+        super.setEmail(null);
     }
 
     // database operations implementation

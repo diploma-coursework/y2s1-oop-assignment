@@ -7,10 +7,9 @@ public abstract class Person {
     protected String email;
     protected String address;
 
-    public Person() { this("", "", "", "", ""); }
+    public Person() { this( "", "", "", ""); }
 
-    public Person(String id, String name, String contactNumber, String email, String address) {
-        this.id = id;
+    public Person( String name, String contactNumber, String email, String address) {
         this.name = name;
         this.contactNumber = contactNumber;
         this.email = email;
