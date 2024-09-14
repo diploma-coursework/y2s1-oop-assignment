@@ -1,9 +1,12 @@
 package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.extended.ItemCategory;
+
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ItemCategoryMenu extends BaseMenu {
     private static final HashMap<String, Option> options = new HashMap<>();
@@ -48,12 +51,18 @@ public class ItemCategoryMenu extends BaseMenu {
         }
     }
 
+    // TODO: make output nicer
     private void seeItemCategories() {
         clearScreen();
-
-        System.out.println(ansi().fgBrightGreen().a(" TODO\n=============").reset());
+        List<ItemCategory> itemCategoryList = ItemCategory.getAllItemCategory();
+        if (itemCategoryList == null) System.out.println("No item category is present.");
+        else {
+            for (ItemCategory itemCategory : itemCategoryList) {
+                System.out.println(itemCategory);
+            }
+        }
+        pause();
     }
-
 
     private void returnToStaffMenu() {
         exitFlag = true;

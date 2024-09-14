@@ -2,15 +2,13 @@ package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ItemCategory implements DatabaseOperations {
     private String id;
@@ -124,16 +122,28 @@ public class ItemCategory implements DatabaseOperations {
             return false;
         }
     }
+    
+    public static List<ItemCategory> getAllItemCategory() {
+        try {
+            List<QueryDocumentSnapshot> documents = ItemCategory.itemCategoryCollection.get().get().getDocuments();
 
-    public String toString(){
-        return "ITEMCATEGORY ID: " + getId()
-                + "\nITEMCATEGORY NAME: " + getName()
-                + "\nITEMCATEGORY DESCRIPTION: " + getDescription()
-                + "\n";
+            List<ItemCategory> itemCategories = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : documents) {
+                itemCategories.add(ItemCategory.getFromDb(doc.getId()));
+            }
+
+            return itemCategories;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
-    // features
-    public ArrayList<Item> getItems() {
-        return new ArrayList<>();
+    public String toString(){
+        return String.format("""
+                ITEMCATEGORY ID: %s
+                ITEMCATEGORY NAME: %s
+                ITEMCATEGORY DESCRIPTION: %s
+                """, this.getId(), this.getName(), this.getDescription());
     }
 }
