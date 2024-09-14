@@ -60,6 +60,8 @@ public class validationCheck {
     }
 
     public static void checkContactNumber(String contactNumber) {
+        // Example of Valid Code
+//        0123456789 +60123456789 01112345678 +601112345678 010-2345678
         if (!contactNumber.matches("^(\\+?6?01)[02-46-9]-*[0-9]{7}$|^(\\+?6?01)1-*[0-9]{8}$")) {
             throw new IllegalArgumentException("Invalid contact number format");
         }

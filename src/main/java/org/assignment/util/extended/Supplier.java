@@ -19,18 +19,20 @@ import java.util.Optional;
 public class Supplier extends Person implements DatabaseOperations {
     protected LocalDate contractStartDate;
     protected LocalDate contractEndDate;
-    protected final int contractYear = 2;
+    protected static final int contractYear = 2;
     private static final CollectionReference supplierCollection = FirebaseConnection.getDb().collection("Supplier");
 
     // Constructors
     public Supplier() {
-        this("", "", "", "", null);
     }
 
     public Supplier(String name, String contactNumber, String address, String email, LocalDate contractStartDate) {
         super(name, contactNumber, email, address);
-        this.contractStartDate = contractStartDate;
-        extendContract();
+        if (contactNumber != null){
+            System.out.println("successful Constructor");
+            setContractStartDate(contractStartDate);
+            setContractEndDate(contractStartDate.plusYears(contractYear));
+        }
     }
 
     // Getters
@@ -44,8 +46,9 @@ public class Supplier extends Person implements DatabaseOperations {
     public void setContractStartDate(LocalDate contractStartDate) {
         this.contractStartDate = contractStartDate;
     }
+
     public void setContractEndDate(LocalDate contractEndDate) {
-        this.contractEndDate = this.contractStartDate.plusYears(contractYear);
+        this.contractEndDate = contractEndDate;
     }
 
     public void clear(){
@@ -60,14 +63,13 @@ public class Supplier extends Person implements DatabaseOperations {
         // add self to db
         try {
             HashMap<String, Object> docValues = new HashMap<>();
-            docValues.put("name", this.name);
+            docValues.put("name", getName());
             docValues.put("contactNumber", getContactNumber());
             docValues.put("address", getAddress());
             docValues.put("email", getEmail());
             // TODO: it needs to be stored as either String or Timestamp in db, below need change
             docValues.put("contractStartDate", getContractStartDate().toString());
-            docValues.put("contractedDate", getContractEndDate().toString());
-            docValues.put("contractYear", getContractYear());
+            docValues.put("contractEndDate", getContractEndDate().toString());
 
             this.id = DbMethods.dbCreateNewId("Supplier","SUP",4);
             supplierCollection.document(this.id).set(docValues).get();
@@ -98,17 +100,11 @@ public class Supplier extends Person implements DatabaseOperations {
             fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
             fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
             // TODO: ur contract stuff (idk correct or not), can make them into a method, and call it here,so less redundant
-//            Timestamp timestamp = (Timestamp) docData.get("contractStartDate");
-//            LocalDate contractStartDate = Optional.ofNullable(timestamp)
-//                    .map(ts -> ts.toDate().toInstant()
-//                            .atZone(ZoneId.systemDefault())
-//                            .toLocalDate())
-//                    .orElse(null);
-            // Convert the stored String back to LocalDate
-            String contractStartDateStr = Optional.ofNullable(docData.get("contractStartDate").toString()).orElse(null);
+
+            String contractStartDateStr = docData.get("contractStartDate").toString();
             LocalDate contractStartDate = contractStartDateStr != null ? LocalDate.parse(contractStartDateStr) : null;
 
-            String contractEndDateStr = Optional.ofNullable(docData.get("contractEndDate").toString()).orElse(null);
+            String contractEndDateStr = docData.get("contractEndDate").toString();
             LocalDate contractEndDate = contractEndDateStr != null ? LocalDate.parse(contractEndDateStr) : null;
 
             // Set contract dates
@@ -149,7 +145,7 @@ public class Supplier extends Person implements DatabaseOperations {
 
     // Extend Contract
     public void extendContract() {
-        this.contractEndDate = this.contractEndDate.plusYears(contractYear);
+        setContractEndDate(getContractEndDate().plusYears(contractYear));
     }
 
     // Contract Renewal
@@ -173,5 +169,11 @@ public class Supplier extends Person implements DatabaseOperations {
     public boolean checkContractAvailability() {
         LocalDate today = LocalDate.now();
         return (!today.isBefore(this.contractStartDate) && !today.isAfter(this.contractEndDate));
+    }
+
+    @Override
+    public String toString(){
+        // TODO: toString for Supplier
+        return super.toString() + "SUPPLIER DETAILS\n";
     }
 }

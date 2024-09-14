@@ -43,4 +43,10 @@ public abstract class Person {
     public String getContactNumber() { return contactNumber; }
     public String getEmail() { return email; }
     public String getAddress() { return address; }
+
+    @Override
+    public String toString(){
+        // TODO: toString for Person
+        return "PRINT PERSON STUFF\n";
+    }
 }
