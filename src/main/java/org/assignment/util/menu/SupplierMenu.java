@@ -103,7 +103,12 @@ public class SupplierMenu extends BaseMenu {
             }
         } while (!id.equals("XXX"));
 
-        return supplier;
+        if (id.equals("XXX")) {
+            System.out.println("Returning to the menu...");
+            return null;
+        }
+        else
+            return supplier;
     }
 
     public void renewSupplierContract() {
