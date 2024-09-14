@@ -13,24 +13,27 @@ public abstract class BaseMenu {
 
     protected static synchronized void displayOptions(HashMap<String, Option> options) {
         options.forEach((optionIdentifier, option) -> {
+            if (optionIdentifier.equals("0")) return;
             System.out.printf("%s - %s\n", optionIdentifier, option.description);
         });
+        if (options.containsKey("0")) System.out.printf("0 - %s\n", options.get("0").description);
     }
 
     protected static synchronized void getUserOptions(HashMap<String, Option> options) {
         while (true) {
             System.out.print("> ");
-            final String enterValue = scanner.next();
+            final String enterValue = scanner.nextLine();
 
             if (options.containsKey(enterValue)) {
                 options.get(enterValue).execute.run();
                 break;
             }
-            System.out.println("Invalid option, please try again.");
+            System.out.println(ansi().bgBrightRed().a("Invalid option, please try again.").reset());
         }
     }
 
     protected static void clearScreen() {
+        System.out.println();
         System.out.print(ansi().eraseScreen().cursor(0, 0));
     }
 
