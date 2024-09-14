@@ -41,6 +41,7 @@ public class SupplierMenu extends BaseMenu {
         // Address
         System.out.println("Address             : ");
         supplier.setAddress(scanner.nextLine());
+
         // Validation Check
         // Ask for confirmation,
         // TODO: if confirm skip,else run clear and loop
@@ -59,8 +60,21 @@ public class SupplierMenu extends BaseMenu {
 
     public void removeSupplier() {
         // Search for supplier
+        searchSupplier();
         // confirmation to remove
-        // remove from database
+        System.out.print("Are you sure you want to remove the supplier? (Y/N) ");
+        char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
+
+        if (yn == 'Y') {
+            // remove from database
+        }
+        else if (yn == 'N') {
+            // return to menu
+        }
+        else {
+            // invalid
+        }
+
     }
 
     public void listSupplier() {
@@ -79,7 +93,7 @@ public class SupplierMenu extends BaseMenu {
         String id = " ";
 
         do {
-            System.out.println("Please enter the ID of the supplier you want to remove: ");
+            System.out.println("Please enter the ID of the supplier: ");
             System.out.print("(Key in XXX to cancel action): ");
             id = (scanner.nextLine()).toUpperCase();
 
