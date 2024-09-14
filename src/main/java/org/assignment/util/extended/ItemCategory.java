@@ -125,6 +125,13 @@ public class ItemCategory implements DatabaseOperations {
         }
     }
 
+    public String toString(){
+        return "ITEMCATEGORY ID: " + getId()
+                + "\nITEMCATEGORY NAME: " + getName()
+                + "\nITEMCATEGORY DESCRIPTION: " + getDescription()
+                + "\n";
+    }
+
     // features
     public ArrayList<Item> getItems() {
         return new ArrayList<>();

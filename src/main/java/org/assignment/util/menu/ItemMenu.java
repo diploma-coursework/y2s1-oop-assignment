@@ -50,6 +50,8 @@ public class ItemMenu extends BaseMenu {
         System.out.println("ItemCategory ID     :");
         item.setItemCategory(ItemCategory.getFromDb(scanner.next()));
         scanner.next();
+        // TODO: Confirmation
+        item.addToDb();
     }
 
     private void removeItem() {
