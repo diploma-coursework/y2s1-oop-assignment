@@ -2,7 +2,6 @@ package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Staff;
-import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.HashMap;
@@ -19,8 +18,6 @@ public class MainMenu extends BaseMenu {
 
     @Override
     public void start() {
-        clearScreen();
-
         String welcomeArt = """
                  __          __  _                            _                    \s
                  \\ \\        / / | |                          | |                   \s
@@ -44,6 +41,7 @@ public class MainMenu extends BaseMenu {
 
         while (!exitFlag)
         {
+            clearScreen();
             System.out.println(ansi().fgBrightGreen().a(welcomeArt).reset());
             displayOptions(MainMenu.options);
             getUserOptions(MainMenu.options);

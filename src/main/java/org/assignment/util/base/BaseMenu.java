@@ -39,12 +39,8 @@ public abstract class BaseMenu {
     }
 
     protected static void pause() {
-        try {
-            Optional.of(System.in.read()).ifPresent(value -> {});
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("Press Enter to continue...");
+        scanner.nextLine();
     }
 
     protected static void timedPause(long millis) {

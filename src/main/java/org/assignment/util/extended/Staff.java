@@ -108,7 +108,6 @@ public class Staff extends Person implements DatabaseOperations {
             if (!doc.exists()) return null;
             Map<String, Object> docData = doc.getData();
             if (docData == null) return null;
-            System.err.println("hreeeee");
 
             // create new instance and assign values
             Staff fetchedStaff = new Staff();

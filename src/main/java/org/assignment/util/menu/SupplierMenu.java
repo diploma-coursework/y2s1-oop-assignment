@@ -3,6 +3,7 @@ package org.assignment.util.menu;
 import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
+import org.assignment.util.validationCheck;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -22,16 +23,15 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void addSupplier() {
-        // Name
         Supplier supplier = new Supplier();
+
+        // Name
         System.out.println("Supplier Name       : ");
-        supplier.setName(scanner.nextLine());
-        // Validation Check
+        supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
 
         // Contact number
         System.out.println("Contact Number      : ");
         supplier.setContactNumber(scanner.nextLine());
-        // Validation Check
 
         // Email
         System.out.println("Email               : ");
@@ -42,7 +42,6 @@ public class SupplierMenu extends BaseMenu {
         System.out.println("Address             : ");
         supplier.setAddress(scanner.nextLine());
 
-        // Validation Check
         // Ask for confirmation,
         // TODO: if confirm skip,else run clear and loop
         supplier.clear();
@@ -53,9 +52,10 @@ public class SupplierMenu extends BaseMenu {
 
 
 //        Supplier supplier = new Supplier( name, contactNumber, email, address, contractStartDate);
-
-        supplier.addToDb();
         // add to database
+        supplier.addToDb();
+        System.out.println("\nSuccessfully add supplier.");
+
     }
 
     public void removeSupplier() {
@@ -66,7 +66,8 @@ public class SupplierMenu extends BaseMenu {
         char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
 
         if (yn == 'Y') {
-            // remove from database
+            searchSupplier().deleteFromDb();
+            System.out.println("\nSuccessfully delete supplier.");
         }
         else if (yn == 'N') {
             // return to menu
@@ -101,14 +102,40 @@ public class SupplierMenu extends BaseMenu {
                 // Search Supplier
             }
         } while (!id.equals("XXX"));
-        return supplier;
+
+        if (id.equals("XXX")) {
+            System.out.println("Returning to the menu...");
+            return null;
+        }
+        else
+            return supplier;
     }
 
     public void renewSupplierContract() {
         // search supplier
+        Supplier supplier = searchSupplier();
+
         // validate if supplier contract is able to be renewed
-        // confirmation
-        // update contract info
+        int ableToRenew = supplier.checkRenewContract();
+
+        if (ableToRenew == 0) {
+            System.out.printf("\n\nThe contract of supplier (%s) is able to be renewed.\n", supplier.getName());
+            System.out.print("Are you sure to renew contract? (Y/N) ");
+
+            char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
+
+            if (yn == 'Y') {
+                supplier.extendContract();
+                System.out.println("\nContract successfully renewed.\n");
+            }
+            else if (yn != 'N') {
+                // invalid
+            }
+        }
+        else if (ableToRenew == 1)
+            System.out.println("\nContract expired. Unable to renew contract.\n");
+        else if (ableToRenew == -1)
+            System.out.println(("\nNot within renew period. Unable to renew contract.\n"));
     }
 
     public void returnToMenu() {
