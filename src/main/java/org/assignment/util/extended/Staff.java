@@ -112,16 +112,16 @@ public class Staff extends Person implements DatabaseOperations {
             // create new instance and assign values
             Staff fetchedStaff = new Staff();
             fetchedStaff.setId(doc.getId());
-            fetchedStaff.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
-            fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber").toString()).orElse(""));
-            fetchedStaff.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
-            fetchedStaff.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
-            fetchedStaff.setGender(Optional.ofNullable((String) docData.get("gender")).orElse(""));
+            fetchedStaff.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
+            fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber")).orElse("").toString());
+            fetchedStaff.setEmail(Optional.ofNullable(docData.get("email")).orElse("").toString());
+            fetchedStaff.setAddress(Optional.ofNullable(docData.get("address")).orElse("").toString());
+            fetchedStaff.setGender(Optional.ofNullable(docData.get("gender")).orElse("").toString());
 //            fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
             fetchedStaff.setPosition(StaffPosition.fromString(Optional.ofNullable(docData.get("position")).map(Object::toString).orElse("")));
             fetchedStaff.setDateJoined(LocalDate.parse(Optional.ofNullable(docData.get("dateJoined")).map(Object::toString).orElse(LocalDate.now().toString())));
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
-            fetchedStaff.setPassword(Optional.ofNullable(docData.get("password").toString()).orElse(""));
+            fetchedStaff.setPassword(Optional.ofNullable(docData.get("password")).orElse("").toString());
 
             // cache and return
             FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);
