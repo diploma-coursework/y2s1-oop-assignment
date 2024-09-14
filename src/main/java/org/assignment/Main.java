@@ -6,6 +6,7 @@ import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Staff;
 import org.assignment.util.extended.Supplier;
+import org.assignment.util.menu.ItemCategoryMenu;
 import org.assignment.util.menu.ItemMenu;
 import org.assignment.util.menu.MainMenu;
 
@@ -30,10 +31,12 @@ public class Main {
 //        supplier.addToDb();
 //        item.addToDb();
 //
-        new MainMenu().start();
+//        new MainMenu().start();
 //
 //        ItemMenu itemMenu = new ItemMenu();
 //        itemMenu.start();
+
+        new ItemCategoryMenu().start();
 
     }
 

@@ -2,7 +2,6 @@ package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Staff;
-import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.HashMap;
