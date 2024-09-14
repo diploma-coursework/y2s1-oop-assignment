@@ -9,6 +9,8 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class ItemMenu extends BaseMenu {
     private static final Scanner scanner = new Scanner(System.in);
     private final HashMap<String, Option> menuOptions = new HashMap<>();
@@ -33,57 +35,121 @@ public class ItemMenu extends BaseMenu {
     }
 
     private void addItem() {
-
-        pause();
-        clearScreen();
-        System.out.println("Adding an item...");
-        Item item = new Item();
-        // TODO: request for fill up of constructor parameters
-        // TODO: Validation checks
-        // TODO: print Placeholder value
-        System.out.print("Item Name           :");
-        item.setName(acceptExitAction(scanner.next().trim()).get());
-        if (item.getName() == null){
-            return;
-        }
-        System.out.print("Item Unit Price     :");
-        item.setUnitPrice(acceptExitAction(scanner.nextDouble()).map(Number::doubleValue).orElse(-1.0));
-        if (item.getUnitPrice() == -1.0){
-            return;
-        }
-        System.out.print("Item Quantity       :");
-        item.setQuantity(acceptExitAction(scanner.nextInt()).map(Number::intValue).orElse(-1));
-        if (item.getQuantity() == -1){
-            return;
-        }
-        System.out.print("Supplier ID         :");
-        item.setSupplier(Supplier.getFromDb(acceptExitAction(scanner.next()).get()));
-        if (item.getSupplier() == null){
-            return;
-        }
-        System.out.print("ItemCategory ID     :");
-        item.setItemCategory(ItemCategory.getFromDb(acceptExitAction(scanner.next()).get()));
-        if (item.getItemCategory() == null){
-            return;
-        }
-        scanner.next();
-        // TODO: Confirmation
-        System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
-        while (true){
-            int i = scanner.nextInt();
-            if (i != 1 && i != 0){
-                System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
-                continue;
+        while(!actionExit) {
+            boolean repeatAction = false;
+            timedPause(300);
+            clearScreen();
+            Item item = new Item();
+            // TODO: request for fill up of constructor parameters
+            // TODO: Validation checks
+            // TODO: print Placeholder value
+            System.out.println("Currently Adding an Item (use Exit or -1 to return)");
+            while (true){
+                System.out.print("Item Name           :");
+                if (scanner.hasNext()) {
+                    // FIXME: error is, get() is receiving null when enter 'exit', need isPresent(), structure of while() is problematic
+                    item.setName(acceptExitAction(scanner.next().trim()).get());
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+                if (item.getName() == null) {
+                    repeatAction = true;
+                    return;
+                }
             }
-            if (i == 0){
-                System.out.println("Action Terminated");
-                break;
+
+            // FIXME: fix repeatAction
+            if (repeatAction){
+                return;
             }
-            item.addToDb();
-            break;
+
+            while (true){
+                System.out.print("Item Unit Price     :");
+                if (scanner.hasNextDouble()) {
+                    item.setUnitPrice(acceptExitAction(scanner.nextDouble()).map(Number::doubleValue).orElse(-1.0));
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+                if (item.getUnitPrice() == -1.0) {
+                    return;
+                }
+            }
+
+            while (true) {
+                System.out.print("Item Quantity       :");
+                if (scanner.hasNextInt()) {
+                    item.setQuantity(acceptExitAction(scanner.nextInt()).map(Number::intValue).orElse(-1));
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+                if (item.getQuantity() == -1) {
+                    return;
+                }
+
+            }
+
+            while (true) {
+                System.out.print("Supplier ID         :");
+                if (scanner.hasNext()) {
+                    item.setSupplier(Supplier.getFromDb(acceptExitAction(scanner.next()).get()));
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+
+                if (item.getSupplier() == null) {
+                    return;
+                }
+
+            }
+
+            while (true) {
+                System.out.print("ItemCategory ID     :");
+                if (scanner.hasNext()) {
+                    item.setItemCategory(ItemCategory.getFromDb(acceptExitAction(scanner.next()).get()));
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+                if (item.getItemCategory() == null) {
+                    return;
+                }
+            }
+            // TODO: Confirmation
+            clearScreen();
+            System.out.println(item);
+            System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+            while (true) {
+                if (scanner.hasNextInt()) {
+                    int i = scanner.nextInt();
+                    if (i != 1 && i != 0) {
+                        clearScreen();
+                        System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+                        System.out.println(item);
+                        continue;
+                    }
+                    if (i == 0) {
+                        System.out.println("Action Terminated");
+                        pause();
+                        break;
+                    }
+                    item.addToDb();
+                    pause();
+                    break;
+                } else{
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    scanner.next();
+                }
+            }
         }
-
-
     }
 
     private void removeItem() {

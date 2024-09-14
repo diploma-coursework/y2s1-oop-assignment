@@ -58,8 +58,6 @@ public abstract class BaseMenu {
         else if (result instanceof Number && (result.equals(-1)) || result.equals(-1.0)){
             return Optional.empty();
         }
-        System.out.println("Reached here");
-        System.out.println(Optional.of(result));
         return Optional.of(result);
     }
 
