@@ -9,6 +9,7 @@ import org.assignment.util.extended.Supplier;
 import org.assignment.util.menu.ItemCategoryMenu;
 import org.assignment.util.menu.ItemMenu;
 import org.assignment.util.menu.MainMenu;
+import org.assignment.util.menu.StaffMenu;
 
 import java.time.LocalDate;
 
@@ -25,10 +26,13 @@ public class Main {
 //
 //        new MainMenu().start();
 
-        ItemMenu itemMenu = new ItemMenu();
-        itemMenu.start();
+//        ItemMenu itemMenu = new ItemMenu();
+//        itemMenu.start();
 
-        new ItemCategoryMenu().start();
+//        new ItemCategoryMenu().start();
+
+//          StaffMenu staffMenu = new StaffMenu();
+//          staffMenu.start();
 
     }
 

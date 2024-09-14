@@ -9,6 +9,8 @@ import org.assignment.util.enums.StaffPosition;
 public class validationCheck {
 
     public static String checkAndFormatName(String name) {
+
+
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
         }
@@ -35,6 +37,7 @@ public class validationCheck {
         }
 
         // Format name: Capitalize the first letter of each word
+
         String[] words = name.split("\\s+");  // Split by spaces
         StringBuilder formattedName = new StringBuilder();
 
@@ -45,6 +48,7 @@ public class validationCheck {
                         .append(" ");                                   // Add a space
             }
         }
+
 
         return formattedName.toString().trim();  // Remove trailing space
     }
@@ -76,7 +80,7 @@ public class validationCheck {
 
     // Validate the address
     public static String checkAddress(String address) {
-        if (address == null || address.trim().isEmpty()) {
+        if (address == null) {
             throw new IllegalArgumentException("Address cannot be empty");
         }
         return address;
@@ -101,11 +105,6 @@ public class validationCheck {
             throw new IllegalArgumentException("Password must be at least 8 characters long.");
         }
 
-        // Check if it contains at least one alphabetic character
-        if (!password.matches(".*[A-Za-z].*")) {
-            throw new IllegalArgumentException("Password must contain at least one alphabetic character (A-Z or a-z).");
-        }
-
         // Check if it contains at least one digit
         if (!password.matches(".*\\d.*")) {
             throw new IllegalArgumentException("Password must contain at least one digit (0-9).");
@@ -117,7 +116,8 @@ public class validationCheck {
         }
 
         // Hash the password using BCrypt
-        return BCrypt.hashpw(password, BCrypt.gensalt());
+        //return BCrypt.hashpw(password, BCrypt.gensalt());
+        return password;
     }
 
     public static void checkDateJoined(LocalDate dateJoined) {

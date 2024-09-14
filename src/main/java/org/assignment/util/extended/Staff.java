@@ -8,6 +8,8 @@ import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.validationCheck;
+import com.google.cloud.Timestamp;
+import java.time.ZoneId;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -36,11 +38,28 @@ public class Staff extends Person implements DatabaseOperations {
     }
 
     // setters
-    public void setGender(String gender) { this.gender = validationCheck.checkGender(gender.charAt(0)); }
-    public void setPosition(StaffPosition position) { this.position = position; }
-    public void setDateJoined(LocalDate dateJoined) { validationCheck.checkDateJoined(dateJoined); this.dateJoined = dateJoined; }
-    public void setSalary(double salary) { this.salary = validationCheck.checkSalary((int) salary); }
-    public void setPassword(String password) { this.password = validationCheck.checkPassword(password); }
+    public void setGender(String gender) {
+        this.gender = validationCheck.checkGender(gender.charAt(0));
+    }
+    public void setPosition(StaffPosition position) {
+        String positionName = position.name();
+        // Validate the position
+        if (validationCheck.isValidPosition(positionName)) {
+            this.position = position;
+        } else {
+            throw new IllegalArgumentException("Invalid position: " + positionName);
+        }
+    }
+    public void setDateJoined(LocalDate dateJoined) {
+        validationCheck.checkDateJoined(dateJoined);
+        this.dateJoined = dateJoined;
+    }
+    public void setSalary(double salary) {
+        this.salary = validationCheck.checkSalary((int) salary);
+    }
+    public void setPassword(String password) {
+        this.password = validationCheck.checkPassword(password);
+    }
 
     @Override
     public void setName(String name) {
@@ -100,6 +119,7 @@ public class Staff extends Person implements DatabaseOperations {
     public static Staff getFromDb(String id) {
         try {
             // get from cache if available
+
             Staff cachedStaffObject = (Staff) FirebaseConnection.getCachedDocument(staffCollection, staffCollection.document(id));
             if (cachedStaffObject != null) return cachedStaffObject;
 
@@ -112,20 +132,58 @@ public class Staff extends Person implements DatabaseOperations {
             // create new instance and assign values
             Staff fetchedStaff = new Staff();
             fetchedStaff.setId(doc.getId());
+
+            // Retrieve and validate name
+            String name = Optional.ofNullable((String) docData.get("name")).orElse("");
+            fetchedStaff.setName(name);
+
+            // Retrieve and validate contactNumber
+            String contactNumber = Optional.ofNullable((String) docData.get("contactNumber")).orElse("");
+            fetchedStaff.setContactNumber(contactNumber);
+
+            // Retrieve and validate email
+            String email = Optional.ofNullable((String) docData.get("email")).orElse("");
+            fetchedStaff.setEmail(email);
+
+            // Retrieve and validate address
+            String address = Optional.ofNullable((String) docData.get("address")).orElse("");
+            fetchedStaff.setAddress(address);
+
+            // Retrieve and validate gender
+            String genderStr = Optional.ofNullable((String) docData.get("gender")).orElse("");
+            fetchedStaff.setGender(genderStr); // Ensure valid gender
+
+            // Retrieve and validate position
+            String positionStr = Optional.ofNullable((String) docData.get("position")).orElse("");
+            fetchedStaff.setPosition(StaffPosition.fromString(positionStr)); // Convert position string to enum
+
+            // Handle dateJoined (assume it's a Timestamp, convert to LocalDate)
+            Timestamp timestamp = (Timestamp) docData.get("dateJoined");
+            fetchedStaff.setDateJoined(timestamp != null ? timestamp.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : LocalDate.now());
+
+            // Handle salary (convert from Object to double)
+            fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse("0.0").toString()));
+
+            // Retrieve and validate password
+            String password = Optional.ofNullable((String) docData.get("password")).orElse("");
+            fetchedStaff.setPassword(password);
+
+            // cache and return
+            FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);
+            return fetchedStaff;
+
+            /*
             fetchedStaff.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
             fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber")).orElse("").toString());
             fetchedStaff.setEmail(Optional.ofNullable(docData.get("email")).orElse("").toString());
             fetchedStaff.setAddress(Optional.ofNullable(docData.get("address")).orElse("").toString());
             fetchedStaff.setGender(Optional.ofNullable(docData.get("gender")).orElse("").toString());
-//            fetchedStaff.setPosition(StaffPosition.fromString(docData.get("position").toString()));
             fetchedStaff.setPosition(StaffPosition.fromString(Optional.ofNullable(docData.get("position")).map(Object::toString).orElse("")));
             fetchedStaff.setDateJoined(LocalDate.parse(Optional.ofNullable(docData.get("dateJoined")).map(Object::toString).orElse(LocalDate.now().toString())));
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
             fetchedStaff.setPassword(Optional.ofNullable(docData.get("password")).orElse("").toString());
+            */
 
-            // cache and return
-            FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);
-            return fetchedStaff;
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;

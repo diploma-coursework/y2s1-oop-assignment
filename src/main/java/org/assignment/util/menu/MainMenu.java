@@ -2,6 +2,7 @@ package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Staff;
+
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.HashMap;
@@ -61,13 +62,13 @@ public class MainMenu extends BaseMenu {
         System.out.print(ansi().reset());
 
         Staff loginStaff = Staff.getFromDb(inputStaffId);
-        if (loginStaff != null && inputPassword.equals(loginStaff.getPassword())) new StaffMenu().start();
-        else {
+        if (loginStaff != null && inputPassword.equals(loginStaff.getPassword())) {
+            new StaffMenu(loginStaff).start();
+        } else {
             System.out.println(ansi().bgBrightRed().a("Invalid credentials.").reset());
             pause();
         }
     }
-
 
     private void exit() {
         System.out.println("Thank you for using ....");

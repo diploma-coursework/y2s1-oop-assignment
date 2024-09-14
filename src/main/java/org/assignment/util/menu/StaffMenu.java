@@ -16,20 +16,26 @@ import java.time.LocalDate;
 public class StaffMenu extends BaseMenu {
 
     private final HashMap<String, BaseMenu.Option> menuOptions = new HashMap<>();
-    private Staff loggedInStaff;
+    private final Staff loggedInStaff;
 
-    public StaffMenu() {
+    public StaffMenu(Staff loggedInStaff) {
+
+        this.loggedInStaff = loggedInStaff;
+
         // Initialize menu options using createOption
         menuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
         menuOptions.put("3", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.MANAGER)));
         menuOptions.put("4", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
         menuOptions.put("5", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
         menuOptions.put("q", new Option("Quit", this::quit));
+
+        exitFlag = false;
+        actionExit = false;
     }
 
     @Override
     public void start() {
-        while (true) {
+        while (!exitFlag) {
             displayOptions(menuOptions);
             getUserOptions(menuOptions);
         }
@@ -116,6 +122,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
+    //TODO: debug and find any possible errors
     private void modify() {
 
         Scanner scanner = new Scanner(System.in);
@@ -148,62 +155,7 @@ public class StaffMenu extends BaseMenu {
 
             String fieldName = "";
 
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter new Name: ");
-                    staff.setName(scanner.nextLine());
-                    fieldName = "name";
-                    break;
-                case 2:
-                    System.out.print("Enter new Gender (M/F): ");
-                    char gender = scanner.next().toUpperCase().charAt(0);
-                    staff.setGender(validationCheck.checkGender(gender));
-                    fieldName = "gender";
-                    break;
-                case 3:
-                    StaffPosition.printPosition();
-                    System.out.print("Enter the number corresponding to the position: ");
-                    staff.setPosition(StaffPosition.fromNumber(scanner.nextInt()));
-                    fieldName = "position";
-                    break;
-                case 4:
-                    System.out.print("Enter new Contact Number: ");
-                    staff.setContactNumber(scanner.next());
-                    fieldName = "contactNumber";
-                    break;
-                case 5:
-                    System.out.print("Enter new Email: ");
-                    staff.setEmail(scanner.next());
-                    fieldName = "email";
-                    break;
-                case 6:
-                    System.out.print("Enter new Address: ");
-                    staff.setAddress(scanner.nextLine());
-                    fieldName = "address";
-                    break;
-                case 7:
-                    System.out.print("Enter new Salary: ");
-                    staff.setSalary(scanner.nextDouble());
-                    fieldName = "salary";
-                    break;
-                case 8:
-                    System.out.print("Enter new Password: ");
-                    staff.setPassword(scanner.nextLine());
-                    fieldName = "password";
-                    break;
-                default:
-                    System.out.println("Invalid choice.");
-                    return;
-            }
-
-            // Update the field in the database
-            if (staff.updateToDb(fieldName)) {
-                System.out.println("Staff record updated successfully.");
-            } else {
-                System.out.println("Failed to update staff record.");
-            }
-
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -211,6 +163,21 @@ public class StaffMenu extends BaseMenu {
 
     private void delete() {
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Staff ID to delete: ");
+        String staffId = scanner.nextLine();
+
+        Staff staff = Staff.getFromDb(staffId);
+        if (staff == null) {
+            System.out.println("Staff ID not found.");
+            return;
+        }
+
+        if (staff.deleteFromDb()) {
+            System.out.println("Staff record deleted successfully.");
+        } else {
+            System.out.println("Failed to delete staff record.");
+        }
     }
 
     private void view() {

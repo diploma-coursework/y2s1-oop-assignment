@@ -21,19 +21,15 @@ public abstract class Person {
     // setters
     public void setId(String id) { this.id = id; }
     public void setName(String name) {
-        validationCheck.checkAndFormatName(name);
         this.name = name;
     }
     public void setEmail(String email) {
-        validationCheck.checkAndFormatName(email);
         this.email = email;
     }
     public void setContactNumber(String contactNumber) {
-        validationCheck.checkContactNumber(contactNumber);
         this.contactNumber = contactNumber;
     }
     public void setAddress(String address) {
-        validationCheck.checkAddress(address);
         this.address = address;
     }
 
