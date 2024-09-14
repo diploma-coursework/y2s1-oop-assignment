@@ -19,8 +19,6 @@ public class MainMenu extends BaseMenu {
 
     @Override
     public void start() {
-        clearScreen();
-
         String welcomeArt = """
                  __          __  _                            _                    \s
                  \\ \\        / / | |                          | |                   \s
@@ -44,6 +42,7 @@ public class MainMenu extends BaseMenu {
 
         while (!exitFlag)
         {
+            clearScreen();
             System.out.println(ansi().fgBrightGreen().a(welcomeArt).reset());
             displayOptions(MainMenu.options);
             getUserOptions(MainMenu.options);
