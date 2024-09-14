@@ -45,7 +45,26 @@ public class Staff extends Person implements DatabaseOperations {
 
     @Override
     public void setName(String name) {
+        validationCheck.checkAndFormatName(name);
         super.setName(name);
+    }
+
+    @Override
+    public void setContactNumber(String contactNumber) {
+        validationCheck.checkContactNumber(contactNumber);
+        super.setContactNumber(contactNumber);
+    }
+
+    @Override
+    public void setEmail(String email) {
+        validationCheck.checkEmail(email);
+        super.setEmail(email);
+    }
+
+    @Override
+    public void setAddress(String address) {
+        validationCheck.checkAddress(address);
+        super.setAddress(address);
     }
 
     // getters
@@ -134,5 +153,18 @@ public class Staff extends Person implements DatabaseOperations {
             System.err.println(e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public String toString(){
+        return "Staff ID: " + getId()
+                + "\nStaff Name: " + getName()
+                + "\nStaff gender: " + getGender()
+                + "\nStaff position: " + getPosition()
+                + "\nStaff contact number: " + getContactNumber()
+                + "\nStaff email: " + getEmail()
+                + "\nStaff address: "+ getAddress()
+                + "\nStaff salary: " + getSalary()
+                + "\nStaff password: " + getPassword();
     }
 }

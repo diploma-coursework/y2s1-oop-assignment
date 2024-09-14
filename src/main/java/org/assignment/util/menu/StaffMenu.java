@@ -46,40 +46,47 @@ public class StaffMenu extends BaseMenu {
             pause();
             clearScreen();
 
+            Staff staff = new Staff();
+
             System.out.println("Please enter ALL necessary informations");
             System.out.println("=======================================");
 
             System.out.print("Enter Name: ");
-            String name = scanner.nextLine();
+            staff.setName(scanner.nextLine());
 
             System.out.print("Enter Gender (M/F): ");
-            char genderInput = scanner.next().toUpperCase().charAt(0);
-            String gender = validationCheck.checkGender(genderInput);
+            char gender = scanner.next().toUpperCase().charAt(0);
+            staff.setGender(validationCheck.checkGender(gender));
 
+            StaffPosition.printPosition();
             System.out.print("Enter the number corresponding to the position: ");
             int positionInput = scanner.nextInt();
             StaffPosition position = StaffPosition.fromNumber(positionInput);
 
             System.out.print("Enter Contact Number: ");
-            String contactNumber = scanner.next();
+            staff.setContactNumber(scanner.next());
 
             System.out.print("Enter Email: ");
-            String email = scanner.next();
+            staff.setEmail(scanner.next());
 
             scanner.nextLine(); // Consume newline
 
             System.out.print("Enter Address: ");
-            String address = scanner.nextLine();
+            staff.setAddress(scanner.nextLine());
 
             System.out.print("Enter Salary: ");
-            int salary = scanner.nextInt();
+            staff.setSalary(scanner.nextInt());
 
             System.out.print("Enter a password: ");
-            String password = scanner.nextLine();
+            staff.setPassword(scanner.nextLine());
 
-            LocalDate dateJoined = LocalDate.now(); // Set the date joined to the current date
+            staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
-            Staff staff = new Staff(name, contactNumber, email, address, gender, position, dateJoined, salary, password);
+            if (staff.addToDb()) {
+                System.out.println("Staff added successfully!");
+            } else {
+                System.out.println("Failed to add staff.");
+            }
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
@@ -96,6 +103,7 @@ public class StaffMenu extends BaseMenu {
 
         System.out.print("Enter Password: ");
         String password = scanner.next();
+
 
 
     }

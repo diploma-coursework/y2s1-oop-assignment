@@ -41,4 +41,5 @@ public enum StaffPosition {
             throw new IllegalArgumentException("Invalid position number.");
         }
     }
+    
 }
