@@ -12,15 +12,7 @@ import org.assignment.util.menu.MainMenu;
 import java.time.LocalDate;
 
 public class Main {
-    static {
-        // TODO: Dedicated place for adding Dummy Data
-//        ItemCategory itemCategory = new ItemCategory("horticultural tools","Essentials for  cultivating and maintaining a lush, thriving garden");
-//        Supplier supplier = new Supplier("Yong Eng","010-654-0440","GeorgeTown","CoffeeYupYupYup",LocalDate.of(2023, 9, 14));
-//        Item item = new Item("Default",3,5,itemCategory,supplier);
-//        itemCategory.addToDb();
-//        supplier.addToDb();
-//        item.addToDb();
-    }
+
     public static void main(String[] args) {
         // TODO: Dedicated place for adding Dummy Data
 //        ItemCategory itemCategory = new ItemCategory("horticultural tools","Essentials for  cultivating and maintaining a lush, thriving garden");
@@ -41,9 +33,9 @@ public class Main {
 //            System.err.println(e.getMessage());
 //        }
 //        new MainMenu().start();
-//
-//        ItemMenu itemMenu = new ItemMenu();
-//        itemMenu.start();
+
+        ItemMenu itemMenu = new ItemMenu();
+        itemMenu.start();
 
     }
 

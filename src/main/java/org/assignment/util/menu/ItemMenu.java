@@ -20,17 +20,20 @@ public class ItemMenu extends BaseMenu {
         menuOptions.put("3", new Option("View Items", this::viewItems));
         menuOptions.put("0", new Option("Quit", this::quit));
 
+        exitFlag = false;
+        actionExit = false;
     }
 
     @Override
     public void start() {
-        while (true) {
+        while (!exitFlag) {
             displayOptions(menuOptions);
             getUserOptions(menuOptions);
         }
     }
 
     private void addItem() {
+
         pause();
         clearScreen();
         System.out.println("Adding an item...");
@@ -39,15 +42,30 @@ public class ItemMenu extends BaseMenu {
         // TODO: Validation checks
         // TODO: print Placeholder value
         System.out.print("Item Name           :");
-        item.setName(scanner.next());
+        item.setName(acceptExitAction(scanner.next()).toString());
+        if (item.getName() == null){
+            return;
+        }
         System.out.print("Item Unit Price     :");
-        item.setUnitPrice(scanner.nextDouble());
+        item.setUnitPrice(acceptExitAction(scanner.nextDouble()).map(Number::doubleValue).orElse(-1.0));
+        if (item.getUnitPrice() == -1.0){
+            return;
+        }
         System.out.print("Item Quantity       :");
-        item.setQuantity(scanner.nextInt());
+        item.setQuantity(acceptExitAction(scanner.nextInt()).map(Number::intValue).orElse(-1));
+        if (item.getQuantity() == -1){
+            return;
+        }
         System.out.print("Supplier ID         :");
-        item.setSupplier(Supplier.getFromDb(scanner.next()));
+        item.setSupplier(Supplier.getFromDb(acceptExitAction(scanner.next()).toString()));
+        if (item.getSupplier() == null){
+            return;
+        }
         System.out.print("ItemCategory ID     :");
-        item.setItemCategory(ItemCategory.getFromDb(scanner.next()));
+        item.setItemCategory(ItemCategory.getFromDb(acceptExitAction(scanner.next()).toString()));
+        if (item.getItemCategory() == null){
+            return;
+        }
         scanner.next();
         // TODO: Confirmation
         System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
@@ -64,6 +82,7 @@ public class ItemMenu extends BaseMenu {
             item.addToDb();
             break;
         }
+
 
     }
 

@@ -8,6 +8,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public abstract class BaseMenu {
     protected static final Scanner scanner = new Scanner(System.in);
     protected boolean exitFlag;
+    protected boolean actionExit;
 
     public void start() {};
 
@@ -52,6 +53,16 @@ public abstract class BaseMenu {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public static<T> Optional<T> acceptExitAction(T result){
+        if (result instanceof String && result.toString().equals("exit")){
+            return Optional.empty();
+        }
+        else if (result instanceof Number && (result.equals(-1)) || result.equals(-1.0) ){
+            return Optional.empty();
+        }
+        return Optional.of(result);
     }
 
     public record Option(String description, Runnable execute) {}
