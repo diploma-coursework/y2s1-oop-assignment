@@ -49,26 +49,14 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version> <!-- Use latest version -->
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.assignment.Main</mainClass> <!-- Replace with your main class -->
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <compilerArgs>
+                        <arg>-Xlint:none</arg> <!-- Disable warnings for faster output -->
+                    </compilerArgs>
+                    <fork>true</fork>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

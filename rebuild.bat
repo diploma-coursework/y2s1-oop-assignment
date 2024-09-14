@@ -2,4 +2,4 @@
 
 cd /d %~dp0
 
-mvn clean package
+mvn -T 1C package
