@@ -48,7 +48,8 @@ public class SupplierMenu extends BaseMenu {
 
 
         supplier.setId(DbMethods.dbCreateNewId("Supplier","SUP0",4));
-        LocalDate contractStartDate = LocalDate.now();
+        supplier.setContractStartDate(LocalDate.now());
+
 
 //        Supplier supplier = new Supplier( name, contactNumber, email, address, contractStartDate);
 

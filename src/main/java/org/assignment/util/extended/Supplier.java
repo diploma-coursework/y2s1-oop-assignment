@@ -45,7 +45,7 @@ public class Supplier extends Person implements DatabaseOperations {
         this.contractStartDate = contractStartDate;
     }
     public void setContractEndDate(LocalDate contractEndDate) {
-        this.contractEndDate = contractStartDate;
+        this.contractEndDate = this.contractStartDate.plusYears(contractYear);
     }
 
     public void clear(){
@@ -149,7 +149,7 @@ public class Supplier extends Person implements DatabaseOperations {
 
     // Extend Contract
     public void extendContract() {
-        this.contractEndDate = this.contractStartDate.plusYears(contractYear);
+        this.contractEndDate = this.contractEndDate.plusYears(contractYear);
     }
 
     // Contract Renewal
