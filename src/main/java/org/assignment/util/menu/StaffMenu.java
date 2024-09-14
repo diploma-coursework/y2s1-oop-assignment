@@ -21,10 +21,9 @@ public class StaffMenu extends BaseMenu {
     public StaffMenu() {
         // Initialize menu options using createOption
         menuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
-        menuOptions.put("2", new Option("Login", this::Login));
         menuOptions.put("3", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.MANAGER)));
         menuOptions.put("4", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
-        menuOptions.put("5", new Option("Display List of staffs", this::view));
+        menuOptions.put("5", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
         menuOptions.put("q", new Option("Quit", this::quit));
     }
 
@@ -36,19 +35,17 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-
     private void signUp() {
 
         Scanner scanner = new Scanner(System.in);
 
         try {
-
             pause();
             clearScreen();
 
             Staff staff = new Staff();
 
-            System.out.println("Please enter ALL necessary informations");
+            System.out.println("Please enter ALL necessary infos");
             System.out.println("=======================================");
 
             System.out.print("Enter Name: ");
@@ -60,8 +57,7 @@ public class StaffMenu extends BaseMenu {
 
             StaffPosition.printPosition();
             System.out.print("Enter the number corresponding to the position: ");
-            int positionInput = scanner.nextInt();
-            StaffPosition position = StaffPosition.fromNumber(positionInput);
+            staff.setPosition(StaffPosition.fromNumber(scanner.nextInt()));
 
             System.out.print("Enter Contact Number: ");
             staff.setContactNumber(scanner.next());
@@ -77,6 +73,8 @@ public class StaffMenu extends BaseMenu {
             System.out.print("Enter Salary: ");
             staff.setSalary(scanner.nextInt());
 
+            scanner.nextLine(); // Consume newline before reading password
+
             System.out.print("Enter a password: ");
             staff.setPassword(scanner.nextLine());
 
@@ -88,31 +86,130 @@ public class StaffMenu extends BaseMenu {
                 System.out.println("Failed to add staff.");
             }
 
+            while (true) {
+
+                // confirmation of adding staff
+                System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+                int i = scanner.nextInt();
+
+                if (i == 1) {
+                    // check whether staff is added to firestore
+                    if (staff.addToDb()) {
+                        System.out.println("Staff added successfully!");
+                    } else {
+                        System.out.println("Failed to add staff.");
+                    }
+                    break;
+
+                } else if (i == 0) {
+                    System.out.println("Action Terminated");
+                    break;
+
+                } else {
+                    System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
+                }
+            }
         } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    private void modify() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter Staff ID to modify: ");
+
+            String staffId = scanner.nextLine();
+            Staff staff = Staff.getFromDb(staffId);
+            if (staff == null) {
+                System.out.println("Staff ID not found.");
+                return;
+            }
+
+            System.out.println("Which field would you like to modify?"
+                    + "\n====================================="
+                    + "\n1.  Name"
+                    + "\n2.  Gender"
+                    + "\n3.  Position"
+                    + "\n4.  Contact Number"
+                    + "\n5.  Email"
+                    + "\n6.  Address"
+                    + "\n7.  Salary"
+                    + "\n8.  Password"
+                    + "\n====================================="
+                    + "\nChoice (1-8): ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            String fieldName = "";
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new Name: ");
+                    staff.setName(scanner.nextLine());
+                    fieldName = "name";
+                    break;
+                case 2:
+                    System.out.print("Enter new Gender (M/F): ");
+                    char gender = scanner.next().toUpperCase().charAt(0);
+                    staff.setGender(validationCheck.checkGender(gender));
+                    fieldName = "gender";
+                    break;
+                case 3:
+                    StaffPosition.printPosition();
+                    System.out.print("Enter the number corresponding to the position: ");
+                    staff.setPosition(StaffPosition.fromNumber(scanner.nextInt()));
+                    fieldName = "position";
+                    break;
+                case 4:
+                    System.out.print("Enter new Contact Number: ");
+                    staff.setContactNumber(scanner.next());
+                    fieldName = "contactNumber";
+                    break;
+                case 5:
+                    System.out.print("Enter new Email: ");
+                    staff.setEmail(scanner.next());
+                    fieldName = "email";
+                    break;
+                case 6:
+                    System.out.print("Enter new Address: ");
+                    staff.setAddress(scanner.nextLine());
+                    fieldName = "address";
+                    break;
+                case 7:
+                    System.out.print("Enter new Salary: ");
+                    staff.setSalary(scanner.nextDouble());
+                    fieldName = "salary";
+                    break;
+                case 8:
+                    System.out.print("Enter new Password: ");
+                    staff.setPassword(scanner.nextLine());
+                    fieldName = "password";
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    return;
+            }
+
+            // Update the field in the database
+            if (staff.updateToDb(fieldName)) {
+                System.out.println("Staff record updated successfully.");
+            } else {
+                System.out.println("Failed to update staff record.");
+            }
+
+        }catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private void Login() {
-        // Logic to handle login
-        // For demonstration, after login, we store the staff in loggedInStaff variable
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter Id: ");
-        String id = scanner.next();
-
-        System.out.print("Enter Password: ");
-        String password = scanner.next();
-
-
-
-    }
 
     private void delete() {
-
-    }
-
-    private void modify() {
 
     }
 
