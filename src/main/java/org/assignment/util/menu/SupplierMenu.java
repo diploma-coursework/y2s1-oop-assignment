@@ -3,6 +3,7 @@ package org.assignment.util.menu;
 import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
+import org.assignment.util.validationCheck;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -26,13 +27,11 @@ public class SupplierMenu extends BaseMenu {
 
         // Name
         System.out.println("Supplier Name       : ");
-        supplier.setName(scanner.nextLine());
-        // Validation Check
+        supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
 
         // Contact number
         System.out.println("Contact Number      : ");
         supplier.setContactNumber(scanner.nextLine());
-        // Validation Check
 
         // Email
         System.out.println("Email               : ");
@@ -43,7 +42,6 @@ public class SupplierMenu extends BaseMenu {
         System.out.println("Address             : ");
         supplier.setAddress(scanner.nextLine());
 
-        // Validation Check
         // Ask for confirmation,
         // TODO: if confirm skip,else run clear and loop
         supplier.clear();
@@ -54,9 +52,10 @@ public class SupplierMenu extends BaseMenu {
 
 
 //        Supplier supplier = new Supplier( name, contactNumber, email, address, contractStartDate);
-
-        supplier.addToDb();
         // add to database
+        supplier.addToDb();
+        System.out.println("\nSuccessfully add supplier.");
+
     }
 
     public void removeSupplier() {
@@ -67,7 +66,8 @@ public class SupplierMenu extends BaseMenu {
         char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
 
         if (yn == 'Y') {
-            // remove from database
+            searchSupplier().deleteFromDb();
+            System.out.println("\nSuccessfully delete supplier.");
         }
         else if (yn == 'N') {
             // return to menu
