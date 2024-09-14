@@ -152,4 +152,14 @@ public class Item extends BaseItem implements DatabaseOperations {
             return false;
         }
     }
+
+    @Override
+    public String toString(){
+        return "ITEM ID: " + getId()
+                + "\nITEM Name: " + getName()
+                + "\nITEM Unit Price: " + getUnitPrice()
+                + "\nITEM Quantity: "+ getQuantity()
+                + "\nITEM Supplier: " + getSupplier()
+                + "\nITEM ItemCategory: " + getItemCategory() +"\n";
+    }
 }
