@@ -31,7 +31,6 @@ public class ItemMenu extends BaseMenu {
     }
 
     private void addItem() {
-//        timedPause(200);
         pause();
         clearScreen();
         System.out.println("Adding an item...");
@@ -39,19 +38,33 @@ public class ItemMenu extends BaseMenu {
         // TODO: request for fill up of constructor parameters
         // TODO: Validation checks
         // TODO: print Placeholder value
-        System.out.println("Item Name           :");
+        System.out.print("Item Name           :");
         item.setName(scanner.next());
-        System.out.println("Item Unit Price     :");
+        System.out.print("Item Unit Price     :");
         item.setUnitPrice(scanner.nextDouble());
-        System.out.println("Item Quantity       :");
+        System.out.print("Item Quantity       :");
         item.setQuantity(scanner.nextInt());
-        System.out.println("Supplier ID         :");
+        System.out.print("Supplier ID         :");
         item.setSupplier(Supplier.getFromDb(scanner.next()));
-        System.out.println("ItemCategory ID     :");
+        System.out.print("ItemCategory ID     :");
         item.setItemCategory(ItemCategory.getFromDb(scanner.next()));
         scanner.next();
         // TODO: Confirmation
-        item.addToDb();
+        System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+        while (true){
+            int i = scanner.nextInt();
+            if (i != 1 && i != 0){
+                System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+                continue;
+            }
+            if (i == 0){
+                System.out.println("Action Terminated");
+                break;
+            }
+            item.addToDb();
+            break;
+        }
+
     }
 
     private void removeItem() {
