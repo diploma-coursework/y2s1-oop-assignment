@@ -85,10 +85,11 @@ public class Supplier extends Person implements DatabaseOperations {
             // get from cache if available
             Supplier cachedSupplierObject = (Supplier) FirebaseConnection.getCachedDocument(supplierCollection, supplierCollection.document(id));
             if (cachedSupplierObject != null) return cachedSupplierObject;
-
+            System.out.println("is exist1?");
             // fetch from db
             DocumentSnapshot doc = supplierCollection.document(id).get().get();
             if (!doc.exists()) return null;
+            System.out.println("is exist2?");
             Map<String, Object> docData = doc.getData();
             if (docData == null) return null;
 

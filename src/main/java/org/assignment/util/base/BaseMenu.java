@@ -52,12 +52,14 @@ public abstract class BaseMenu {
     }
 
     public static<T> Optional<T> acceptExitAction(T result){
-        if (result instanceof String && result.toString().equals("exit")){
+        if (result instanceof String && result.toString().equalsIgnoreCase("exit")){
             return Optional.empty();
         }
-        else if (result instanceof Number && (result.equals(-1)) || result.equals(-1.0) ){
+        else if (result instanceof Number && (result.equals(-1)) || result.equals(-1.0)){
             return Optional.empty();
         }
+        System.out.println("Reached here");
+        System.out.println(Optional.of(result));
         return Optional.of(result);
     }
 

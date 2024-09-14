@@ -42,7 +42,7 @@ public class ItemMenu extends BaseMenu {
         // TODO: Validation checks
         // TODO: print Placeholder value
         System.out.print("Item Name           :");
-        item.setName(acceptExitAction(scanner.next()).toString());
+        item.setName(acceptExitAction(scanner.next().trim()).get());
         if (item.getName() == null){
             return;
         }
@@ -57,12 +57,12 @@ public class ItemMenu extends BaseMenu {
             return;
         }
         System.out.print("Supplier ID         :");
-        item.setSupplier(Supplier.getFromDb(acceptExitAction(scanner.next()).toString()));
+        item.setSupplier(Supplier.getFromDb(acceptExitAction(scanner.next()).get()));
         if (item.getSupplier() == null){
             return;
         }
         System.out.print("ItemCategory ID     :");
-        item.setItemCategory(ItemCategory.getFromDb(acceptExitAction(scanner.next()).toString()));
+        item.setItemCategory(ItemCategory.getFromDb(acceptExitAction(scanner.next()).get()));
         if (item.getItemCategory() == null){
             return;
         }
