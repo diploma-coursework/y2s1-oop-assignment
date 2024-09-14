@@ -37,6 +37,8 @@ public class ItemMenu extends BaseMenu {
         System.out.println("Adding an item...");
         Item item = new Item();
         // TODO: request for fill up of constructor parameters
+        // TODO: Validation checks
+        // TODO: print Placeholder value
         System.out.println("Item Name           :");
         item.setName(scanner.next());
         System.out.println("Item Unit Price     :");

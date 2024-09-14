@@ -115,7 +115,6 @@ public class Supplier extends Person implements DatabaseOperations {
             fetchedSupplier.setContractStartDate(contractStartDate);
             fetchedSupplier.setContractEndDate(contractEndDate);
 
-            fetchedSupplier.setContractStartDate(contractStartDate);
 
             // cache and return
             FirebaseConnection.cacheNewDocument(supplierCollection, supplierCollection.document(id), fetchedSupplier);
