@@ -2,10 +2,10 @@
 
 cd /d %~dp0
 
-call mvn package
+call mvn -T 1C package
 
 call cls
 
-call java -jar target/oop-assignment-1.0-jar-with-dependencies.jar
+call java -jar target/oop-assignment-1.0.jar
 
 pause
