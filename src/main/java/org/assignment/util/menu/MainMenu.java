@@ -26,7 +26,6 @@ public class MainMenu extends BaseMenu {
 
     private void staffLogin() {
         System.out.print(ansi().fgBlue().a("test").reset());
-        System.out.println("hi");
         pause();
         clearScreen();
     }
