@@ -95,10 +95,10 @@ public class Supplier extends Person implements DatabaseOperations {
             // create new instance and assign values
             Supplier fetchedSupplier = new Supplier();
             fetchedSupplier.setId(doc.getId());
-            fetchedSupplier.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
-            fetchedSupplier.setContactNumber(Optional.ofNullable(docData.get("contactNumber").toString()).orElse(""));
-            fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email").toString()).orElse(""));
-            fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address").toString()).orElse(""));
+            fetchedSupplier.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
+            fetchedSupplier.setContactNumber(Optional.ofNullable(docData.get("contactNumber")).orElse("").toString());
+            fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email")).orElse("").toString());
+            fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address")).orElse("").toString());
             // TODO: ur contract stuff (idk correct or not), can make them into a method, and call it here,so less redundant
 
             String contractStartDateStr = docData.get("contractStartDate").toString();

@@ -88,8 +88,8 @@ public class ItemCategory implements DatabaseOperations {
             // create new instance and assign values
             ItemCategory fetchedItemCategory = new ItemCategory();
             fetchedItemCategory.setId(doc.getId());
-            fetchedItemCategory.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
-            fetchedItemCategory.setDescription(Optional.ofNullable(docData.get("description").toString()).orElse(""));
+            fetchedItemCategory.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
+            fetchedItemCategory.setDescription(Optional.ofNullable(docData.get("description")).orElse("").toString());
 
             // cache and return
             FirebaseConnection.cacheNewDocument(itemCategoryCollection, itemCategoryCollection.document(id), fetchedItemCategory);

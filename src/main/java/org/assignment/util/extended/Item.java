@@ -104,7 +104,7 @@ public class Item extends BaseItem implements DatabaseOperations {
             // create new instance and assign values
             Item fetchedItem = new Item();
             fetchedItem.setId(doc.getId());
-            fetchedItem.setName(Optional.ofNullable(docData.get("name").toString()).orElse(""));
+            fetchedItem.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
             fetchedItem.setUnitPrice(Double.parseDouble(Optional.ofNullable(docData.get("unitPrice")).orElse(0.0).toString()));
             fetchedItem.setQuantity(Integer.parseInt(Optional.ofNullable(docData.get("quantity")).orElse(0).toString()));
             fetchedItem.setItemCategory(ItemCategory.getFromDb(((DocumentReference) docData.get("itemCategory")).getId()));
