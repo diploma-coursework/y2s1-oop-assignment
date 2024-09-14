@@ -150,19 +150,17 @@ public class Supplier extends Person implements DatabaseOperations {
 
     // Contract Renewal
     // Only allow contract renewal within 2 - 6 months before the current contract ends
-    public int renewContract () {
+    public int checkRenewContract () {
         LocalDate today = LocalDate.now();
         LocalDate renewPeriodStart = this.contractEndDate.minusMonths(6);
-        LocalDate renewPeriodEnd = this.contractEndDate.minusMonths(6);
+        LocalDate renewPeriodEnd = this.contractEndDate;
 
         if (today.isBefore(renewPeriodStart))
             return -1;  // Not reach renew period yet
         else if (today.isAfter(renewPeriodEnd))
             return 1;   // Over renew period, unable to renew
-        else {
-            extendContract();
-            return 0;   // Success renew contract
-        }
+        else
+            return 0;   // Able to extend contract
     }
 
     // Check Contract Availability

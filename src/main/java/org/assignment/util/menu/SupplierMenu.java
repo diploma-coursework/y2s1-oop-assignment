@@ -22,8 +22,9 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void addSupplier() {
-        // Name
         Supplier supplier = new Supplier();
+
+        // Name
         System.out.println("Supplier Name       : ");
         supplier.setName(scanner.nextLine());
         // Validation Check
@@ -101,14 +102,35 @@ public class SupplierMenu extends BaseMenu {
                 // Search Supplier
             }
         } while (!id.equals("XXX"));
+
         return supplier;
     }
 
     public void renewSupplierContract() {
         // search supplier
+        Supplier supplier = searchSupplier();
+
         // validate if supplier contract is able to be renewed
-        // confirmation
-        // update contract info
+        int ableToRenew = supplier.checkRenewContract();
+
+        if (ableToRenew == 0) {
+            System.out.printf("\n\nThe contract of supplier (%s) is able to be renewed.\n", supplier.getName());
+            System.out.print("Are you sure to renew contract? (Y/N) ");
+
+            char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
+
+            if (yn == 'Y') {
+                supplier.extendContract();
+                System.out.println("\nContract successfully renewed.\n");
+            }
+            else if (yn != 'N') {
+                // invalid
+            }
+        }
+        else if (ableToRenew == 1)
+            System.out.println("\nContract expired. Unable to renew contract.\n");
+        else if (ableToRenew == -1)
+            System.out.println(("\nNot within renew period. Unable to renew contract.\n"));
     }
 
     public void returnToMenu() {
