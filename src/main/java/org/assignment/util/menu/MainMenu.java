@@ -15,7 +15,7 @@ public class MainMenu extends BaseMenu {
 
     @Override
     public void start() {
-        if (!exitFlag) {
+        while (!exitFlag) {
             System.out.println("Welcome to XXX Furniture Store!\n===============================");
             displayOptions(MainMenu.options);
             getUserOptions(MainMenu.options);

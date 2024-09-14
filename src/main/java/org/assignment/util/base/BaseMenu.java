@@ -3,8 +3,7 @@ package org.assignment.util.base;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Scanner;
-import org.fusesource.jansi.Ansi;
-import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public abstract class BaseMenu {
     protected static final Scanner scanner = new Scanner(System.in);
@@ -32,7 +31,7 @@ public abstract class BaseMenu {
     }
 
     protected static void clearScreen() {
-        System.out.println(ansi().eraseScreen());
+        System.out.println(ansi().eraseScreen().reset());
     }
 
     protected static void pause() {
