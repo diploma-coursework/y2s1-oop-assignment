@@ -1,6 +1,8 @@
 package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
+import static org.fusesource.jansi.Ansi.ansi;
+
 import java.util.HashMap;
 
 public class MainMenu extends BaseMenu {
@@ -23,10 +25,10 @@ public class MainMenu extends BaseMenu {
     }
 
     private void staffLogin() {
-        System.out.println("login....");
+        System.out.print(ansi().fgBlue().a("test").reset());
+        System.out.println("hi");
         pause();
         clearScreen();
-        pause();
     }
 
 

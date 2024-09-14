@@ -31,7 +31,7 @@ public abstract class BaseMenu {
     }
 
     protected static void clearScreen() {
-        System.out.println(ansi().eraseScreen().reset());
+        System.out.print(ansi().eraseScreen().cursor(0, 0));
     }
 
     protected static void pause() {
