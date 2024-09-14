@@ -1,7 +1,10 @@
 package org.assignment;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+import org.assignment.util.FirebaseConnection;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
+import org.assignment.util.extended.Staff;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.menu.ItemMenu;
 import org.assignment.util.menu.MainMenu;
@@ -26,8 +29,18 @@ public class Main {
 //        itemCategory.addToDb();
 //        supplier.addToDb();
 //        item.addToDb();
+//
+        Staff staff = Staff.getFromDb("STF0000");
+        if (staff == null) System.out.println("nulllll");
+        else System.out.println(staff.getId());
 
-        new MainMenu().start();
+//        try {
+//            DocumentSnapshot doc = FirebaseConnection.getDb().collection("Staff").document("STF0000").get().get();
+//            System.out.println(doc.getId());
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
+//        new MainMenu().start();
 //
 //        ItemMenu itemMenu = new ItemMenu();
 //        itemMenu.start();

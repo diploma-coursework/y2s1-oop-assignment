@@ -15,21 +15,10 @@
     </properties>
 
     <dependencies>
-        <!-- gRPC Dependencies -->
         <dependency>
             <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty</artifactId>
-            <version>1.52.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-core</artifactId>
-            <version>1.52.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>1.52.1</version>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.66.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
