@@ -9,15 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemCategoryMenu extends BaseMenu {
-    private static final HashMap<String, Option> options = new HashMap<>();
+    private static final HashMap<String, Option> options1 = new HashMap<>(), options2 = new HashMap<>();
 
-    // TODO: think of useful & suitable options
     public ItemCategoryMenu() {
-        ItemCategoryMenu.options.put("1", new Option("See Item Categories", this::seeItemCategories));
-        ItemCategoryMenu.options.put("2", new Option("Create a New Item Category", this::createNewItemCategory));
-        ItemCategoryMenu.options.put("3", new Option("Update a Item Category Details", this::updateItemCategoryDetails));
-        ItemCategoryMenu.options.put("4", new Option("Delete a Item Category", this::deleteItemCategory));
-        ItemCategoryMenu.options.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::returnToStaffMenu));
+        ItemCategoryMenu.options1.put("1", new Option("See Item Categories", this::seeItemCategories));
+        ItemCategoryMenu.options1.put("2", new Option("Create a New Item Category", this::createNewItemCategory));
+        ItemCategoryMenu.options1.put("3", new Option("Update Item Category Details", this::updateItemCategoryDetails));
+        ItemCategoryMenu.options1.put("4", new Option("Delete a Item Category", this::deleteItemCategory));
+        ItemCategoryMenu.options1.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::returnToStaffMenu));
+
+        ItemCategoryMenu.options2.put("1", new Option("Edit Name", () -> {}));
+        ItemCategoryMenu.options2.put("2", new Option("Edit Description", () -> {}));
+        ItemCategoryMenu.options2.put("3", new Option("Save", () -> {}));
+        ItemCategoryMenu.options2.put("0", new Option(ansi().fgRed().a("Exit without Saving...").reset().toString(), () -> {}));
 
         exitFlag = false;
     }
@@ -46,8 +50,8 @@ public class ItemCategoryMenu extends BaseMenu {
 
             // print the user menu on 0, 0
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(" Item Category Menu\n====================").reset());
-            displayOptions(ItemCategoryMenu.options);
-            getUserOptions(ItemCategoryMenu.options);
+            displayOptions(ItemCategoryMenu.options1);
+            getUserOptions(ItemCategoryMenu.options1);
         }
     }
 
@@ -104,7 +108,42 @@ public class ItemCategoryMenu extends BaseMenu {
     }
 
     private void updateItemCategoryDetails() {
+        clearScreen();
 
+        System.out.println(ansi().fgBrightGreen().a(" Update an Item Category:\n=========================\n").reset());
+
+        // get category id
+        String inputCategoryId = "";
+        System.out.println("Category Id:");
+        System.out.print(ansi().a("(Type 'exit' to exit)").cursorUp(1).cursorLeft(8));
+        while (inputCategoryId.isEmpty()) {
+            inputCategoryId = scanner.nextLine().trim();
+
+            if (inputCategoryId.isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(13));
+        }
+        // exit if requested
+        if (inputCategoryId.equalsIgnoreCase("exit")) return;
+
+        // get ItemCategory
+        ItemCategory itemCategory = ItemCategory.getFromDb(inputCategoryId);
+        System.out.println(ansi().eraseLine());
+        if (itemCategory == null) System.out.println(ansi().bgBrightRed().a("Invalid category id.").reset());
+        else {
+            // show current details
+            System.out.println(ansi().cursorUp(2).eraseLine().a(itemCategory));
+
+            // get user action (edit / save / exit)
+            displayOptions(ItemCategoryMenu.options2);
+            Option selectedOption = getUserOptions(ItemCategoryMenu.options2);
+
+            // "0" for exit
+            if (selectedOption == ItemCategoryMenu.options2.get("0")) return;
+
+            //TODO: use switch case or something, and add loop 
+
+
+        }
+        pause();
     }
 
     private void deleteItemCategory() {

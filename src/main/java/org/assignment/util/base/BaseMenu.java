@@ -20,17 +20,18 @@ public abstract class BaseMenu {
         if (options.containsKey("0")) System.out.printf("0 - %s\n", options.get("0").description);
     }
 
-    protected static synchronized void getUserOptions(HashMap<String, Option> options) {
+    protected static synchronized Option getUserOptions(HashMap<String, Option> options) {
         while (true) {
             System.out.print("> ");
             final String enterValue = scanner.nextLine();
 
             if (options.containsKey(enterValue)) {
                 options.get(enterValue).execute.run();
-                break;
+                return options.get(enterValue);
             }
-            // TODO: instead of printing this,move pointer up and remove the currentLine
-            System.out.println(ansi().bgBrightRed().a("Invalid option, please try again.").reset());
+
+            System.out.print(ansi().bgBrightRed().a("Invalid option, please try again.").reset()
+                    .cursorUp(1).cursorLeft(33).a(" ".repeat(40)).cursorLeft(40));
         }
     }
 
