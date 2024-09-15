@@ -59,8 +59,14 @@ public class Staff extends Person implements DatabaseOperations {
     public void setSalary(double salary) {
         this.salary = validationCheck.checkSalary((int) salary);
     }
+
     public void setPassword(String password) {
         this.password = validationCheck.checkPassword(password);
+
+        // Validate the password
+        //String validatedPassword = validationCheck.checkPassword(password);
+        // Hash the password
+        //this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
     }
 
     @Override
@@ -102,6 +108,10 @@ public class Staff extends Person implements DatabaseOperations {
             System.out.println("Checking for existing staff with email: " + this.email);
             System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
 
+            //TODO: test the hash function
+            String hashedPassword = BCrypt.hashpw(this.password, BCrypt.gensalt());
+            this.password = hashedPassword;
+
             QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
             if (!existingStaffSnapshot.isEmpty()) {
                 System.out.println("Staff with this email already exists.");
@@ -124,6 +134,7 @@ public class Staff extends Person implements DatabaseOperations {
 
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
+            //docValues.put("password", this.password());
 
             String prefix;
             switch (getPosition().getAccessLevel()) {
