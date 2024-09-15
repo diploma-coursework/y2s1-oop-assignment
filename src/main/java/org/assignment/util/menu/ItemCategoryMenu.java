@@ -64,7 +64,43 @@ public class ItemCategoryMenu extends BaseMenu {
     }
 
     private void createNewItemCategory() {
+        clearScreen();
+        System.out.println(ansi().fgBrightGreen().a(" Create a new Item Category:\n============================\n").reset());
 
+        // print form prompts
+        System.out.print(ansi().a("Category Name       :\nBrief Description   :").cursorUp(1).cursorRight(1).a(ansi().fgBlue()));
+
+        ItemCategory newItemCategory = new ItemCategory("", "");
+
+        // get both inputs and retry if input is empty
+        while (newItemCategory.getName().isEmpty()) {
+            newItemCategory.setName(scanner.nextLine().trim());
+
+            if (newItemCategory.getName().isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(22));
+        }
+
+        System.out.print(ansi().cursorRight(22).a(ansi().fgBrightMagenta()));
+
+        while (newItemCategory.getDescription().isEmpty()) {
+            newItemCategory.setDescription(scanner.nextLine().trim());
+
+            if (newItemCategory.getDescription().isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(22));
+        }
+
+        // get confirmation from user
+        System.out.println(ansi().reset().cursor(6, 0)
+                .fgBrightGreen().a("\nCreate the following item category? (y / n) ").reset());
+
+        boolean userConfirm = getYesNoOption();
+        if (userConfirm) {
+            boolean createSuccessful = newItemCategory.addToDb();
+
+            if (createSuccessful) System.out.println("\nItem category created successfully!");
+            else System.out.println("\nFailed to created item category, please try again later.");
+        } else {
+            System.out.println("\nCanceled process...");
+        };
+        pause();
     }
 
     private void updateItemCategoryDetails() {
