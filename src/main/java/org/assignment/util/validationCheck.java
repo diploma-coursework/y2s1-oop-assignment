@@ -42,7 +42,7 @@ public class validationCheck {
         StringBuilder formattedName = new StringBuilder();
 
         for (String word : words) {
-            if (word.length() > 0) {
+            if (!word.isEmpty()) {
                 formattedName.append(Character.toUpperCase(word.charAt(0))) // Capitalize the first letter
                         .append(word.substring(1).toLowerCase())        // Make the rest of the word lowercase
                         .append(" ");                                   // Add a space

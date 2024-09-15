@@ -96,6 +96,13 @@ public class Staff extends Person implements DatabaseOperations {
     // database operations implementation
     public boolean addToDb() {
         try {
+
+            DocumentSnapshot existingStaff = staffCollection.whereEqualTo("email", this.email).get().get().getDocuments().stream().findFirst().orElse(null);
+            if (existingStaff != null) {
+                System.out.println("Staff with this email already exists.");
+                return false;  // Prevent duplicate entry
+            }
+
             HashMap<String, Object> docValues = new HashMap<>();
             docValues.put("name", this.name);
             docValues.put("contactNumber", getContactNumber());
@@ -103,13 +110,21 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("email", getEmail());
             docValues.put("gender", getGender());
             docValues.put("position", getPosition().toString());
-            docValues.put("dateJoined", getDateJoined());
+
+            if (getDateJoined() != null) {
+                docValues.put("dateJoined", Timestamp.ofTimeSecondsAndNanos(getDateJoined().atStartOfDay(ZoneId.systemDefault()).toEpochSecond(), 0));
+            } else {
+                docValues.put("dateJoined", Timestamp.now());  // Fallback to current timestamp if null
+            }
+
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
 
-            this.id = DbMethods.dbCreateNewId("Staff","STF",4);
+            this.id = DbMethods.dbCreateNewId("Staff", "STF", 4);
             staffCollection.document(this.id).set(docValues).get();
+
             return true;
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return false;

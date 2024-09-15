@@ -24,9 +24,9 @@ public class StaffMenu extends BaseMenu {
 
         // Initialize menu options using createOption
         menuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
-        menuOptions.put("3", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.MANAGER)));
-        menuOptions.put("4", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
-        menuOptions.put("5", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
+        menuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
+        menuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
+        menuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
         menuOptions.put("q", new Option("Quit", this::quit));
 
         exitFlag = false;
@@ -51,38 +51,51 @@ public class StaffMenu extends BaseMenu {
 
             Staff staff = new Staff();
 
-            System.out.println("Please enter ALL necessary infos");
-            System.out.println("=======================================");
-
+            System.out.println("Please enter ALL necessary info");
+            System.out.println("=======================================" + "\n");
             System.out.print("Enter Name: ");
             staff.setName(scanner.nextLine());
+
+            newline();
 
             System.out.print("Enter Gender (M/F): ");
             char gender = scanner.next().toUpperCase().charAt(0);
             staff.setGender(validationCheck.checkGender(gender));
 
+            newline();
+
             StaffPosition.printPosition();
             System.out.print("Enter the number corresponding to the position: ");
             staff.setPosition(StaffPosition.fromNumber(scanner.nextInt()));
 
+            newline();
+
             System.out.print("Enter Contact Number: ");
             staff.setContactNumber(scanner.next());
+
+            newline();
 
             System.out.print("Enter Email: ");
             staff.setEmail(scanner.next());
 
             scanner.nextLine(); // Consume newline
+            newline();
 
             System.out.print("Enter Address: ");
             staff.setAddress(scanner.nextLine());
+
+            newline();
 
             System.out.print("Enter Salary: ");
             staff.setSalary(scanner.nextInt());
 
             scanner.nextLine(); // Consume newline before reading password
+            newline();
 
             System.out.print("Enter a password: ");
             staff.setPassword(scanner.nextLine());
+
+            newline();
 
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
@@ -222,5 +235,9 @@ public class StaffMenu extends BaseMenu {
         } else {
             System.out.println("No staff is currently logged in. Please log in first.");
         }
+    }
+
+    public void newline() {
+        System.out.println();
     }
 }
