@@ -10,6 +10,7 @@ import org.assignment.util.base.Person;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -171,6 +172,13 @@ public class Supplier extends Person implements DatabaseOperations {
     @Override
     public String toString(){
         // TODO: toString for Supplier
-        return super.toString() + "SUPPLIER DETAILS\n";
+        // return super.toString() + "SUPPLIER DETAILS\n";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String startDate = this.contractStartDate != null ? this.contractStartDate.format(formatter) : "N/A";
+        String endDate = this.contractEndDate != null ? this.contractEndDate.format(formatter) : "N/A";
+
+        return super.toString() + String.format("\nContract Start Date: %s\nContract End Date: %s", startDate, endDate);
     }
 }
