@@ -101,34 +101,32 @@ public class StaffMenu extends BaseMenu {
 
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
-            if (staff.addToDb()) {
+            boolean isAdded = staff.addToDb();
+
+            if (isAdded) {
                 System.out.println("Staff added successfully!");
+
+                while (true) {
+                    // confirmation of adding staff
+                    System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+                    int i = scanner.nextInt();
+
+                    if (i == 1) {
+                        System.out.println("Staff confirmed and added successfully!");
+                        break;
+
+                    } else if (i == 0) {
+                        System.out.println("Action Terminated");
+                        // Optionally, you could remove the staff entry if not confirmed
+                        // e.g., staffCollection.document(staff.getId()).delete();
+                        break;
+
+                    } else {
+                        System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
+                    }
+                }
             } else {
                 System.out.println("Failed to add staff.");
-            }
-
-            while (true) {
-
-                // confirmation of adding staff
-                System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
-                int i = scanner.nextInt();
-
-                if (i == 1) {
-                    // check whether staff is added to firestore
-                    if (staff.addToDb()) {
-                        System.out.println("Staff added successfully!");
-                    } else {
-                        System.out.println("Failed to add staff.");
-                    }
-                    break;
-
-                } else if (i == 0) {
-                    System.out.println("Action Terminated");
-                    break;
-
-                } else {
-                    System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
-                }
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
