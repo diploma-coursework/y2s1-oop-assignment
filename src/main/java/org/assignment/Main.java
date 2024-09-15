@@ -24,10 +24,10 @@ public class Main {
 //        supplier.addToDb();
 //        item.addToDb();
 //
-//        new MainMenu().start();
+        new MainMenu().start();
 
-        ItemMenu itemMenu = new ItemMenu();
-        itemMenu.start();
+//        ItemMenu itemMenu = new ItemMenu();
+//        itemMenu.start();
 
 //        new ItemCategoryMenu().start();
 

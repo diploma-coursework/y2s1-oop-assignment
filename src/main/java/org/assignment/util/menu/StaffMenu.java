@@ -12,10 +12,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.time.LocalDate;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 
 public class StaffMenu extends BaseMenu {
 
-    private final HashMap<String, BaseMenu.Option> menuOptions = new HashMap<>();
+    private final HashMap<String, BaseMenu.Option> StaffMenuOptions = new HashMap<>();
     private final Staff loggedInStaff;
 
     public StaffMenu(Staff loggedInStaff) {
@@ -23,11 +25,11 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        menuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
-        menuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
-        menuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
-        menuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
-        menuOptions.put("q", new Option("Quit", this::quit));
+        StaffMenuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quit));
 
         exitFlag = false;
         actionExit = false;
@@ -36,8 +38,8 @@ public class StaffMenu extends BaseMenu {
     @Override
     public void start() {
         while (!exitFlag) {
-            displayOptions(menuOptions);
-            getUserOptions(menuOptions);
+            displayOptions(StaffMenuOptions);
+            getUserOptions(StaffMenuOptions);
         }
     }
 
@@ -99,34 +101,32 @@ public class StaffMenu extends BaseMenu {
 
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
-            if (staff.addToDb()) {
+            boolean isAdded = staff.addToDb();
+
+            if (isAdded) {
                 System.out.println("Staff added successfully!");
+
+                while (true) {
+                    // confirmation of adding staff
+                    System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
+                    int i = scanner.nextInt();
+
+                    if (i == 1) {
+                        System.out.println("Staff confirmed and added successfully!");
+                        break;
+
+                    } else if (i == 0) {
+                        System.out.println("Action Terminated");
+                        // Optionally, you could remove the staff entry if not confirmed
+                        // e.g., staffCollection.document(staff.getId()).delete();
+                        break;
+
+                    } else {
+                        System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
+                    }
+                }
             } else {
                 System.out.println("Failed to add staff.");
-            }
-
-            while (true) {
-
-                // confirmation of adding staff
-                System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
-                int i = scanner.nextInt();
-
-                if (i == 1) {
-                    // check whether staff is added to firestore
-                    if (staff.addToDb()) {
-                        System.out.println("Staff added successfully!");
-                    } else {
-                        System.out.println("Failed to add staff.");
-                    }
-                    break;
-
-                } else if (i == 0) {
-                    System.out.println("Action Terminated");
-                    break;
-
-                } else {
-                    System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
-                }
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());

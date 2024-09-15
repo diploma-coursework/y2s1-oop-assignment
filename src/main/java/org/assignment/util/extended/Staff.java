@@ -8,6 +8,7 @@ import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.validationCheck;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 import java.time.ZoneId;
 
@@ -97,8 +98,10 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean addToDb() {
         try {
 
-            DocumentSnapshot existingStaff = staffCollection.whereEqualTo("email", this.email).get().get().getDocuments().stream().findFirst().orElse(null);
-            if (existingStaff != null) {
+            System.out.println("Checking for existing staff with email: " + this.email);
+
+            QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
+            if (!existingStaffSnapshot.isEmpty()) {
                 System.out.println("Staff with this email already exists.");
                 return false;  // Prevent duplicate entry
             }
@@ -120,11 +123,23 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
 
-            this.id = DbMethods.dbCreateNewId("Staff", "STF", 4);
+            String prefix;
+            switch (getPosition().getAccessLevel()) {
+                case MANAGER:
+                    prefix = "MNG";
+                    break;
+                case ADMIN:
+                    prefix = "ADM";
+                    break;
+                case STAFF:
+                default:
+                    prefix = "STF";
+                    break;
+            }
+
+            this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
             staffCollection.document(this.id).set(docValues).get();
-
             return true;
-
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return false;
@@ -186,18 +201,6 @@ public class Staff extends Person implements DatabaseOperations {
             // cache and return
             FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);
             return fetchedStaff;
-
-            /*
-            fetchedStaff.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
-            fetchedStaff.setContactNumber(Optional.ofNullable(docData.get("contactNumber")).orElse("").toString());
-            fetchedStaff.setEmail(Optional.ofNullable(docData.get("email")).orElse("").toString());
-            fetchedStaff.setAddress(Optional.ofNullable(docData.get("address")).orElse("").toString());
-            fetchedStaff.setGender(Optional.ofNullable(docData.get("gender")).orElse("").toString());
-            fetchedStaff.setPosition(StaffPosition.fromString(Optional.ofNullable(docData.get("position")).map(Object::toString).orElse("")));
-            fetchedStaff.setDateJoined(LocalDate.parse(Optional.ofNullable(docData.get("dateJoined")).map(Object::toString).orElse(LocalDate.now().toString())));
-            fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse(0.0).toString()));
-            fetchedStaff.setPassword(Optional.ofNullable(docData.get("password")).orElse("").toString());
-            */
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
