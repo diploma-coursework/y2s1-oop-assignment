@@ -14,9 +14,9 @@ public class ItemCategoryMenu extends BaseMenu {
     // TODO: think of useful & suitable options
     public ItemCategoryMenu() {
         ItemCategoryMenu.options.put("1", new Option("See Item Categories", this::seeItemCategories));
-        ItemCategoryMenu.options.put("2", new Option("Create new item categories", this::seeItemCategories));
-        ItemCategoryMenu.options.put("3", new Option("Update Item Categories", this::seeItemCategories));
-        ItemCategoryMenu.options.put("4", new Option("Delete Item Categories", this::seeItemCategories));
+        ItemCategoryMenu.options.put("2", new Option("Create a New Item Category", this::createNewItemCategory));
+        ItemCategoryMenu.options.put("3", new Option("Update a Item Category Details", this::updateItemCategoryDetails));
+        ItemCategoryMenu.options.put("4", new Option("Delete a Item Category", this::deleteItemCategory));
         ItemCategoryMenu.options.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::returnToStaffMenu));
 
         exitFlag = false;
@@ -51,7 +51,6 @@ public class ItemCategoryMenu extends BaseMenu {
         }
     }
 
-    // TODO: make output nicer
     private void seeItemCategories() {
         clearScreen();
         List<ItemCategory> itemCategoryList = ItemCategory.getAllItemCategory();
@@ -62,6 +61,18 @@ public class ItemCategoryMenu extends BaseMenu {
             }
         }
         pause();
+    }
+
+    private void createNewItemCategory() {
+
+    }
+
+    private void updateItemCategoryDetails() {
+
+    }
+
+    private void deleteItemCategory() {
+
     }
 
     private void returnToStaffMenu() {

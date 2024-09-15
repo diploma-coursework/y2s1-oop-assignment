@@ -10,6 +10,8 @@ import org.assignment.util.base.DatabaseOperations;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class ItemCategory implements DatabaseOperations {
     private String id;
     private String name;
@@ -139,11 +141,28 @@ public class ItemCategory implements DatabaseOperations {
         }
     }
 
-    public String toString(){
-        return String.format("""
-                ITEMCATEGORY ID: %s
-                ITEMCATEGORY NAME: %s
-                ITEMCATEGORY DESCRIPTION: %s
-                """, this.getId(), this.getName(), this.getDescription());
+    public String toString() {
+        StringBuilder returnString = new StringBuilder();
+
+        returnString
+                .append("Id         : ").append(ansi().fgYellow().a(this.getId()).reset().toString()).append("\n")
+                .append("Name       : ").append(ansi().fgBlue().a(this.getName()).reset().toString()).append("\n")
+                .append("Description: ").append(ansi().fgBrightMagenta());
+
+        // do text wrap for description with alignment
+        String[] tokenizedDescription = this.getDescription().split(" ");
+        int currentLineLength = 0;
+
+        for (String word : tokenizedDescription) {
+            if (currentLineLength > 50) {
+                returnString.append("\n             ");
+                currentLineLength = 0;
+            }
+
+            returnString.append(word).append(" ");
+            currentLineLength += word.length() + 1 ;
+        }
+        returnString.append(ansi().reset()).append("\n");
+        return returnString.toString();
     }
 }
