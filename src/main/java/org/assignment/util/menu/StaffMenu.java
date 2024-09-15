@@ -12,10 +12,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.time.LocalDate;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 
 public class StaffMenu extends BaseMenu {
 
-    private final HashMap<String, BaseMenu.Option> menuOptions = new HashMap<>();
+    private final HashMap<String, BaseMenu.Option> StaffMenuOptions = new HashMap<>();
     private final Staff loggedInStaff;
 
     public StaffMenu(Staff loggedInStaff) {
@@ -23,11 +25,11 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        menuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
-        menuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
-        menuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
-        menuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
-        menuOptions.put("q", new Option("Quit", this::quit));
+        StaffMenuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quit));
 
         exitFlag = false;
         actionExit = false;
@@ -36,8 +38,8 @@ public class StaffMenu extends BaseMenu {
     @Override
     public void start() {
         while (!exitFlag) {
-            displayOptions(menuOptions);
-            getUserOptions(menuOptions);
+            displayOptions(StaffMenuOptions);
+            getUserOptions(StaffMenuOptions);
         }
     }
 

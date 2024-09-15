@@ -8,6 +8,7 @@ import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.validationCheck;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 import java.time.ZoneId;
 
@@ -97,8 +98,10 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean addToDb() {
         try {
 
-            DocumentSnapshot existingStaff = staffCollection.whereEqualTo("email", this.email).get().get().getDocuments().stream().findFirst().orElse(null);
-            if (existingStaff != null) {
+            System.out.println("Checking for existing staff with email: " + this.email);
+
+            QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();  // QuerySnapshot instead of DocumentSnapshot
+            if (!existingStaffSnapshot.isEmpty()) {  // Check if the snapshot contains any documents
                 System.out.println("Staff with this email already exists.");
                 return false;  // Prevent duplicate entry
             }
@@ -120,7 +123,12 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
 
-            this.id = DbMethods.dbCreateNewId("Staff", "STF", 4);
+//            this.id = DbMethods.dbCreateNewId("Staff", "STF", 4);
+
+            //TODO: test the role-based restriction
+            String prefix = getPosition().getAccessLevel().name().substring(0, 3); // STF, MAN, ADM
+            this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
+
             staffCollection.document(this.id).set(docValues).get();
 
             return true;

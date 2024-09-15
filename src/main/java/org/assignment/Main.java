@@ -29,7 +29,7 @@ public class Main {
 //        ItemMenu itemMenu = new ItemMenu();
 //        itemMenu.start();
 
-        new ItemCategoryMenu().start();
+//        new ItemCategoryMenu().start();
 
 //          StaffMenu staffMenu = new StaffMenu();
 //          staffMenu.start();
