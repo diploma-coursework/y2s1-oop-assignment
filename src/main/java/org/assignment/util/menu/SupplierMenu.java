@@ -61,21 +61,23 @@ public class SupplierMenu extends BaseMenu {
     public void removeSupplier() {
         // Search for supplier
         searchSupplier();
+
         // confirmation to remove
-        System.out.print("Are you sure you want to remove the supplier? (Y/N) ");
-        char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
+        char yn = ' ';
+        do {
+            System.out.print("Are you sure you want to remove the supplier? (Y/N) ");
+            yn = Character.toUpperCase(scanner.nextLine().charAt(0));
 
-        if (yn == 'Y') {
-            searchSupplier().deleteFromDb();
-            System.out.println("\nSuccessfully delete supplier.");
-        }
-        else if (yn == 'N') {
-            // return to menu
-        }
-        else {
-            // invalid
-        }
-
+            if (yn == 'Y') {
+                searchSupplier().deleteFromDb();
+                System.out.println("\nSuccessfully delete supplier.");
+            }
+            else if (yn == 'N') {
+                // return to menu
+            }
+            else
+            System.out.println("\nInvalid input. Y/N only.\n");
+        } while (yn != 'Y' && yn != 'N');
     }
 
     public void listSupplier() {
@@ -99,7 +101,7 @@ public class SupplierMenu extends BaseMenu {
             id = (scanner.nextLine()).toUpperCase();
 
             if (!id.equals("XXX")) {
-                // Search Supplier
+                supplier = Supplier.getFromDb(id);
             }
         } while (!id.equals("XXX"));
 
@@ -117,20 +119,26 @@ public class SupplierMenu extends BaseMenu {
 
         // validate if supplier contract is able to be renewed
         int ableToRenew = supplier.checkRenewContract();
+        char yn = ' ';
 
         if (ableToRenew == 0) {
-            System.out.printf("\n\nThe contract of supplier (%s) is able to be renewed.\n", supplier.getName());
-            System.out.print("Are you sure to renew contract? (Y/N) ");
+            do {
+                System.out.printf("\n\nThe contract of supplier (%s) is able to be renewed.\n", supplier.getName());
+                System.out.print("Are you sure to renew contract? (Y/N) ");
 
-            char yn = Character.toUpperCase(scanner.nextLine().charAt(0));
+                yn = Character.toUpperCase(scanner.nextLine().charAt(0));
 
-            if (yn == 'Y') {
-                supplier.extendContract();
-                System.out.println("\nContract successfully renewed.\n");
-            }
-            else if (yn != 'N') {
-                // invalid
-            }
+                if (yn == 'Y') {
+                    supplier.extendContract();
+                    System.out.println("\nContract successfully renewed.\n");
+                }
+                else if (yn != 'N') {
+                    // return to menu
+                }
+                else {
+                    System.out.println("\nInvalid input. Y/N only\n");
+                }
+            } while(yn != 'Y' && yn != 'N');
         }
         else if (ableToRenew == 1)
             System.out.println("\nContract expired. Unable to renew contract.\n");
