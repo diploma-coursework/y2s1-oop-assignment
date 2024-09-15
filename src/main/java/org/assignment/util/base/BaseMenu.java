@@ -34,6 +34,19 @@ public abstract class BaseMenu {
         }
     }
 
+    protected static boolean getYesNoOption() {
+        System.out.print("> ");
+
+        while (true) {
+            String input = scanner.nextLine();
+
+            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) return true;
+            if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) return false;
+
+            System.out.print(ansi().cursorUp(1).eraseLine().a("> "));
+        }
+    }
+
     protected static void clearScreen() {
         System.out.print("\033[H\033[2J"); // ANSI escape code to clear screen and reset cursor
     }
