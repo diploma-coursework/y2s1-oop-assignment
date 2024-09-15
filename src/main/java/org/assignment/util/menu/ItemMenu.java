@@ -8,8 +8,10 @@ import org.assignment.util.extended.Supplier;
 import org.assignment.util.validationCheck;
 import org.checkerframework.checker.units.qual.A;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
+import static com.google.api.client.util.FieldInfo.setFieldValue;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ItemMenu extends BaseMenu {
@@ -20,7 +22,8 @@ public class ItemMenu extends BaseMenu {
         // Initialize menu options using createOption
         menuOptions.put("1", new Option("Add Item", this::addItem));
         menuOptions.put("2", new Option("Remove Item", this::removeItem));
-        menuOptions.put("3", new Option("View Items", this::viewItems));
+        menuOptions.put("3", new Option("Modify Item", this::modifyItem));
+        menuOptions.put("4", new Option("View Items", this::viewItems));
         menuOptions.put("0", new Option("Quit", this::quit));
 
         exitFlag = false;
@@ -76,7 +79,6 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNextDouble()) {
                 scannerValue.append(scanner.nextDouble());
                 scanner.nextLine();
-//                acceptExitAction(scanner.nextDouble()).map(Number::doubleValue).orElse(-1.0)
                 if (acceptExitAction(Double.valueOf(scannerValue.toString())).isEmpty()){
                     return;
                 }
@@ -94,7 +96,6 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNextInt()) {
                 scannerValue.append(scanner.nextInt());
                 scanner.nextLine();
-//                acceptExitAction(scanner.nextInt()).map(Number::intValue).orElse(-1)
                 if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()){
                     return;
                 }
@@ -105,7 +106,6 @@ public class ItemMenu extends BaseMenu {
                 System.out.print(ansi().cursorUp(1).eraseLine());
                 scanner.nextLine();
             }
-
         }
 
         while (true) {
@@ -127,7 +127,6 @@ public class ItemMenu extends BaseMenu {
                 System.out.print(ansi().cursorUp(1).eraseLine());
                 scanner.nextLine();
             }
-
         }
 
         while (true) {
@@ -159,6 +158,7 @@ public class ItemMenu extends BaseMenu {
                 int i = scanner.nextInt();
                 if (i != 1 && i != 0) {
                     System.out.println("Invalid input. Please enter 1 to confirm, or 0 to cancel.");
+                    System.out.print("> ");
                     continue; // No need to clear the screen again
                 }
                 if (i == 0) {
@@ -186,7 +186,6 @@ public class ItemMenu extends BaseMenu {
         System.out.println("Enter the IDs' of the Items to Remove: ");
         System.out.println("Eg.(ITEM0001 ITEM0002...)");
         System.out.println("Enter Exit to exit");
-//        System.out.print("> ");
 
         System.out.print("> ");
         while (scanner.hasNextLine()) {
@@ -271,6 +270,229 @@ public class ItemMenu extends BaseMenu {
         } while(option != 0);
     }
 
+    private void modifyItem() {
+        // get instance of Item from db
+        // change its value
+        // update with updateToDb(String fieldName)
+        clearScreen();
+        // TODO: choose by id
+        System.out.println("Enter the ID of the ITEM to modify: ");
+        System.out.println("Enter Exit to exit");
+        System.out.print("> ");
+        StringBuilder scannerValue = new StringBuilder();
+        // Method Segments for Getting Item instance through ITEMID and prompting with Validation for ID
+        Item item = new Item();
+        while (true) {
+            // FIXME: Any clear,Line Reprint, Exit doesnt work
+            scannerValue.append(scanner.nextLine());
+            if (scannerValue.isEmpty()){
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                System.out.print("> ");
+                continue;
+            }
+            if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                return;
+            }
+            if (!DbMethods.isValidCode("ITEM",scannerValue.toString()) || Item.getFromDb(scannerValue.toString())== null){
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                System.out.print("> ");
+                continue;
+            } else{
+                item = Item.getFromDb(scannerValue.toString());
+                scannerValue.setLength(0);
+                break;
+            }
+        }
+//        item
+        boolean validFieldName = false;
+        String chosenField = "";
+        Field[] fields = Item.class.getDeclaredFields();
+        System.out.println("Which Field would you Like to Modify");
+        System.out.println(item);
+        System.out.println("Enter Exit to exit");
+        System.out.print("> ");
+        // ---
+        while (true) {
+            scannerValue.append(scanner.next());
+            if (scannerValue.isEmpty()){
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                System.out.print("> ");
+                continue;
+            }
+            if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                return;
+            }
+
+            for (Field field : fields) {
+                if (field.toString().contentEquals(scannerValue)){
+                    chosenField = scannerValue.toString();
+                    // TODO: find getters for this field
+                    switch (field.toString()){
+                        case "name":
+                            // CHOOSE STRING
+                            while (true) {
+                                scannerValue.setLength(0);
+                                System.out.print("Item Name           :");
+                                if (scanner.hasNextLine()) {
+                                    scannerValue.append(scanner.nextLine().trim());
+                                    if (!validationCheck.isValidName(scannerValue.toString())){
+                                        System.out.print(ansi().cursorUp(1).eraseLine());
+                                        continue;
+                                    }
+
+                                    if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                                        return;
+                                    }
+                                    assert item != null;
+                                    item.setName(scannerValue.toString());
+                                    scannerValue.setLength(0);
+                                    break;
+                                } else{
+                                    System.out.print(ansi().cursorUp(1).eraseLine());
+                                    scanner.nextLine();
+                                }
+                            }
+                            break;
+                        case "unitPrice":
+                            // CHOOSE DOUBLE
+                            while (true) {
+                                scannerValue.setLength(0);
+                                System.out.print("Item Unit Price     :");
+                                // FIXME: NaN would be valid
+                                if (scanner.hasNextDouble()) {
+                                    scannerValue.append(scanner.nextDouble());
+                                    scanner.nextLine();
+                                    if (acceptExitAction(Double.valueOf(scannerValue.toString())).isEmpty()){
+                                        return;
+                                    }
+                                    assert item != null;
+                                    item.setUnitPrice(Double.parseDouble(scannerValue.toString()));
+                                    break;
+                                } else{
+                                    System.out.print(ansi().cursorUp(1).eraseLine());
+                                    scanner.nextLine();
+                                }
+                            }
+                            break;
+                        case "quantity":
+                            // CHOOSE INT
+                            while (true) {
+                                scannerValue.setLength(0);
+                                System.out.print("Item Quantity       :");
+                                if (scanner.hasNextInt()) {
+                                    scannerValue.append(scanner.nextInt());
+                                    scanner.nextLine();
+                                    if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()){
+                                        return;
+                                    }
+                                    assert item != null;
+                                    item.setQuantity(Integer.parseInt(scannerValue.toString()));
+                                    scannerValue.setLength(0);
+                                    break;
+                                } else{
+                                    System.out.print(ansi().cursorUp(1).eraseLine());
+                                    scanner.nextLine();
+                                }
+                            }
+                            break;
+                        case "Supplier":
+                            // CHOOSE SUP ID
+                            while (true) {
+                                scannerValue.setLength(0);
+                                System.out.print("Supplier ID         :");
+                                if (scanner.hasNext()) {
+                                    scannerValue.append(scanner.next());
+                                    if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                                        return;
+                                    }
+                                    if (!DbMethods.isValidCode("SUP",scannerValue.toString())){
+                                        System.out.print(ansi().cursorUp(1).eraseLine());
+                                        continue;
+                                    }
+                                    assert item != null;
+                                    item.setSupplier(Supplier.getFromDb(scannerValue.toString()));
+                                    scannerValue.setLength(0);
+                                    break;
+                                } else{
+                                    System.out.print(ansi().cursorUp(1).eraseLine());
+                                    scanner.nextLine();
+                                }
+                            }
+                            // TODO: get instance from id
+                            break;
+                        case "ItemCategory":
+                            // CHOSE CAT ID
+                            while (true) {
+                                scannerValue.setLength(0);
+                                System.out.print("ItemCategory ID     :");
+                                if (scanner.hasNext()) {
+                                    scannerValue.append(scanner.next());
+                                    if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                                        return;
+                                    }
+                                    if (!DbMethods.isValidCode("CAT",scannerValue.toString())){
+                                        System.out.print(ansi().cursorUp(1).eraseLine());
+                                        continue;
+                                    }
+                                    assert item != null;
+                                    item.setItemCategory(ItemCategory.getFromDb(scannerValue.toString()));
+                                    break;
+                                } else{
+                                    System.out.print(ansi().cursorUp(1).eraseLine());
+                                    scanner.nextLine();
+                                }
+                            }
+                            // TODO: get instance from id
+                            break;
+                        default:
+                            break;
+                    }
+                    validFieldName = true;
+                    break;
+                }
+            }
+
+            if (!validFieldName){
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                System.out.print("> ");
+            }
+            break;
+        }
+
+
+
+        clearScreen();
+        assert item != null;
+        System.out.println(item.RefIdPrint());
+        System.out.print("To Confirm Modifying [Enter 1] else [Enter 0]: ");
+        while (true) {
+            if (scanner.hasNextInt()) {
+                int i = scanner.nextInt();
+                if (i != 1 && i != 0) {
+                    System.out.println("Invalid input. Please enter 1 to confirm, or 0 to cancel.");
+                    continue;
+                }
+                if (i == 0) {
+                    System.out.println("Action Terminated..");
+                    pause();
+                    clearScreen();
+                    break;
+                }
+
+                assert item != null;
+                item.updateToDb(chosenField);
+                pause();
+                clearScreen();
+                break;
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear the invalid input
+            }
+        }
+        // ---
+
+    }
+
     private void viewItems() {
         System.out.println("Viewing all items...");
         // Logic to view items
@@ -289,4 +511,5 @@ public class ItemMenu extends BaseMenu {
 //        }
 //        return false;
 //    }
+
 }

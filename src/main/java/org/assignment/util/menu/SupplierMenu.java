@@ -24,28 +24,39 @@ public class SupplierMenu extends BaseMenu {
 
     public void addSupplier() {
         Supplier supplier = new Supplier();
+        boolean confirmed = false;
 
-        // Name
-        System.out.println("Supplier Name       : ");
-        supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
+        while (!confirmed) {
+            // Name
+            System.out.println("Supplier Name       : ");
+            supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
 
-        // Contact number
-        System.out.println("Contact Number      : ");
-        supplier.setContactNumber(scanner.nextLine());
+            // Contact number
+            System.out.println("Contact Number      : ");
+            supplier.setContactNumber(scanner.nextLine());
 
-        // Email
-        System.out.println("Email               : ");
-        supplier.setEmail(scanner.nextLine());
-        // Validation Check
+            // Email
+            System.out.println("Email               : ");
+            supplier.setEmail(scanner.nextLine());
+            // Validation Check
 
-        // Address
-        System.out.println("Address             : ");
-        supplier.setAddress(scanner.nextLine());
+            // Address
+            System.out.println("Address             : ");
+            supplier.setAddress(scanner.nextLine());
 
-        // Ask for confirmation,
-        // TODO: if confirm skip,else run clear and loop
-        supplier.clear();
+            // Ask for confirmation,
+            // TODO: if confirm skip,else run clear and loop (maybe done???)
+            System.out.print("Confirm to add supplier? (Y/N): ");
+            char confirmation = Character.toUpperCase(scanner.nextLine().charAt(0));
 
+            if (confirmation == 'Y')
+                confirmed = true;
+            else {
+                // Clear the supplier details if not confirmed
+                supplier.clear();
+                System.out.println("Please re-enter the details.\n");
+            }
+        }
 
         supplier.setId(DbMethods.dbCreateNewId("Supplier","SUP0",4));
         supplier.setContractStartDate(LocalDate.now());
@@ -55,7 +66,6 @@ public class SupplierMenu extends BaseMenu {
         // add to database
         supplier.addToDb();
         System.out.println("\nSuccessfully add supplier.");
-
     }
 
     public void removeSupplier() {

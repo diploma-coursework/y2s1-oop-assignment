@@ -11,6 +11,7 @@ import org.assignment.util.validationCheck;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 import java.time.ZoneId;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -99,6 +100,7 @@ public class Staff extends Person implements DatabaseOperations {
         try {
 
             System.out.println("Checking for existing staff with email: " + this.email);
+            System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
 
             QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
             if (!existingStaffSnapshot.isEmpty()) {
