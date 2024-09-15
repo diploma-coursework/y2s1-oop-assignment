@@ -159,7 +159,7 @@ public class Item extends BaseItem implements DatabaseOperations {
                 + "\nITEM Name: " + getName()
                 + "\nITEM Unit Price: " + getUnitPrice()
                 + "\nITEM Quantity: "+ getQuantity()
-                + "\nITEM Supplier: " + getSupplier()
-                + "\nITEM ItemCategory: " + getItemCategory() +"\n";
+                + "\n\nITEM Supplier\n" + getSupplier()
+                + "\nITEM ItemCategory\n" + getItemCategory() +"\n";
     }
 }

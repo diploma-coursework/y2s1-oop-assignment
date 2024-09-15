@@ -37,6 +37,9 @@ public abstract class BaseMenu {
     protected static void clearScreen() {
         System.out.println();
         System.out.print(ansi().eraseScreen().cursor(0, 0));
+        System.out.print("\033[3J"); // Clear scrollback buffer
+        System.out.print("\033[H\033[2J"); // ANSI escape code to clear screen and reset cursor
+        System.out.flush(); // Ensure everything gets flushed and processed
     }
 
     protected static void pause() {
