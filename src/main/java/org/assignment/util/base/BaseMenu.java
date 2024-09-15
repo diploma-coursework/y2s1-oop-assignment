@@ -29,6 +29,7 @@ public abstract class BaseMenu {
                 options.get(enterValue).execute.run();
                 break;
             }
+            // TODO: instead of printing this,move pointer up and remove the currentLine
             System.out.println(ansi().bgBrightRed().a("Invalid option, please try again.").reset());
         }
     }

@@ -8,6 +8,36 @@ import org.assignment.util.enums.StaffPosition;
 
 public class validationCheck {
 
+    public static boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+
+        name = name.trim(); // Trim leading/trailing spaces
+
+        // Check length constraints
+        if (name.length() < 2 || name.length() > 50) {
+            return false;
+        }
+
+        // Check for valid characters
+        if (!name.matches("^[a-zA-Z\\s'-]+$")) {
+            return false;
+        }
+
+        // Ensure no consecutive spaces, hyphens, or apostrophes
+        if (name.matches(".*[\\s'-]{2,}.*")) {
+            return false;
+        }
+
+        // Ensure no digits are in the name
+        if (name.matches(".*\\d.*")) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static String checkAndFormatName(String name) {
 
 
@@ -43,7 +73,7 @@ public class validationCheck {
 
         for (String word : words) {
             if (!word.isEmpty()) {
-                formattedName.append(Character.toUpperCase(word.charAt(0))) // Capitalize the first letter
+                formattedName.append(Character.toUpperCase(word.charAt(0))) // Capitalize the first letterch
                         .append(word.substring(1).toLowerCase())        // Make the rest of the word lowercase
                         .append(" ");                                   // Add a space
             }
