@@ -37,7 +37,11 @@ public class StaffMenu extends BaseMenu {
 
     @Override
     public void start() {
+
+        String StaffMenu = "Welcome to Staff Menu " + loggedInStaff.getName();
+
         while (!exitFlag) {
+            clearScreen();
             displayOptions(StaffMenuOptions);
             getUserOptions(StaffMenuOptions);
         }
@@ -48,14 +52,14 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            pause();
+            timedPause(300);
             clearScreen();
 
             Staff staff = new Staff();
 
             System.out.println("Please enter ALL necessary info");
             System.out.println("=======================================" + "\n");
-            System.out.print("Enter Name: ");
+            System.out.print(ansi().fgRgb(8552916).a("Enter Name: "));
             staff.setName(scanner.nextLine());
 
             newline();
@@ -98,13 +102,14 @@ public class StaffMenu extends BaseMenu {
             staff.setPassword(scanner.nextLine());
 
             newline();
+            System.out.print(ansi().reset());
 
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
             boolean isAdded = staff.addToDb();
 
             if (isAdded) {
-                System.out.println("Staff added successfully!");
+                System.out.println(ansi().bgBrightGreen().a("Staff added successfully!").reset());
 
                 while (true) {
                     // confirmation of adding staff
@@ -112,11 +117,11 @@ public class StaffMenu extends BaseMenu {
                     int i = scanner.nextInt();
 
                     if (i == 1) {
-                        System.out.println("Staff confirmed and added successfully!");
+                        System.out.println(ansi().bgBrightGreen().a("Staff confirmed and added successfully!").reset());
                         break;
 
                     } else if (i == 0) {
-                        System.out.println("Action Terminated");
+                        System.out.println(ansi().bgBrightRed().a("Action terminated.").reset());
                         // Optionally, you could remove the staff entry if not confirmed
                         // e.g., staffCollection.document(staff.getId()).delete();
                         break;
@@ -126,7 +131,7 @@ public class StaffMenu extends BaseMenu {
                     }
                 }
             } else {
-                System.out.println("Failed to add staff.");
+                System.out.println(ansi().bgBrightRed().a("Failed to add staff.").reset());
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
