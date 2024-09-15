@@ -43,6 +43,8 @@ public abstract class Person {
     @Override
     public String toString(){
         // TODO: toString for Person
-        return "PRINT PERSON STUFF\n";
+        // return "PRINT PERSON STUFF\n";
+        return String.format("ID: %s\nName: %s\nContact Number: %s\nEmail: %s\nAddress: %s",
+                this.id, this.name, this.contactNumber, this.email, this.address);
     }
 }
