@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class Item extends BaseItem implements DatabaseOperations {
     private ItemCategory itemCategory;
     private Supplier supplier;
@@ -161,6 +163,21 @@ public class Item extends BaseItem implements DatabaseOperations {
                 + "\nITEM Quantity      : "+ getQuantity()
                 + "\n\nITEM Supplier\n" + getSupplier()
                 + "\n\nITEM ItemCategory\n" + getItemCategory() +"\n";
+    }
+
+    public String testString(){
+        StringBuilder returnString = new StringBuilder();
+
+        returnString
+                .append("ITEM ID            : ").append(ansi().fgYellow().a(getId()).reset().toString()).append("\n")
+                .append("ITEM name          : ").append(ansi().fgBlue().a(getName()).reset().toString()).append("\n")
+                .append("ITEM Unit Price    : ").append(ansi().fgBrightMagenta().a(getUnitPrice())).append("\n")
+                .append("ITEM Quantity      : ").append(ansi().fgBrightMagenta().a(getQuantity()).reset()).append("\n\n")
+                .append("ITEM Supplier Info\n").append(getSupplier()).append("\n\n")
+                .append("ITEM ItemCategory Info\n").append(getItemCategory()).append("\n");
+
+        returnString.append(ansi().reset());
+        return returnString.toString();
     }
 
     public String RefIdPrint(){
