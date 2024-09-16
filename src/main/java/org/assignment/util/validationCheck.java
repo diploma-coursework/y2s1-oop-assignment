@@ -145,9 +145,6 @@ public class validationCheck {
             throw new IllegalArgumentException("Password must contain at least one special character from the set @$!%*#?&.");
         }
 
-        //TODO:
-        // Hash the password using BCrypt
-        //return BCrypt.hashpw(password, BCrypt.gensalt());
         return password;
     }
 

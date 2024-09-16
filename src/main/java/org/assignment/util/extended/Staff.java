@@ -59,8 +59,14 @@ public class Staff extends Person implements DatabaseOperations {
     public void setSalary(double salary) {
         this.salary = validationCheck.checkSalary((int) salary);
     }
+
     public void setPassword(String password) {
-        this.password = validationCheck.checkPassword(password);
+        //this.password = validationCheck.checkPassword(password);
+
+        // Validate the password first
+        String validatedPassword = validationCheck.checkPassword(password);
+        // Hash the validated password using BCrypt
+        this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
     }
 
     @Override
@@ -100,7 +106,8 @@ public class Staff extends Person implements DatabaseOperations {
         try {
 
             System.out.println("Checking for existing staff with email: " + this.email);
-            System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
+
+            System.out.println(this.password);
 
             QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
             if (!existingStaffSnapshot.isEmpty()) {
@@ -124,6 +131,7 @@ public class Staff extends Person implements DatabaseOperations {
 
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
+            //docValues.put("password", this.password());
 
             String prefix;
             switch (getPosition().getAccessLevel()) {
@@ -197,8 +205,9 @@ public class Staff extends Person implements DatabaseOperations {
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse("0.0").toString()));
 
             // Retrieve and validate password
-            String password = Optional.ofNullable((String) docData.get("password")).orElse("");
-            fetchedStaff.setPassword(password);
+//            String password = Optional.ofNullable((String) docData.get("password")).orElse("");
+//            fetchedStaff.setPassword(password);
+            fetchedStaff.password = Optional.ofNullable((String) docData.get("password")).orElse("");  // No need to hash again
 
             // cache and return
             FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);

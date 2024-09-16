@@ -2,6 +2,7 @@ package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Staff;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -49,10 +50,12 @@ public class MainMenu extends BaseMenu {
         }
     }
 
+    //TODO: check the password hashing methods for STF0016
+    // password: pop12345@
     private void staffLogin() {
         clearScreen();
 
-        System.out.println(ansi().fgBrightGreen().a(" Staff Login\n=============").reset());
+        System.out.println(ansi().fgBrightGreen().a("Staff Login\n=============").reset());
 
         System.out.print(ansi().fgRgb(8552916).a("Staff Id: "));
         String inputStaffId = scanner.nextLine();
@@ -62,7 +65,7 @@ public class MainMenu extends BaseMenu {
         System.out.print(ansi().reset());
 
         Staff loginStaff = Staff.getFromDb(inputStaffId);
-        if (loginStaff != null && inputPassword.equals(loginStaff.getPassword())) {
+        if (loginStaff != null && BCrypt.checkpw(inputPassword, loginStaff.getPassword())) {
             new StaffMenu(loginStaff).start();
         } else {
             System.out.println(ansi().bgBrightRed().a("Invalid credentials.").reset());
