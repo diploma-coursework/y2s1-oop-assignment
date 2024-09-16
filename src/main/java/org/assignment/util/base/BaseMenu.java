@@ -50,7 +50,7 @@ public abstract class BaseMenu {
 
     protected static void clearScreen() {
         System.out.print(ansi().eraseScreen().cursor(0, 0));
-        System.out.print("\033[3J"); // Clear scrollback buffer
+        System.out.print("\033[3J"); // Clear scroll back buffer
         System.out.flush();
     }
 
@@ -65,6 +65,10 @@ public abstract class BaseMenu {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public void newline() {
+        System.out.println();
     }
 
     public static<T> Optional<T> acceptExitAction(T result){

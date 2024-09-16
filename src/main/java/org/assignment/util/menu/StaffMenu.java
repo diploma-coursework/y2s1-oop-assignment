@@ -58,7 +58,7 @@ public class StaffMenu extends BaseMenu {
 
             Staff staff = new Staff();
 
-            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Please enter ALL necessary info" + "\n===============================" + "\n").reset());
+            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Please enter ALL necessary info\n===============================\n").reset());
 
 
 
@@ -225,21 +225,62 @@ public class StaffMenu extends BaseMenu {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter Staff ID to delete: ");
-        String staffId = scanner.nextLine();
+        try {
+            timedPause(300);
+            clearScreen();
 
-        Staff staff = Staff.getFromDb(staffId);
-        if (staff == null) {
-            System.out.println("Staff ID not found.");
-            return;
+            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Delete a Staff Record\n=======================\n").reset());
+
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Staff ID to delete: "));
+                String staffId = scanner.nextLine();
+
+                try {
+                    // Retrieve staff object from the database
+                    Staff staff = Staff.getFromDb(staffId);
+
+                    if (staff == null) {
+                        // If the staff is not found, print error and prompt again
+                        System.out.println(ansi().bgBrightRed().a("Staff ID not found. Please try again.\n").reset());
+                    } else {
+                        // Confirm deletion
+                        System.out.println(ansi().fgBrightYellow().a("Staff found: " + staff.getName() + "\n").reset());
+
+                        while (true) {
+                            System.out.print(ansi().bgBrightGreen().a("Confirm deletion (Enter 1 to delete, 0 to cancel): ").reset());
+                            int confirmation = scanner.nextInt();
+
+                            if (confirmation == 1) {
+                                // Proceed with deletion
+                                if (staff.deleteFromDb()) {
+                                    System.out.println(ansi().bgBrightGreen().a("Staff record deleted successfully!").reset());
+                                } else {
+                                    System.out.println(ansi().bgBrightRed().a("Failed to delete staff record.").reset());
+                                }
+                                pause();
+                                return;
+                            } else if (confirmation == 0) {
+                                System.out.println(ansi().bgBrightRed().a("Action terminated.").reset());
+                                pause();
+                                return;
+                            } else {
+                                // Invalid input for confirmation
+                                System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter 1 to confirm or 0 to cancel.\n").reset());
+                            }
+                        }
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle any unexpected validation issues
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(ansi().bgBrightRed().a("An unexpected error occurred: " + e.getMessage()).reset());
         }
+    }
 
-        if (staff.deleteFromDb()) {
-            System.out.println("Staff record deleted successfully.");
-        } else {
-            System.out.println("Failed to delete staff record.");
-        }
-
+    private void view() {
 
     }
 
@@ -281,10 +322,6 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void view() {
-
-    }
-
     private void quit() {
         System.out.println("Quit");
         System.exit(0);
@@ -323,9 +360,5 @@ public class StaffMenu extends BaseMenu {
         } else {
             System.out.println("No staff is currently logged in. Please log in first.");
         }
-    }
-
-    public void newline() {
-        System.out.println();
     }
 }
