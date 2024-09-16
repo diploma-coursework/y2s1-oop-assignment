@@ -28,33 +28,36 @@ public class Main extends BaseMenu {
 //        ItemMenu itemMenu = new ItemMenu();
 //        itemMenu.start();
 
-//        new ItemCategoryMenu().start();
+        new ItemCategoryMenu().start();
+
 
 //          StaffMenu staffMenu = new StaffMenu();
 //          staffMenu.start();
-        while (true) {
-            System.out.println("Temporary Menu");
-            System.out.println("1 for Item,2 for ItemCat,3 for Staff, 4 for Supplier");
-            System.out.print("> ");
-            Scanner scanner = new Scanner(System.in);
-            switch (scanner.nextInt()) {
-                case 1:
-                    new ItemMenu().start();
-                    break;
-                case 2:
-                    new ItemCategoryMenu().start();
-                    break;
-                case 3:
-                    new MainMenu().start();
-                    break;
-                case 4:
-                    new SupplierMenu().start();
-                    break;
-                default:
-                    break;
-            }
-            clearScreen();
-        }
+
+
+//        while (true) {
+//            System.out.println("Temporary Menu");
+//            System.out.println("1 for Item,2 for ItemCat,3 for Staff, 4 for Supplier");
+//            System.out.print("> ");
+//            Scanner scanner = new Scanner(System.in);
+//            switch (scanner.nextInt()) {
+//                case 1:
+//                    new ItemMenu().start();
+//                    break;
+//                case 2:
+//                    new ItemCategoryMenu().start();
+//                    break;
+//                case 3:
+//                    new MainMenu().start();
+//                    break;
+//                case 4:
+//                    new SupplierMenu().start();
+//                    break;
+//                default:
+//                    break;
+//            }
+//            clearScreen();
+//        }
     }
 
 }

@@ -20,8 +20,7 @@ public class ItemCategoryMenu extends BaseMenu {
 
         ItemCategoryMenu.options2.put("1", new Option("Edit Name", () -> {}));
         ItemCategoryMenu.options2.put("2", new Option("Edit Description", () -> {}));
-        ItemCategoryMenu.options2.put("3", new Option("Save", () -> {}));
-        ItemCategoryMenu.options2.put("0", new Option(ansi().fgRed().a("Exit without Saving...").reset().toString(), () -> {}));
+        ItemCategoryMenu.options2.put("0", new Option(ansi().fgBrightGreen().a("Save").reset().toString(), () -> {}));
 
         exitFlag = false;
     }
@@ -79,7 +78,6 @@ public class ItemCategoryMenu extends BaseMenu {
         // get both inputs and retry if input is empty
         while (newItemCategory.getName().isEmpty()) {
             newItemCategory.setName(scanner.nextLine().trim());
-
             if (newItemCategory.getName().isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(22));
         }
 
@@ -87,7 +85,6 @@ public class ItemCategoryMenu extends BaseMenu {
 
         while (newItemCategory.getDescription().isEmpty()) {
             newItemCategory.setDescription(scanner.nextLine().trim());
-
             if (newItemCategory.getDescription().isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(22));
         }
 
@@ -100,7 +97,7 @@ public class ItemCategoryMenu extends BaseMenu {
             boolean createSuccessful = newItemCategory.addToDb();
 
             if (createSuccessful) System.out.println("\nItem category created successfully!");
-            else System.out.println("\nFailed to created item category, please try again later.");
+            else System.out.println(ansi().fgRed().a("\nFailed to created item category, please try again later.").reset());
         } else {
             System.out.println("\nCanceled process...");
         };
@@ -127,11 +124,18 @@ public class ItemCategoryMenu extends BaseMenu {
         // get ItemCategory
         ItemCategory itemCategory = ItemCategory.getFromDb(inputCategoryId);
         System.out.println(ansi().eraseLine());
-        if (itemCategory == null) System.out.println(ansi().bgBrightRed().a("Invalid category id.").reset());
-        else {
-            // show current details
-            System.out.println(ansi().cursorUp(2).eraseLine().a(itemCategory));
 
+        // exit if category id input is invalid
+        if (itemCategory == null) {
+            System.out.println(ansi().bgBrightRed().a("Invalid category id.").reset());
+            pause();
+            return;
+        }
+
+        // show current details
+        System.out.println(ansi().cursorUp(2).eraseLine().a(itemCategory));
+
+        while (true) {
             // get user action (edit / save / exit)
             displayOptions(ItemCategoryMenu.options2);
             Option selectedOption = getUserOptions(ItemCategoryMenu.options2);
@@ -139,11 +143,44 @@ public class ItemCategoryMenu extends BaseMenu {
             // "0" for exit
             if (selectedOption == ItemCategoryMenu.options2.get("0")) return;
 
-            //TODO: use switch case or something, and add loop 
+            // "1" for edit name
+            boolean updateSuccess = true;
+            if (selectedOption == ItemCategoryMenu.options2.get("1")) {
+                String newName = "";
+                System.out.print(ansi().eraseLine().newline().a("Enter new Name: "));
 
+                while (newName.isEmpty()) {
+                    newName = scanner.nextLine().trim();
+                    if (newName.isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(15));
+                }
 
+                System.out.println("\nAre you sure about the change? (y / n)");
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = itemCategory.setName(newName, true);
+            } else {
+                // "2" for edit description
+                String newDescription = "";
+                System.out.print(ansi().eraseLine().newline().a("Enter new Description: "));
+
+                while (newDescription.isEmpty()) {
+                    newDescription = scanner.nextLine().trim();
+                    if (newDescription.isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(15));
+                }
+
+                System.out.println("\nAre you sure about the change? (y / n)");
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = itemCategory.setDescription(newDescription, true);
+            }
+
+            if (!updateSuccess) {
+                System.out.println(ansi().fgRed().a("Something went wrong when updating, please try again later..."));
+                pause();
+            }
+
+            clearScreen();
+            System.out.println(ansi().fgBrightGreen().a(" Update an Item Category:\n=========================\n").reset());
+            System.out.println(itemCategory);
         }
-        pause();
     }
 
     private void deleteItemCategory() {
