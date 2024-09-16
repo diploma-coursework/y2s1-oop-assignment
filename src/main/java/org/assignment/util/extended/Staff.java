@@ -234,6 +234,7 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean deleteFromDb()  {
         try {
             staffCollection.document(this.id).delete().get();
+            FirebaseConnection.deleteCachedDocument(staffCollection, staffCollection.document(this.id));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
