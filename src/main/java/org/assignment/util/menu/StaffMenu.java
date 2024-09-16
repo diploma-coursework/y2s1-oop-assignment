@@ -38,10 +38,11 @@ public class StaffMenu extends BaseMenu {
     @Override
     public void start() {
 
-        String StaffMenu = "Welcome to Staff Menu " + loggedInStaff.getName();
+        String staffMenuGreet = "Welcome to Staff Menu " + loggedInStaff.getName() + "!\n==========================";
 
         while (!exitFlag) {
             clearScreen();
+            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(staffMenuGreet).reset());
             displayOptions(StaffMenuOptions);
             getUserOptions(StaffMenuOptions);
         }
@@ -57,87 +58,189 @@ public class StaffMenu extends BaseMenu {
 
             Staff staff = new Staff();
 
-            System.out.println("Please enter ALL necessary info");
-            System.out.println("=======================================" + "\n");
-            System.out.print(ansi().fgRgb(8552916).a("Enter Name: "));
-            staff.setName(scanner.nextLine());
+            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Please enter ALL necessary info" + "\n===============================" + "\n").reset());
+
+
+
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Name: "));
+                String name = scanner.nextLine();
+                try {
+                    name = validationCheck.checkAndFormatName(name);
+                    staff.setName(name);
+                    break; // Exit loop if name is valid
+                } catch (IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() +"\n").reset());
+                }
+            }
 
             newline();
 
-            System.out.print("Enter Gender (M/F): ");
-            char gender = scanner.next().toUpperCase().charAt(0);
-            staff.setGender(validationCheck.checkGender(gender));
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Gender (M/F): "));
+                char gender = scanner.next().toUpperCase().charAt(0);
+                try {
+                    staff.setGender(validationCheck.checkGender(gender));
+                    break; // Exit loop if gender is valid
+                } catch (IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
 
             newline();
 
+            int positionNumber;
             StaffPosition.printPosition();
-            System.out.print("Enter the number corresponding to the position: ");
-            staff.setPosition(StaffPosition.fromNumber(scanner.nextInt()));
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter the number corresponding to the position: "));
+                positionNumber = scanner.nextInt();
+                try {
+                    staff.setPosition(StaffPosition.fromNumber(positionNumber));
+                    break; // Exit loop if position is valid
+                } catch (IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
 
             newline();
 
-            System.out.print("Enter Contact Number: ");
-            staff.setContactNumber(scanner.next());
+            while(true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Contact Number: "));
+                String contact = scanner.next();
+                try {
+                    staff.setContactNumber(contact);
+                    break;
+                }catch(IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
 
             newline();
 
-            System.out.print("Enter Email: ");
-            staff.setEmail(scanner.next());
+            while(true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Email: "));
+                String email = scanner.next();
+                try {
+                    staff.setEmail(email);
+                    break;
+                }catch(IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
 
-            scanner.nextLine(); // Consume newline
             newline();
 
-            System.out.print("Enter Address: ");
-            staff.setAddress(scanner.nextLine());
+            while(true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Address: "));
+                String address = scanner.next();
+                try{
+                    staff.setAddress(address);
+                    break;
+                }catch(IllegalArgumentException e){
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage()).reset());
+                    System.out.println("\n");
+                }
+            }
 
             newline();
 
-            System.out.print("Enter Salary: ");
-            staff.setSalary(scanner.nextInt());
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter Salary: "));
 
-            scanner.nextLine(); // Consume newline before reading password
+                try {
+                    // Handle non-integer inputs
+                    if (!scanner.hasNextInt()) {
+                        System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a valid number.\n").reset());
+                        scanner.next(); // Clear the invalid input
+                        continue;
+                    }
+
+                    int salary = scanner.nextInt();
+
+                    // Validation check
+                    try {
+                        staff.setSalary(salary);
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a numeric value.\n").reset());
+                    scanner.next(); // Clear the invalid input
+                }
+            }
+
             newline();
+            scanner.nextLine();
 
-            System.out.print("Enter a password: ");
-            staff.setPassword(scanner.nextLine());
+            while(true) {
+                System.out.print(ansi().fgRgb(8552916).a("Enter a password: "));
+                String password = scanner.nextLine();
+                try{
+                    staff.setPassword(password);
+                    break;
+                }catch(IllegalArgumentException e) {
+                    System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                }
+            }
 
             newline();
             System.out.print(ansi().reset());
 
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
-            boolean isAdded = staff.addToDb();
+            while (true) {
+                System.out.print(ansi().bgBrightGreen().a("To Confirm Adding (Enter 1) else (Enter 0): ").reset());
+                int i = scanner.nextInt();
 
-            if (isAdded) {
-                System.out.println(ansi().bgBrightGreen().a("Staff added successfully!").reset());
+                if (i == 1) {
+                    // Confirm and add to the database
+                    boolean isAdded = staff.addToDb();
 
-                while (true) {
-                    // confirmation of adding staff
-                    System.out.print("To Confirm Adding(Enter 1) else (Enter 0): ");
-                    int i = scanner.nextInt();
-
-                    if (i == 1) {
-                        System.out.println(ansi().bgBrightGreen().a("Staff confirmed and added successfully!").reset());
-                        break;
-
-                    } else if (i == 0) {
-                        System.out.println(ansi().bgBrightRed().a("Action terminated.").reset());
-                        // Optionally, you could remove the staff entry if not confirmed
-                        // e.g., staffCollection.document(staff.getId()).delete();
-                        break;
-
+                    if (isAdded) {
+                        System.out.println(ansi().bgBrightGreen().a("Staff added successfully!").reset());
+                        pause();
                     } else {
-                        System.out.println("Invalid input. Please enter 1 to confirm or 0 to cancel.");
+                        System.out.println(ansi().bgBrightRed().a("Failed to add staff.").reset());
                     }
+                    break; // Break out of the loop after adding the staff
+                } else if (i == 0) {
+                    System.out.println(ansi().bgBrightRed().a("Action terminated.").reset());
+                    pause();
+                    break; // Break out of the loop if action is terminated
+                } else {
+                    System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter 1 to confirm or 0 to cancel.").reset());
                 }
-            } else {
-                System.out.println(ansi().bgBrightRed().a("Failed to add staff.").reset());
             }
+
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
         }
+    }
+
+    private void delete() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter Staff ID to delete: ");
+        String staffId = scanner.nextLine();
+
+        Staff staff = Staff.getFromDb(staffId);
+        if (staff == null) {
+            System.out.println("Staff ID not found.");
+            return;
+        }
+
+        if (staff.deleteFromDb()) {
+            System.out.println("Staff record deleted successfully.");
+        } else {
+            System.out.println("Failed to delete staff record.");
+        }
+
+
     }
 
     //TODO: debug and find any possible errors
@@ -175,26 +278,6 @@ public class StaffMenu extends BaseMenu {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-        }
-    }
-
-
-    private void delete() {
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Staff ID to delete: ");
-        String staffId = scanner.nextLine();
-
-        Staff staff = Staff.getFromDb(staffId);
-        if (staff == null) {
-            System.out.println("Staff ID not found.");
-            return;
-        }
-
-        if (staff.deleteFromDb()) {
-            System.out.println("Staff record deleted successfully.");
-        } else {
-            System.out.println("Failed to delete staff record.");
         }
     }
 

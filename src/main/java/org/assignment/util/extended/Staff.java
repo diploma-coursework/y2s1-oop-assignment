@@ -71,8 +71,17 @@ public class Staff extends Person implements DatabaseOperations {
 
     @Override
     public void setName(String name) {
-        validationCheck.checkAndFormatName(name);
-        super.setName(name);
+        //validationCheck.checkAndFormatName(name);
+        //super.setName(name);
+
+        try {
+            String formattedName = validationCheck.checkAndFormatName(name);
+            super.setName(formattedName);
+        } catch (IllegalArgumentException e) {
+            // Handle exception or provide user feedback
+            System.out.println(e.getMessage());
+            // You might want to rethrow or handle the error according to your application's needs
+        }
     }
 
     @Override
@@ -107,7 +116,6 @@ public class Staff extends Person implements DatabaseOperations {
 
             System.out.println("Checking for existing staff with email: " + this.email);
 
-            System.out.println(this.password);
 
             QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
             if (!existingStaffSnapshot.isEmpty()) {
@@ -135,16 +143,10 @@ public class Staff extends Person implements DatabaseOperations {
 
             String prefix;
             switch (getPosition().getAccessLevel()) {
-                case MANAGER:
-                    prefix = "MNG";
-                    break;
-                case ADMIN:
-                    prefix = "ADM";
-                    break;
+                case MANAGER: prefix = "MNG"; break;
+                case ADMIN: prefix = "ADM"; break;
                 case STAFF:
-                default:
-                    prefix = "STF";
-                    break;
+                default: prefix = "STF"; break;
             }
 
             this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);

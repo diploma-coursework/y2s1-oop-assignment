@@ -23,12 +23,12 @@ public class Main extends BaseMenu {
 //        supplier.addToDb();
 //        item.addToDb();
 //
-//        new MainMenu().start();
+        new MainMenu().start();
 
 //        ItemMenu itemMenu = new ItemMenu();
 //        itemMenu.start();
 
-        new ItemCategoryMenu().start();
+//        new ItemCategoryMenu().start();
 
 
 //          StaffMenu staffMenu = new StaffMenu();
