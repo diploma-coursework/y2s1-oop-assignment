@@ -32,7 +32,6 @@ public class StaffMenu extends BaseMenu {
         StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quit));
 
         exitFlag = false;
-        actionExit = false;
     }
 
     @Override
