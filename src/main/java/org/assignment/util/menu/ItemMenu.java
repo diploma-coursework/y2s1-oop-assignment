@@ -224,7 +224,6 @@ public class ItemMenu extends BaseMenu {
 
     private void removeItem() {
         clearScreen();
-        // TODO: choose by id
         List<Item> removeList = new ArrayList<>();
 
         System.out.println("Enter the IDs' of the Items to Remove: ");
@@ -317,17 +316,12 @@ public class ItemMenu extends BaseMenu {
     }
 
     private void modifyItem() {
-        // get instance of Item from db
-        // change its value
-        // update with updateToDb(String fieldName)
-        // FIXME: newLine doesnt clearLine+cursorUp,Exit doesnt work, doesnt read correct ID
         clearScreen();
-        // TODO: choose by id
         System.out.println("Enter the ID of the ITEM to modify: ");
         System.out.println("Enter Exit to exit");
         System.out.print("> ");
         StringBuilder scannerValue = new StringBuilder();
-        // Method Segments for Getting Item instance through ITEMID and prompting with Validation for ID
+
         Item item;
         // VALID ITEM ID
         while (true) {
@@ -360,20 +354,20 @@ public class ItemMenu extends BaseMenu {
             if (selectedOption == modifyOptions.get("0")) return;
 
             // "1" for edit name
-            if (selectedOption == modifyOptions.get("1")) { // TODO: EDIT NAME
+            if (selectedOption == modifyOptions.get("1")) { // TODO: When invalidName, it doesnt go back to starting position
                 String newName = "";
-                System.out.print(ansi().eraseLine().newline().a("Enter new Name      : "));
+                System.out.print("Enter new Name: ");
 
-                if (newName.compareToIgnoreCase("exit") == 0) return;
+                if (newName.compareToIgnoreCase("exit") == 0) {return;}
 
                 while (newName.isEmpty() || !validationCheck.isValidName(newName) || newName.equals(item.getName())) {
                     newName = scanner.nextLine().trim();
-                    if (newName.isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(22).eraseLine(Ansi.Erase.FORWARD));
+                    if (newName.isEmpty()) System.out.print(ansi().cursorUp(1).eraseLine());
                 }
 
                 System.out.println("\nAre you sure about the change? (y / n)");
                 if (getYesNoOption()) item.setName(newName, true);
-            } else if (selectedOption == modifyOptions.get("2")) { // TODO: EDIT UNIT PRICE
+            } else if (selectedOption == modifyOptions.get("2")) { //
 
                 while (true) {
                     scannerValue.setLength(0);
@@ -403,7 +397,7 @@ public class ItemMenu extends BaseMenu {
 
                 System.out.println("\nAre you sure about the change? (y / n)");
                 if (getYesNoOption()) item.setUnitPrice(Double.parseDouble(scannerValue.toString()), true);
-            } else if (selectedOption == modifyOptions.get("3")) { // TODO: EDIT QUANTITY
+            } else if (selectedOption == modifyOptions.get("3")) {
 
                 while (true) {
                     scannerValue.setLength(0);
@@ -432,7 +426,7 @@ public class ItemMenu extends BaseMenu {
 
                 System.out.println("\nAre you sure about the change? (y / n)");
                 if (getYesNoOption()) item.setQuantity(Integer.parseInt(scannerValue.toString()), true);
-            } else if (selectedOption == modifyOptions.get("4")){ // TODO: EDIT SUPPLIER ID
+            } else if (selectedOption == modifyOptions.get("4")){
                 while (true) {
                     scannerValue.setLength(0);
                     System.out.print("Supplier ID         :");
@@ -488,8 +482,27 @@ public class ItemMenu extends BaseMenu {
     }
 
     private void viewItems() {
-        System.out.println("Viewing all items...");
-        // Logic to view items
+        clearScreen();
+        List<Item> itemList = Item.getAllItem();
+        if (itemList == null) System.out.println("No item category is present.");
+        else {
+            for (Item item : itemList) {
+                System.out.println(item);
+            }
+        }
+        pause();
+    }
+
+    private void seeItemCategories() {
+        clearScreen();
+        List<ItemCategory> itemCategoryList = ItemCategory.getAllItemCategory();
+        if (itemCategoryList == null) System.out.println("No item category is present.");
+        else {
+            for (ItemCategory itemCategory : itemCategoryList) {
+                System.out.println(itemCategory);
+            }
+        }
+        pause();
     }
 
     private void quit() {exitFlag = true;}
