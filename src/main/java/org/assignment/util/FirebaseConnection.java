@@ -65,4 +65,11 @@ public class FirebaseConnection {
         if (!cachedDocumentsByCollection.get(collectionReference).containsKey(documentReference)) return null;
         return cachedDocumentsByCollection.get(collectionReference).get(documentReference);
     }
+
+    public static void deleteCachedDocument(CollectionReference collectionReference, DocumentReference documentReference) {
+        if (cachedDocumentsByCollection.containsKey(collectionReference)) {
+            // cache the document
+            cachedDocumentsByCollection.get(collectionReference).remove(documentReference);
+        }
+    }
 }

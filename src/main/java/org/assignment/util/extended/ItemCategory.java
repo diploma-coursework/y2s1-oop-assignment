@@ -117,6 +117,7 @@ public class ItemCategory implements DatabaseOperations {
     public boolean deleteFromDb() {
         try {
             itemCategoryCollection.document(this.id).delete().get();
+            FirebaseConnection.deleteCachedDocument(itemCategoryCollection, itemCategoryCollection.document(this.id));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());

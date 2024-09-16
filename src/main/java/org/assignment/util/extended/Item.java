@@ -148,6 +148,7 @@ public class Item extends BaseItem implements DatabaseOperations {
     public boolean deleteFromDb() {
         try {
             itemCollection.document(this.id).delete().get();
+            FirebaseConnection.deleteCachedDocument(itemCollection, itemCollection.document(this.id));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
