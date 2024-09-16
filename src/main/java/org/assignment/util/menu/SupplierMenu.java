@@ -70,7 +70,7 @@ public class SupplierMenu extends BaseMenu {
 
     public void removeSupplier() {
         // Search for supplier
-        searchSupplier();
+        Supplier supplier = searchSupplier();
 
         // confirmation to remove
         char yn = ' ';
@@ -83,11 +83,11 @@ public class SupplierMenu extends BaseMenu {
                 System.out.println("\nSuccessfully delete supplier.");
             }
             else if (yn == 'N') {
-                // return to menu
+                return;
             }
             else
             System.out.println("\nInvalid input. Y/N only.\n");
-        } while (yn != 'Y' && yn != 'N');
+        } while (yn != 'Y');
     }
 
     public void listSupplier() {
@@ -97,6 +97,8 @@ public class SupplierMenu extends BaseMenu {
 
     public void editSupplier() {
         // search for supplier
+        Supplier supplier = searchSupplier();
+
         // select data field to edit (except id and contract infos)
     }
 
@@ -143,12 +145,12 @@ public class SupplierMenu extends BaseMenu {
                     System.out.println("\nContract successfully renewed.\n");
                 }
                 else if (yn != 'N') {
-                    // return to menu
+                    return;
                 }
                 else {
                     System.out.println("\nInvalid input. Y/N only\n");
                 }
-            } while(yn != 'Y' && yn != 'N');
+            } while(yn != 'Y');
         }
         else if (ableToRenew == 1)
             System.out.println("\nContract expired. Unable to renew contract.\n");
