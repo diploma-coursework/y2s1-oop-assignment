@@ -184,7 +184,46 @@ public class ItemCategoryMenu extends BaseMenu {
     }
 
     private void deleteItemCategory() {
+        clearScreen();
 
+        System.out.println(ansi().fgBrightGreen().a(" Delete an Item Category:\n=========================\n").reset());
+
+        // get category id
+        String inputCategoryId = "";
+        System.out.println("Category Id:");
+        System.out.print(ansi().a("(Type 'exit' to exit)").cursorUp(1).cursorLeft(8));
+        while (inputCategoryId.isEmpty()) {
+            inputCategoryId = scanner.nextLine().trim();
+
+            if (inputCategoryId.isEmpty()) System.out.print(ansi().cursorUp(1).cursorRight(13));
+        }
+        // exit if requested
+        if (inputCategoryId.equalsIgnoreCase("exit")) return;
+
+        // get ItemCategory
+        ItemCategory itemCategory = ItemCategory.getFromDb(inputCategoryId);
+        System.out.println(ansi().eraseLine());
+
+        // exit if category id input is invalid
+        if (itemCategory == null) {
+            System.out.println(ansi().bgBrightRed().a("Invalid category id.").reset());
+            pause();
+            return;
+        }
+
+        // show current details
+        System.out.println(ansi().cursorUp(2).eraseLine().a(itemCategory));
+
+        System.out.println("Delete the following item category? (y / n)");
+        boolean deleteConfirmation = getYesNoOption();
+        if (deleteConfirmation) {
+            boolean deleteSuccessful = itemCategory.deleteFromDb();
+            if (deleteSuccessful) System.out.println(ansi().fgBrightGreen().a("Deletion successful!").reset());
+            else System.out.println(ansi().fgRed().a("Something went wrong during deletion, please try again later..."));
+        } else {
+            System.out.println("Process canceled...");
+        }
+        pause();
     }
 
     private void returnToStaffMenu() {
