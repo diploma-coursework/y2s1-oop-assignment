@@ -24,12 +24,12 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        StaffMenuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
-        StaffMenuOptions.put("2", new Option("Delete", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
-        StaffMenuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modifyStaff, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("2", new Option("Delete staff document", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.MANAGER)));
         StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::viewStaff, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("5", new Option("Search staff document", () -> restrictedAction(this::searchStaff, AccessLevel.MANAGER)));
         StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitStaffMenu));
-
         exitFlag = false;
     }
 
@@ -310,7 +310,7 @@ public class StaffMenu extends BaseMenu {
                 System.out.println("Contact Number: " + staff.getContactNumber());
                 System.out.println("Email: " + staff.getEmail());
                 System.out.println("Address: " + staff.getAddress());
-                System.out.println("Salary: $" + staff.getSalary());
+                System.out.println("Salary: RM" + staff.getSalary());
                 System.out.println("Date Joined: " + staff.getDateJoined());
                 System.out.println("=======================================\n");
             }
@@ -341,6 +341,8 @@ public class StaffMenu extends BaseMenu {
                 System.out.println(ansi().bgBrightRed().a("Staff ID not found.").reset());
                 return;
             }
+
+            newline();
 
             System.out.println("""
                                 Which field would you like to modify?
@@ -495,6 +497,56 @@ public class StaffMenu extends BaseMenu {
         } catch (Exception e) {
             System.out.println(ansi().bgBrightRed().a("An unexpected error occurred: " + e.getMessage()).reset());
             pause();
+        }
+    }
+
+    //This is a feature I guess? :)
+    public void searchStaff() {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            timedPause(300);
+            clearScreen();
+
+            System.out.println(ansi().fgBrightGreen().a("Staff Login\n=============").reset());
+
+            System.out.print(ansi().fgRgb(8552916).a("Staff Id: "));
+            String inputStaffId = scanner.nextLine();
+            newline();
+
+            if (inputStaffId.trim().isEmpty()) {
+                System.out.println(ansi().bgBrightRed().a("Staff ID cannot be empty.").reset());
+                return;
+            }
+
+            Staff staff = Staff.getFromDb(inputStaffId);
+
+            if (staff == null) {
+                System.out.println(ansi().bgBrightRed().a("No staff record found with ID: " + inputStaffId).reset());
+                return;
+            } else{
+                System.out.println(ansi().bgBrightGreen().a("Staff is found! ").reset());
+            }
+
+            newline();
+
+            // Print details of the found staff member
+            System.out.println(ansi().fgRgb(8552916).a("=========================================="));
+            System.out.println("Staff ID: " + staff.getId());
+            System.out.println("Name: " + staff.getName());
+            System.out.println("Gender: " + staff.getGender());
+            System.out.println("Position: " + staff.getPosition());
+            System.out.println("Contact Number: " + staff.getContactNumber());
+            System.out.println("Email: " + staff.getEmail());
+            System.out.println("Address: " + staff.getAddress());
+            System.out.println("Salary: RM" + staff.getSalary());
+            System.out.println("Date Joined: " + staff.getDateJoined());
+            System.out.println("==========================================\n");
+            System.out.print(ansi().reset());
+            pause();
+
+        }catch(Exception e) {
+            System.out.println(ansi().bgBrightRed().a("An unexpected error occurred: " + e.getMessage()).reset());
         }
     }
 
