@@ -13,6 +13,8 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 import java.time.ZoneId;
 import org.mindrot.jbcrypt.BCrypt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class Staff extends Person implements DatabaseOperations {
     protected String gender;
@@ -29,75 +32,144 @@ public class Staff extends Person implements DatabaseOperations {
     protected double salary;
     protected String password;
     private static final CollectionReference staffCollection = FirebaseConnection.getDb().collection("Staff");
+    private static final Logger logger = LogManager.getLogger(Staff.class);
 
+    //constructor
     public Staff() {
-    }
-
-    public Staff(String name, String contactNumber, String email, String address, String gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
-        super(name, contactNumber, email, address);
-        setGender(gender);
-        setPosition(position);
-        setDateJoined(dateJoined);
-        setSalary(salary);
-        setPassword(password);
+        //default
     }
 
     // setters
-    public void setGender(String gender) {
-        this.gender = validationCheck.checkGender(gender.charAt(0));
+    public boolean setGender(String gender, boolean updateToDb) {
+        try {
+            this.gender = validationCheck.checkGender(gender.charAt(0));
+            if (updateToDb) {
+                return this.updateToDb("gender");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
-    public void setPosition(StaffPosition position) {
-        String positionName = position.name();
-        // Validate the position
-        if (validationCheck.isValidPosition(positionName)) {
-            this.position = position;
-        } else {
-            throw new IllegalArgumentException("Invalid position: " + positionName);
+    public boolean setPosition(StaffPosition position, boolean updateToDb) {
+        try {
+            String positionName = position.name();
+            if (validationCheck.isValidPosition(positionName)) {
+                this.position = position;
+                if (updateToDb) {
+                    return this.updateToDb("position");
+                }
+                return true;
+            } else {
+                throw new IllegalArgumentException("Invalid position: " + positionName);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
         }
     }
     public void setDateJoined(LocalDate dateJoined) {
         validationCheck.checkDateJoined(dateJoined);
         this.dateJoined = dateJoined;
     }
-    public void setSalary(double salary) {
-        this.salary = validationCheck.checkSalary((int) salary);
+
+    public boolean setSalary(double salary, boolean updateToDb) {
+        try {
+            this.salary = validationCheck.checkSalary((int) salary);
+            if (updateToDb) {
+                return this.updateToDb("salary");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    public void setPassword(String password) {
-        // Validate the password first
-        String validatedPassword = validationCheck.checkPassword(password);
-        // Hash the validated password using BCrypt
-        this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
+    public boolean setPassword(String password, boolean updateToDb) {
+        try {
+            String validatedPassword = validationCheck.checkPassword(password);
+            this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
+            if (updateToDb) {
+                return this.updateToDb("password");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    @Override
-    public void setName(String name) {
+    public boolean setName(String name, boolean updateToDb) {
         try{
             String formattedName = validationCheck.checkAndFormatName(name);
             super.setName(formattedName);
+
+            if (updateToDb) {
+                return this.updateToDb("name");
+            }
+            return true;
+
         } catch (IllegalArgumentException e) {
             // Handle exception or provide user feedback
             System.out.println(e.getMessage());
             // You might want to rethrow or handle the error according to your application's needs
+            return false;
         }
     }
 
-    @Override
-    public void setContactNumber(String contactNumber) {
-        validationCheck.checkContactNumber(contactNumber);
-        super.setContactNumber(contactNumber);
+    public boolean setContactNumber(String contactNumber, boolean updateToDb) {
+        try {
+            validationCheck.checkContactNumber(contactNumber);
+            super.setContactNumber(contactNumber);
+            if (updateToDb) {
+                return this.updateToDb("contactNumber");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    @Override
-    public void setEmail(String email) {
-        validationCheck.checkEmail(email);
-        super.setEmail(email);
+    public boolean setEmail(String email, boolean updateToDb) {
+        try {
+            validationCheck.checkEmail(email);
+            super.setEmail(email);
+            if (updateToDb) {
+                return this.updateToDb("email");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    @Override
-    public void setAddress(String address) {
-        validationCheck.checkAddress(address);
-        super.setAddress(address);
+    public boolean setAddress(String address, boolean updateToDb) {
+        try {
+            validationCheck.checkAddress(address);
+            super.setAddress(address);
+            if (updateToDb) {
+                return this.updateToDb("address");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    // Overloaded methods without updateToDb
+    public void setGender(String gender) {
+        setGender(gender, false);
+    }
+    public void setPosition(StaffPosition position) {
+        setPosition(position, false);
+    }
+    public void setSalary(double salary) {
+        setSalary(salary, false);
     }
 
     // getters
@@ -106,7 +178,7 @@ public class Staff extends Person implements DatabaseOperations {
     public LocalDate getDateJoined() { return this.dateJoined; }
     public double getSalary() { return this.salary; }
     public String getPassword() { return this.password; }
-    public static CollectionReference getStaffCollection() { return Staff.staffCollection; }
+    //public static CollectionReference getStaffCollection() { return Staff.staffCollection; }
 
     // database operations implementation
     public boolean addToDb() {
@@ -244,16 +316,37 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean updateToDb(String fieldName)  {
+    private Field findField(String fieldName) throws NoSuchFieldException {
+        Class<?> currentClass = this.getClass();
+        while (currentClass != null) {
+            try {
+                return currentClass.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException("Field " + fieldName + " not found in any class.");
+    }
+
+    public boolean updateToDb(String fieldName) {
         try {
-            Field field = this.getClass().getDeclaredField(fieldName);
+            System.out.println("Updating field " + fieldName + "...");
+
+            Field field = findField(fieldName);
             field.setAccessible(true);
+            Object fieldValue = field.get(this);
 
-            staffCollection.document(this.id).update(fieldName, field.get(this)).get();
-
+            staffCollection.document(this.id).update(fieldName, fieldValue).get();
             return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+
+        } catch (NoSuchFieldException e) {
+            logger.error("Field not found: {}", fieldName, e); //If I use print trace it will give out warnings
+            return false;
+        } catch (IllegalAccessException e) {
+            logger.error("Illegal access to field: {}", fieldName, e);
+            return false;
+        } catch (InterruptedException | ExecutionException e) {
+            logger.error("Error updating Firebase document: {}", e.getMessage(), e);
             return false;
         }
     }
