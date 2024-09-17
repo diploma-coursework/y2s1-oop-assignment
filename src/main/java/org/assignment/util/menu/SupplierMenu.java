@@ -101,23 +101,61 @@ public class SupplierMenu extends BaseMenu {
 
         if (supplier != null) {
             System.out.println(" 1 | Name");
-            System.out.println(" 2 | Gender");
-            System.out.println(" 3 | Contact Number");
-            System.out.println(" 4 | Email");
-            System.out.println(" 5 | Address");
+            System.out.println(" 2 | Contact Number");
+            System.out.println(" 3 | Email");
+            System.out.println(" 4 | Address");
 
             System.out.println("Select 1 - 5 to edit: ");
             int selection = scanner.nextInt();
+
+            boolean updateResult;
 
             switch (selection) {
                 case 1:
                     System.out.println("\nSupplier Name: " + supplier.getName());
                     System.out.println("Enter new name: ");
 
-                    supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
+                    String newName = scanner.nextLine();
 
+                    updateResult = supplier.setName(newName, true);
+                    break;
 
+                case 2:
+                    System.out.println("\nContact Number: " + supplier.getContactNumber());
+                    System.out.println("Enter new contact number: ");
+
+                    String newContactNum = scanner.nextLine();
+
+                    updateResult = supplier.setContactNumber(newContactNum, true);
+                    break;
+
+                case 3:
+                    System.out.println("\nEmail: " + supplier.getEmail());
+                    System.out.println("Enter new email: ");
+
+                    String newEmail = scanner.nextLine();
+
+                    updateResult = supplier.setEmail(newEmail, true);
+                    break;
+
+                case 4:
+                    System.out.println("\nAddress: " + supplier.getEmail());
+                    System.out.println("Enter new address: ");
+
+                    String newAddress = scanner.nextLine();
+
+                    updateResult = supplier.setAddress(newAddress, true);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+                    return;
             }
+
+            if (updateResult)
+                System.out.println("Updated successfully!");
+            else
+                System.out.println("Update failed.");
         }
         // select data field to edit (except id and contract infos)
     }
@@ -179,6 +217,6 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void returnToMenu() {
-        
+        exitFlag = true;
     }
 }

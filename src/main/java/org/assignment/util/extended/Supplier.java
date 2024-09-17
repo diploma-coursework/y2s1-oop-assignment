@@ -7,6 +7,7 @@ import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
+import org.assignment.util.validationCheck;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -181,5 +182,66 @@ public class Supplier extends Person implements DatabaseOperations {
         String endDate = this.contractEndDate != null ? this.contractEndDate.format(formatter) : "N/A";
 
         return super.toString() + String.format("\nContract Start Date: %s\nContract End Date: %s", startDate, endDate);
+    }
+
+    // Update Data Fields (Setters)
+    public boolean setName(String name, boolean updateToDb) {
+        try{
+            String formattedName = validationCheck.checkAndFormatName(name);
+            super.setName(formattedName);
+
+            if (updateToDb) {
+                return this.updateToDb("name");
+            }
+            return true;
+
+        } catch (IllegalArgumentException e) {
+            // Handle exception or provide user feedback
+            System.out.println(e.getMessage());
+            // You might want to rethrow or handle the error according to your application's needs
+            return false;
+        }
+    }
+
+    public boolean setContactNumber(String contactNumber, boolean updateToDb) {
+        try {
+            validationCheck.checkContactNumber(contactNumber);
+            super.setContactNumber(contactNumber);
+            if (updateToDb) {
+                return this.updateToDb("contactNumber");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean setEmail(String email, boolean updateToDb) {
+        try {
+            validationCheck.checkEmail(email);
+            super.setEmail(email);
+            if (updateToDb) {
+                return this.updateToDb("email");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean setAddress(String address, boolean updateToDb) {
+        try {
+            validationCheck.checkAddress(address);
+            super.setAddress(address);
+            if (updateToDb) {
+                return this.updateToDb("address");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }
