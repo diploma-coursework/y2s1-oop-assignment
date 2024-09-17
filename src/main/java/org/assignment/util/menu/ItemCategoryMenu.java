@@ -100,7 +100,7 @@ public class ItemCategoryMenu extends BaseMenu {
             else System.out.println(ansi().fgRed().a("\nFailed to created item category, please try again later.").reset());
         } else {
             System.out.println("\nCanceled process...");
-        };
+        }
         pause();
     }
 
