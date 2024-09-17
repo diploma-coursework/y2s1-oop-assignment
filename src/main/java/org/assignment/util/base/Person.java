@@ -1,7 +1,5 @@
 package org.assignment.util.base;
 
-import org.assignment.util.validationCheck;
-
 public abstract class Person {
     protected String id;
     protected String name;
