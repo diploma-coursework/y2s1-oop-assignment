@@ -1,19 +1,14 @@
 package org.assignment.util.extended;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.BaseItem;
 import org.assignment.util.base.DatabaseOperations;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -156,37 +151,41 @@ public class Item extends BaseItem implements DatabaseOperations {
         }
     }
 
+    public static List<Item> getAllItem() {
+        try {
+            List<QueryDocumentSnapshot> documents = Item.itemCollection.get().get().getDocuments();
+
+            List<Item> items = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : documents) {
+                items.add(Item.getFromDb(doc.getId()));
+            }
+
+            return items;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+//    @Override
+//    public String toString(){
+//        return "ITEM ID: " + getId()
+//                + "\nITEM Name          : " + getName()
+//                + "\nITEM Unit Price    : " + getUnitPrice()
+//                + "\nITEM Quantity      : "+ getQuantity()
+//                + "\n\nITEM Supplier\n" + getSupplier()
+//                + "\n\nITEM ItemCategory\n" + getItemCategory() +"\n";
+//    }
+
     @Override
     public String toString(){
-        return "ITEM ID: " + getId()
-                + "\nITEM Name          : " + getName()
-                + "\nITEM Unit Price    : " + getUnitPrice()
-                + "\nITEM Quantity      : "+ getQuantity()
-                + "\n\nITEM Supplier\n" + getSupplier()
-                + "\n\nITEM ItemCategory\n" + getItemCategory() +"\n";
-    }
 
-    public String testString(){
-        StringBuilder returnString = new StringBuilder();
-
-        returnString
-                .append("ITEM ID            : ").append(ansi().fgYellow().a(getId()).reset().toString()).append("\n")
-                .append("ITEM name          : ").append(ansi().fgBlue().a(getName()).reset().toString()).append("\n")
-                .append("ITEM Unit Price    : ").append(ansi().fgBrightMagenta().a(getUnitPrice())).append("\n")
-                .append("ITEM Quantity      : ").append(ansi().fgBrightMagenta().a(getQuantity()).reset()).append("\n\n")
-                .append("ITEM Supplier Info\n").append(getSupplier()).append("\n\n")
-                .append("ITEM ItemCategory Info\n").append(getItemCategory()).append("\n");
-
-        returnString.append(ansi().reset());
-        return returnString.toString();
-    }
-
-    public String RefIdPrint(){
-        return "ITEM ID: " + getId()
-                + "\nITEM Name           : " + getName()
-                + "\nITEM Unit Price     : " + getUnitPrice()
-                + "\nITEM Quantity       : "+ getQuantity()
-                + "\nITEM Supplier ID    : " + getSupplier().getId()
-                + "\nITEM ItemCategory ID: " + getItemCategory().getId() +"\n";
+        return "ITEM ID            : " + ansi().fgYellow().a(getId()).reset().toString() + "\n" +
+                "ITEM name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
+                "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(getUnitPrice()) + "\n" +
+                "ITEM Quantity      : " + ansi().fgBrightMagenta().a(getQuantity()).reset() + "\n\n" +
+                "ITEM Supplier Info\n" + getSupplier() + "\n\n" +
+                "ITEM ItemCategory Info\n" + getItemCategory() + "\n" +
+                ansi().reset();
     }
 }
