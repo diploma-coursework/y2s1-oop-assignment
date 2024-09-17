@@ -11,20 +11,25 @@ import org.fusesource.jansi.Ansi;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.api.client.util.FieldInfo.setFieldValue;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ItemMenu extends BaseMenu {
+    private List<Item> items = Item.getAllItem(); // FIXME: testing
     private static final Scanner scanner = new Scanner(System.in);
-    private static final HashMap<String, Option> menuOptions = new HashMap<>(), modifyOptions = new HashMap<>();
+    private static final HashMap<String, Option> menuOptions = new HashMap<>()
+            , modifyOptions = new HashMap<>(), queryOptions = new HashMap<>()
+            , queryOptionsUnitPrice = new HashMap<>(), queryOptionsQuantity = new HashMap<>();
 
     public ItemMenu() {
         // Initialize menu options using createOption
         menuOptions.put("1", new Option("Add Item", this::addItem));
         menuOptions.put("2", new Option("Remove Item", this::removeItem));
         menuOptions.put("3", new Option("Modify Item", this::modifyItem));
-        menuOptions.put("4", new Option("View Items", this::viewItems));
+        menuOptions.put("4", new Option("View All Items", this::viewItems));
+        menuOptions.put("5", new Option("Filter Items", this::menuFilter));
         menuOptions.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::quit));
 
         modifyOptions.put("1", new Option("Edit Name", () -> {}));
@@ -33,6 +38,21 @@ public class ItemMenu extends BaseMenu {
         modifyOptions.put("4", new Option("Edit Supplier ID", () -> {}));
         modifyOptions.put("5", new Option("Edit ItemCategory ID", () -> {}));
         modifyOptions.put("0",new Option(ansi().fgBrightGreen().a("Save").reset().toString(), () -> {}));
+
+        queryOptions.put("1", new Option("Filter By Name", this::filterByName));
+        queryOptions.put("2", new Option("Filter By Unit Price", this::menuUnitPrice));
+        queryOptions.put("3", new Option("Filter By Quantity", this::menuQuantity));
+        queryOptions.put("4", new Option("Search By Supplier ID", this::filterBySupplierID));
+        queryOptions.put("5", new Option("Search By ItemCategory ID", this::filterByItemCategoryID));
+        queryOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), this::quitSearch));
+
+//        queryOptionsUnitPrice.put("1", new Option("Filter Unit Price By Value", () -> {filterByUnitPrice(() -> {System.out.println("Hello");});}));
+//        queryOptionsUnitPrice.put("2", new Option("Filter Unit Price By Range", () -> {filterByUnitPrice(() -> {System.out.println("Hello");});}));
+        queryOptionsUnitPrice.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
+
+        queryOptionsQuantity.put("1", new Option("Filter Quantity by Value", () -> {}));
+        queryOptionsQuantity.put("2", new Option("Filter Quantity by Range", () -> {}));
+        queryOptionsQuantity.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
 
         exitFlag = false;
     }
@@ -44,6 +64,27 @@ public class ItemMenu extends BaseMenu {
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(" Item Menu\n====================").reset());
             displayOptions(menuOptions);
             getUserOptions(menuOptions);
+        }
+    }
+
+    private void menuUnitPrice(){
+        clearScreen();
+        displayOptions(queryOptionsUnitPrice);
+        getUserOptions(queryOptionsUnitPrice);
+    }
+
+    private void menuQuantity(){
+        clearScreen();
+        displayOptions(queryOptionsQuantity);
+        getUserOptions(queryOptionsQuantity);
+    }
+
+    private void menuFilter(){
+        exitAction = false;
+        clearScreen();
+        while (!exitAction){
+            displayOptions(queryOptions);
+            getUserOptions(queryOptions);
         }
     }
 
@@ -493,17 +534,122 @@ public class ItemMenu extends BaseMenu {
         pause();
     }
 
-    private void seeItemCategories() {
-        clearScreen();
-        List<ItemCategory> itemCategoryList = ItemCategory.getAllItemCategory();
-        if (itemCategoryList == null) System.out.println("No item category is present.");
-        else {
-            for (ItemCategory itemCategory : itemCategoryList) {
-                System.out.println(itemCategory);
-            }
-        }
-        pause();
+    // FIXME TESTING
+    // Filter by Name // FIXME: idk wat or not
+    private void filterByName() {
+        System.out.print("Enter item name: ");
+        String query = scanner.nextLine().trim();
+
+        List<Item> filteredItems = items.stream().filter(item -> item.getName().toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
+
+        displayFilteredItems(filteredItems);
     }
 
+    // Filter by Unit Price TODO: modify
+    // TODO: idea -> can i have 2 printstatement param, if only needed 1, printstatement is empty
+    // TODO: ifLogic is where the if(code) will be in , 1 Runnable for the filteredItems .filter
+    // FIXME: starting to think if its worth the effort.. or should just use overloading methods
+    private void filterByUnitPrice(Runnable printStatement ,Runnable ifLogic) {
+        StringBuilder price = new StringBuilder();
+        while (true) {
+            price.setLength(0);
+            System.out.print("Enter Unit Price     :");
+            printStatement.run();
+            // FIXME: NaN would be valid
+            if (scanner.hasNextLine()){
+                price.append(scanner.nextLine().trim());
+
+                if (price.toString().isEmpty() || !price.toString().matches("^[+-]?([0-9]*[.])?[0-9]+([eE][+-]?[0-9]+)?$")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                if (acceptExitAction(Double.valueOf(price.toString())).isEmpty()) {return;}
+
+                if (Double.parseDouble(price.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                // TODO: this is the line to put as Runnable
+                List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() == Double.parseDouble(price.toString())).collect(Collectors.toList());
+                displayFilteredItems(filteredItems);
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
+    }
+
+    private void filterBySingleQuantity() {
+        System.out.print("Enter quantity: ");
+        try {
+            int quantity = Integer.parseInt(scanner.nextLine());
+            List<Item> filteredItems = items.stream()
+                    .filter(item -> item.getQuantity() == quantity)
+                    .collect(Collectors.toList());
+            displayFilteredItems(filteredItems);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for quantity.");
+        }
+    }
+
+    // Filter by Quantity Range
+    private void filterByQuantityRange() {
+        System.out.print("Enter starting range value: ");
+        try {
+            int start = Integer.parseInt(scanner.nextLine());
+            System.out.print("Enter ending range value: ");
+            int end = Integer.parseInt(scanner.nextLine());
+            List<Item> filteredItems = items.stream()
+                    .filter(item -> item.getQuantity() >= start && item.getQuantity() <= end)
+                    .collect(Collectors.toList());
+            displayFilteredItems(filteredItems);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for range.");
+        }
+    }
+
+
+    // Filter by Quantity TODO: modify
+    private void filterByQuantity() {
+        System.out.print("Enter quantity: ");
+        try {
+            int quantity = Integer.parseInt(scanner.nextLine());
+            List<Item> filteredItems = items.stream()
+                    .filter(item -> item.getQuantity() == quantity)
+                    .collect(Collectors.toList());
+            displayFilteredItems(filteredItems);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for quantity.");
+        }
+    }
+
+    // Filter by Supplier ID
+    private void filterBySupplierID() {
+        System.out.print("Enter supplier ID: ");
+        String query = scanner.nextLine();
+        List<Item> filteredItems = items.stream()
+                .filter(item -> item.getSupplier().getId().equals(query))
+                .collect(Collectors.toList());
+        displayFilteredItems(filteredItems);
+    }
+
+    // Filter by ItemCategory ID
+    private void filterByItemCategoryID() {
+        System.out.print("Enter item category ID: ");
+        String query = scanner.nextLine();
+        List<Item> filteredItems = items.stream()
+                .filter(item -> item.getItemCategory().getId().equals(query))
+                .collect(Collectors.toList());
+        displayFilteredItems(filteredItems);
+    }
+
+    // Display the filtered items
+    private void displayFilteredItems(List<Item> filteredItems) {filteredItems.forEach(item -> System.out.println(item.toString()));}
+
     private void quit() {exitFlag = true;}
+
+    private void quitSearch() {exitAction = true;}
 }
