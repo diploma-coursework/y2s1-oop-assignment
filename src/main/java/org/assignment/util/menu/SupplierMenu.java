@@ -99,6 +99,26 @@ public class SupplierMenu extends BaseMenu {
         // search for supplier
         Supplier supplier = searchSupplier();
 
+        if (supplier != null) {
+            System.out.println(" 1 | Name");
+            System.out.println(" 2 | Gender");
+            System.out.println(" 3 | Contact Number");
+            System.out.println(" 4 | Email");
+            System.out.println(" 5 | Address");
+
+            System.out.println("Select 1 - 5 to edit: ");
+            int selection = scanner.nextInt();
+
+            switch (selection) {
+                case 1:
+                    System.out.println("\nSupplier Name: " + supplier.getName());
+                    System.out.println("Enter new name: ");
+
+                    supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
+
+
+            }
+        }
         // select data field to edit (except id and contract infos)
     }
 
