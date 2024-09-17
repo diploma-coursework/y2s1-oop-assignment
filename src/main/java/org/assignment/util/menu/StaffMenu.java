@@ -499,7 +499,9 @@ public class StaffMenu extends BaseMenu {
     }
 
     private void quitStaffMenu() {
+        newline();
         System.out.println("See you again " + loggedInStaff.getName() +"! >:)");
+        pause();
         exitFlag = true;
     }
 
@@ -510,9 +512,11 @@ public class StaffMenu extends BaseMenu {
                 action.run();
             } else {
                 System.out.println("Access Denied: Insufficient privileges.");
+                pause();
             }
         } else {
             System.out.println("No staff is currently logged in. Please log in first.");
+            pause();
         }
     }
 }
