@@ -2,6 +2,7 @@ package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
@@ -18,6 +19,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Staff extends Person implements DatabaseOperations {
     protected String gender;
@@ -61,8 +64,6 @@ public class Staff extends Person implements DatabaseOperations {
     }
 
     public void setPassword(String password) {
-        //this.password = validationCheck.checkPassword(password);
-
         // Validate the password first
         String validatedPassword = validationCheck.checkPassword(password);
         // Hash the validated password using BCrypt
@@ -71,10 +72,7 @@ public class Staff extends Person implements DatabaseOperations {
 
     @Override
     public void setName(String name) {
-        //validationCheck.checkAndFormatName(name);
-        //super.setName(name);
-
-        try {
+        try{
             String formattedName = validationCheck.checkAndFormatName(name);
             super.setName(formattedName);
         } catch (IllegalArgumentException e) {
@@ -139,15 +137,12 @@ public class Staff extends Person implements DatabaseOperations {
 
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
-            //docValues.put("password", this.password());
 
-            String prefix;
-            switch (getPosition().getAccessLevel()) {
-                case MANAGER: prefix = "MNG"; break;
-                case ADMIN: prefix = "ADM"; break;
-                case STAFF:
-                default: prefix = "STF"; break;
-            }
+            String prefix = switch (getPosition().getAccessLevel()) {
+                case MANAGER -> "MNG";
+                case ADMIN -> "ADM";
+                case STAFF -> "STF";  // 'DEFAULT' is not necessary here but included for clarity
+            };
 
             this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
             staffCollection.document(this.id).set(docValues).get();
@@ -207,8 +202,6 @@ public class Staff extends Person implements DatabaseOperations {
             fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse("0.0").toString()));
 
             // Retrieve and validate password
-//            String password = Optional.ofNullable((String) docData.get("password")).orElse("");
-//            fetchedStaff.setPassword(password);
             fetchedStaff.password = Optional.ofNullable((String) docData.get("password")).orElse("");  // No need to hash again
 
             // cache and return
@@ -221,11 +214,29 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean updateToDb(String fieldName)  {
+    public static List<Staff> getAllStaffInfo() {
+        List<Staff> staffList = new ArrayList<>();
         try {
-            Field field = this.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            staffCollection.document(this.id).update(fieldName, field.get(this)).get();
+            // Retrieve all documents from the staff collection
+            List<QueryDocumentSnapshot> documents = staffCollection.get().get().getDocuments();
+
+            for (QueryDocumentSnapshot doc : documents) {
+                // Fetch each staff record using the document ID
+                Staff staff = getFromDb(doc.getId());
+                if (staff != null) {
+                    staffList.add(staff);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching all staff records: " + e.getMessage());
+        }
+        return staffList;
+    }
+
+    public boolean deleteFromDb()  {
+        try {
+            staffCollection.document(this.id).delete().get();
+            FirebaseConnection.deleteCachedDocument(staffCollection, staffCollection.document(this.id));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -233,10 +244,13 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean deleteFromDb()  {
+    public boolean updateToDb(String fieldName)  {
         try {
-            staffCollection.document(this.id).delete().get();
-            FirebaseConnection.deleteCachedDocument(staffCollection, staffCollection.document(this.id));
+            Field field = this.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+
+            staffCollection.document(this.id).update(fieldName, field.get(this)).get();
+
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());

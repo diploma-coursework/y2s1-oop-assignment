@@ -6,11 +6,10 @@ import org.assignment.util.enums.AccessLevel;
 import org.assignment.util.extended.Staff;
 import org.assignment.util.validationCheck;
 
-
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -25,11 +24,11 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        StaffMenuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUp, AccessLevel.ADMIN)));
-        StaffMenuOptions.put("2", new Option("Delete", () -> restrictedAction(this::delete, AccessLevel.ADMIN)));
-        StaffMenuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modify, AccessLevel.MANAGER)));
-        StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::view, AccessLevel.MANAGER)));
-        StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quit));
+        StaffMenuOptions.put("1", new Option("Signup", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("2", new Option("Delete", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
+        StaffMenuOptions.put("3", new Option("Modify", () -> restrictedAction(this::modifyStaff, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::viewStaff, AccessLevel.MANAGER)));
+        StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitStaffMenu));
 
         exitFlag = false;
         actionExit = false;
@@ -48,7 +47,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void signUp() {
+    private void signUpStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -221,7 +220,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void delete() {
+    private void deleteStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -280,26 +279,63 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void view() {
+    private void viewStaff() {
+        try {
+            timedPause(300);
+            clearScreen();
 
+            System.out.println(ansi().fgBrightGreen().a("View All Staff Records\n=======================\n").reset());
+
+            // Retrieve all staff records from the database
+            List<Staff> allStaff = Staff.getAllStaffInfo();
+
+            if (allStaff.isEmpty()) {
+                System.out.println(ansi().bgBrightRed().a("No staff records found in the database.").reset());
+                return;
+            }
+
+            // Print details of each staff member
+            for (Staff staff : allStaff) {
+                System.out.println(ansi().fgRgb(8552916).a("Staff ID: " + staff.getId()));
+                System.out.println("Name: " + staff.getName());
+                System.out.println("Gender: " + staff.getGender());
+                System.out.println("Position: " + staff.getPosition());
+                System.out.println("Contact Number: " + staff.getContactNumber());
+                System.out.println("Email: " + staff.getEmail());
+                System.out.println("Address: " + staff.getAddress());
+                System.out.println("Salary: $" + staff.getSalary());
+                System.out.println("Date Joined: " + staff.getDateJoined());
+                System.out.println("=======================================\n");
+            }
+
+            pause();
+
+        } catch (Exception e) {
+            System.out.println(ansi().bgBrightRed().a("An error occurred while retrieving staff records: " + e.getMessage()).reset());
+        }
     }
 
     //TODO: debug and find any possible errors
-    private void modify() {
+    private void modifyStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
         try {
-            System.out.print("Enter Staff ID to modify: ");
+            timedPause(300);
+            clearScreen();
 
+            System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Modify staff document\n=====================\n").reset());
+
+            System.out.print(ansi().fgRgb(8552916).a("Enter Staff ID to modify: "));
             String staffId = scanner.nextLine();
             Staff staff = Staff.getFromDb(staffId);
+
             if (staff == null) {
-                System.out.println("Staff ID not found.");
+                System.out.println(ansi().bgBrightRed().a("Staff ID not found.").reset());
                 return;
             }
 
-            System.out.println("Which field would you like to modify?"
+            System.out.println("\nWhich field would you like to modify?"
                     + "\n====================================="
                     + "\n1.  Name"
                     + "\n2.  Gender"
@@ -309,44 +345,167 @@ public class StaffMenu extends BaseMenu {
                     + "\n6.  Address"
                     + "\n7.  Salary"
                     + "\n8.  Password"
-                    + "\n====================================="
-                    + "\nChoice (1-8): ");
+                    + "\n=====================================");
 
+            System.out.print("\nChoice (1-8): ");
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume the newline character (prevent index out of bounds error)
 
-            String fieldName = "";
+            boolean isValid = true;
 
+            switch (choice) {
+                case 1:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new name: "));
+                        String newName = scanner.nextLine();
+                        try {
+                            newName = validationCheck.checkAndFormatName(newName);
+                            staff.setName(newName);
+                            break; // Exit loop if name is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 2:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new gender (M/F): "));
+                        char newGender = scanner.next().toUpperCase().charAt(0);
+                        try {
+                            staff.setGender(validationCheck.checkGender(newGender));
+                            break; // Exit loop if gender is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 3:
+                    int positionNumber;
+                    StaffPosition.printPosition();
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter the number corresponding to the position: "));
+                        positionNumber = scanner.nextInt();
+                        try {
+                            staff.setPosition(StaffPosition.fromNumber(positionNumber));
+                            break; // Exit loop if position is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 4:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new contact number: "));
+                        String newContact = scanner.nextLine();
+                        try {
+                            staff.setContactNumber(newContact);
+                            break; // Exit loop if contact number is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 5:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new email: "));
+                        String newEmail = scanner.nextLine();
+                        try {
+                            staff.setEmail(newEmail);
+                            break; // Exit loop if email is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 6:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new address: "));
+                        String newAddress = scanner.nextLine();
+                        try {
+                            staff.setAddress(newAddress);
+                            break; // Exit loop if address is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                case 7:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new salary: "));
+                        try {
+                            if (!scanner.hasNextDouble()) {
+                                System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a valid number.\n").reset());
+                                scanner.next(); // Clear the invalid input
+                                continue;
+                            }
+
+                            double newSalary = scanner.nextDouble();
+                            scanner.nextLine(); // Consume newline
+                            try {
+                                staff.setSalary(newSalary);
+                                break; // Exit loop if salary is valid
+                            } catch (IllegalArgumentException e) {
+                                System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                            }
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a numeric value.\n").reset());
+                            scanner.next(); // Clear the invalid input
+                        }
+                    }
+                    break;
+                case 8:
+                    while (true) {
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new password: "));
+                        String newPassword = scanner.nextLine();
+                        try {
+                            staff.setPassword(newPassword);
+                            break; // Exit loop if password is valid
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println(ansi().bgBrightRed().a("Invalid choice.").reset());
+                    isValid = false;
+            }
+
+            if (isValid) {
+                boolean success = staff.updateToDb(getFieldNameFromChoice(choice));
+                if (success) {
+                    System.out.println(ansi().bgBrightGreen().a("Staff record updated successfully.").reset());
+                    pause();
+                } else {
+                    System.out.println(ansi().bgBrightRed().a("Failed to update staff record.").reset());
+                    pause();
+                }
+            }
         } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(ansi().bgBrightRed().a("Error: " + e.getMessage()).reset());
+            pause();
+        } catch (Exception e) {
+            System.out.println(ansi().bgBrightRed().a("An unexpected error occurred: " + e.getMessage()).reset());
+            pause();
         }
     }
 
-    private void quit() {
-        System.out.println("Quit");
+    private String getFieldNameFromChoice(int choice) {
+        return switch (choice) {
+            case 1 -> "name";
+            case 2 -> "gender";
+            case 3 -> "position";
+            case 4 -> "contactNumber";
+            case 5 -> "email";
+            case 6 -> "address";
+            case 7 -> "salary";
+            case 8 -> "password";
+            default -> null;
+        };
+    }
+
+    private void quitStaffMenu() {
+        System.out.println("See you again " + loggedInStaff.getName() +"! >:)");
         System.exit(0);
-    }
-
-    private static boolean validAccount(String iDString, String passString) {
-        // Check from database
-        // Placeholder logic
-        return iDString.equalsIgnoreCase("AAA") && passString.equals("AAA");
-    }
-
-    private Map<String, Object> convertStaffToMap(Staff staff) {
-
-        Map<String, Object> staffData = new HashMap<>();
-
-        staffData.put("name", staff.getName());
-        staffData.put("gender", String.valueOf(staff.getGender())); // Convert char to string
-        staffData.put("position", staff.getPosition().name()); // Enum to string
-        staffData.put("contactNumber", staff.getContactNumber());
-        staffData.put("email", staff.getEmail());
-        staffData.put("dateJoined", staff.getDateJoined().toString()); // LocalDate to string
-        staffData.put("salary", staff.getSalary());
-        staffData.put("address", staff.getAddress());
-
-        return staffData;
     }
 
     private void restrictedAction(Runnable action, AccessLevel requiredAccessLevel) {

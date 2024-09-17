@@ -50,8 +50,8 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //TODO: check the password hashing methods for STF0016,STF0017
-    // password: pop12345@,Lee234@#56
+    //TODO: check the password hashing methods for STF0016,STF0017,ADM0009,STF0000
+    // password: pop12345@,Lee234@#56,Johnisgreat6@, simplelol@6
     private void staffLogin() {
         clearScreen();
 
