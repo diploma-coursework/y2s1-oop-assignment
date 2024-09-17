@@ -20,73 +20,6 @@ import java.util.concurrent.ExecutionException;
 public class DbMethods {
     public static Firestore db = FirebaseConnection.getDb();
 
-
-    // Write
-    public static void writeToDb(Map<String, Object> itemInfo , String collection, String id){
-//        System.out.println("reached writeToDb");
-        ApiFuture<WriteResult> future = db.collection(collection).document(id).set(itemInfo);
-        dbVerification("created",future);
-    }
-
-    // find Class, Choice method, fieldName, Modify
-    public static <T> void modifyInDb(String id, String collection, String field, T newValue) {
-        DocumentReference docRef = db.collection(collection).document(id);
-        if (field == null) {
-            System.err.println("Invalid choice");
-            return;
-        }
-        // need add try catch statement
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put(field, newValue);
-
-        ApiFuture<WriteResult> future = docRef.update(updateMap);
-        dbVerification("modified",future);
-    }
-
-    public static <T> void modifyInDb(String id, String collection, String field,int index, T newValue) {
-        DocumentReference docRef = db.collection(collection).document(id);
-        if (field == null) {
-            System.err.println("Invalid choice");
-            return;
-        }
-        // need add try catch statement
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put(field, newValue);
-
-        ApiFuture<WriteResult> future = docRef.update(updateMap);
-        dbVerification("modified",future);
-    }
-
-    // Delete
-    public static void deleteInDb(String id, String collection) {
-        DocumentReference docRef = db.collection(collection).document(id);
-        ApiFuture<WriteResult> future = docRef.delete();
-
-        dbVerification("deleted",future);
-    }
-
-    // View
-    public static void viewInDb(String id, String collection) {
-        DocumentReference docRef = db.collection(collection).document(id);
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-
-        try {
-            DocumentSnapshot document = future.get();
-
-            if (document.exists()) {
-                // Print the document fields
-                System.out.println("Document data: " + document.getData());
-            } else {
-                System.out.println("No Document");
-            }
-        } catch (Exception e) {
-            System.err.println("3) Error getting document: " + e.getMessage());
-        }
-    }
-
-    // getters
-
-
     // No. of Item
     private static int dbGetIdCount(String collection){
         try {
@@ -111,7 +44,6 @@ public class DbMethods {
         }
     }
 
-    // No. of item +1
     private static void dbIncrementCount(String collection) {
         try {
             // Retrieve the document snapshot
@@ -144,15 +76,14 @@ public class DbMethods {
 
     // create Item ID
     public static String dbCreateNewId(String collection, String idFormat, int idSize){
-        // improve with StringBuilder
-        String idFormatSize = "%0" + idSize + "d";
+
+        StringBuilder idFormatSize = new StringBuilder();
+        idFormatSize.append(idFormat).append(String.format("%0"+idSize+"d",dbGetIdCount(collection)));
         if(dbGetIdCount(collection) != -1){
             dbIncrementCount(collection);
-            return idFormat +String.format(idFormatSize,dbGetIdCount(collection));
+            return idFormatSize.toString();
         }
-        else{
-            return "ERROR";
-        }
+        else return "ERR";
     }
 
     public static boolean isValidCode(String idFormat,String input) {
@@ -173,15 +104,5 @@ public class DbMethods {
         }
 
         return prefix.equals(idFormat) && suffix.chars().allMatch(Character::isDigit);
-    }
-
-    public static void dbVerification(String action, ApiFuture<WriteResult> future){
-        try {
-            WriteResult result = future.get();
-            System.out.println("Document successfully " + action  + " at: " + result.getUpdateTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error " + action  + " document: " + e.getMessage());
-        }
     }
 }
