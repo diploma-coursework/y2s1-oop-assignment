@@ -2,12 +2,13 @@ package org.assignment.util.menu;
 
 import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
-import org.assignment.util.extended.Item;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.validationCheck;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class SupplierMenu extends BaseMenu {
     private final HashMap<String, Option> supplierMenuOptions = new HashMap<>();
@@ -20,10 +21,23 @@ public class SupplierMenu extends BaseMenu {
         supplierMenuOptions.put("4", new Option("Edit Supplier", this::editSupplier));
         supplierMenuOptions.put("5", new Option("Renew Supplier's Contract", this::renewSupplierContract));
         supplierMenuOptions.put("0", new Option("Return to Menu", this::returnToMenu));
-        // My idea was if user choose 0 back to last menu cuz supplier menu should be sub menu of staff...?
+
+        exitFlag = false;
+    }
+
+    @Override
+    public void start() {
+        while (!exitFlag) {
+            clearScreen();
+            System.out.println("Supplier Menu\n=============");
+            displayOptions(supplierMenuOptions);
+            getUserOptions(supplierMenuOptions);
+        }
     }
 
     public void addSupplier() {
+        clearScreen();
+
         Supplier supplier = new Supplier();
         boolean confirmed = false;
 
@@ -70,6 +84,7 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void removeSupplier() {
+        clearScreen();
         // Search for supplier
         Supplier supplier = searchSupplier();
 
@@ -104,6 +119,7 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void editSupplier() {
+        clearScreen();
         // search for supplier
         Supplier supplier = searchSupplier();
 
@@ -169,6 +185,7 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public Supplier searchSupplier() {
+        clearScreen();
         // search for supplier
         Supplier supplier = new Supplier();
         String id = " ";
