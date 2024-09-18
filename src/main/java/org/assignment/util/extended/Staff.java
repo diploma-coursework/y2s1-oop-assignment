@@ -229,10 +229,20 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("salary", getSalary());
             docValues.put("password", getPassword());
 
+            /*
             String prefix = switch (getPosition().getAccessLevel()) {
                 case MANAGER -> "MNG";
                 case ADMIN -> "ADM";
-                case STAFF -> "STF";  // 'DEFAULT' is not necessary here but included for clarity
+                case STAFF -> "STF";
+            };
+            */
+            String prefix = switch (getPosition()) {
+                case INVENTORY_CLERK -> "MNG";
+                case STOCK_CONTROLLER -> "STC";
+                case SUPPLIER -> "SPR";
+                case WAREHOUSE_MANAGER -> "WHM";
+                case INVENTORY_SUPERVISOR -> "IVS";
+                case ADMIN -> "ADM";
             };
 
             this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
