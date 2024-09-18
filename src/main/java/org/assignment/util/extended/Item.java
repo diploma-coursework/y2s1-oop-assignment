@@ -144,10 +144,10 @@ public class Item extends BaseItem implements DatabaseOperations {
 
     public boolean updateToDb(String fieldName) {
         try {
-            Field field = this.getClass().getDeclaredField(fieldName);
+            Field field = this.getClass().getSuperclass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            itemCollection.document(getId()).update(fieldName, field.get(this)).get();
+            itemCollection.document(this.getId()).update(fieldName, field.get(this)).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
