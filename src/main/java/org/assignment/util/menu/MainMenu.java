@@ -69,9 +69,6 @@ public class MainMenu extends BaseMenu {
         if (loginStaff != null) {
             String storedHashedPassword = loginStaff.getPassword();
 
-            // Print for debugging purposes
-            System.out.println("Stored hashed password: " + storedHashedPassword);
-
             if (BCrypt.checkpw(inputPassword, storedHashedPassword)) {
                 new StaffMenu(loginStaff).start();
             } else {
