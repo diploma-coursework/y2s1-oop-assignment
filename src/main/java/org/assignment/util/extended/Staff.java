@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+
 public class Staff extends Person implements DatabaseOperations {
     protected String gender;
     protected StaffPosition position;
@@ -36,7 +37,15 @@ public class Staff extends Person implements DatabaseOperations {
 
     //constructor
     public Staff() {
-        //default
+    }
+
+    public Staff(String name, String contactNumber, String email, String address, String gender, StaffPosition position, LocalDate dateJoined, double salary, String password) {
+        super(name, contactNumber, email, address);
+        setGender(gender);
+        setPosition(position);
+        setDateJoined(dateJoined);
+        setSalary(salary);
+        setPassword(password);
     }
 
     // setters
@@ -73,7 +82,6 @@ public class Staff extends Person implements DatabaseOperations {
         validationCheck.checkDateJoined(dateJoined);
         this.dateJoined = dateJoined;
     }
-
     public boolean setSalary(double salary, boolean updateToDb) {
         try {
             this.salary = validationCheck.checkSalary((int) salary);
@@ -87,14 +95,25 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    public boolean setPassword(String password, boolean updateToDb) {
+    public boolean setPassword(String password, boolean updateToDb, boolean signup) {
         try {
             String validatedPassword = validationCheck.checkPassword(password);
-            this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
+
             if (updateToDb) {
+                this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
                 return this.updateToDb("password");
             }
+
+            // If this is a signup process (but not updating to DB yet)
+            if (signup) {
+                this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
+                return true; // Assuming signup is successful
+            }
+
+            // If just setting the password without DB update or signup
+            this.password = validatedPassword;
             return true;
+
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return false;
@@ -161,7 +180,12 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    // Overloaded methods without updateToDb
+    //I don't know what am I doing, but
+    public void setPassword(String password) {
+        setPassword(password, false, false); // Default values for `updateToDb` and `isSignup`
+    }
+
+    // Overloaded methods
     public void setGender(String gender) {
         setGender(gender, false);
     }
@@ -171,6 +195,7 @@ public class Staff extends Person implements DatabaseOperations {
     public void setSalary(double salary) {
         setSalary(salary, false);
     }
+
 
     // getters
     public String getGender() { return this.gender; }
@@ -238,43 +263,20 @@ public class Staff extends Person implements DatabaseOperations {
             Map<String, Object> docData = doc.getData();
             if (docData == null) return null;
 
-            // create new instance and assign values
-            Staff fetchedStaff = new Staff();
-            fetchedStaff.setId(doc.getId());
-
-            // Retrieve and validate name
             String name = Optional.ofNullable((String) docData.get("name")).orElse("");
-            fetchedStaff.setName(name);
-
-            // Retrieve and validate contactNumber
             String contactNumber = Optional.ofNullable((String) docData.get("contactNumber")).orElse("");
-            fetchedStaff.setContactNumber(contactNumber);
-
-            // Retrieve and validate email
             String email = Optional.ofNullable((String) docData.get("email")).orElse("");
-            fetchedStaff.setEmail(email);
-
-            // Retrieve and validate address
             String address = Optional.ofNullable((String) docData.get("address")).orElse("");
-            fetchedStaff.setAddress(address);
-
-            // Retrieve and validate gender
             String genderStr = Optional.ofNullable((String) docData.get("gender")).orElse("");
-            fetchedStaff.setGender(genderStr); // Ensure valid gender
+            StaffPosition position = StaffPosition.fromString(Optional.ofNullable((String) docData.get("position")).orElse(""));
+            LocalDate dateJoined = Optional.ofNullable((Timestamp) docData.get("dateJoined"))
+                    .map(ts -> ts.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
+                    .orElse(LocalDate.now());
+            double salary = Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse("0.0").toString());
+            String password = Optional.ofNullable((String) docData.get("password")).orElse("");
 
-            // Retrieve and validate position
-            String positionStr = Optional.ofNullable((String) docData.get("position")).orElse("");
-            fetchedStaff.setPosition(StaffPosition.fromString(positionStr)); // Convert position string to enum
-
-            // Handle dateJoined (assume it's a Timestamp, convert to LocalDate)
-            Timestamp timestamp = (Timestamp) docData.get("dateJoined");
-            fetchedStaff.setDateJoined(timestamp != null ? timestamp.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : LocalDate.now());
-
-            // Handle salary (convert from Object to double)
-            fetchedStaff.setSalary(Double.parseDouble(Optional.ofNullable(docData.get("salary")).orElse("0.0").toString()));
-
-            // Retrieve and validate password
-            fetchedStaff.password = Optional.ofNullable((String) docData.get("password")).orElse("");  // No need to hash again
+            Staff fetchedStaff = new Staff(name, contactNumber, email, address, genderStr, position, dateJoined, salary, password);
+            fetchedStaff.setId(doc.getId());
 
             // cache and return
             FirebaseConnection.cacheNewDocument(staffCollection, staffCollection.document(id), fetchedStaff);

@@ -50,8 +50,8 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //TODO: check the password hashing methods for STF0016,STF0000
-    // password: pop12345@,simplelol@6
+    //TODO: check the password hashing methods for ADM0000, STF0002
+    // password: pop12345@, joelwong123#
     private void staffLogin() {
         clearScreen();
 
@@ -65,10 +65,21 @@ public class MainMenu extends BaseMenu {
         System.out.print(ansi().reset());
 
         Staff loginStaff = Staff.getFromDb(inputStaffId);
-        if (loginStaff != null && BCrypt.checkpw(inputPassword, loginStaff.getPassword())) {
-            new StaffMenu(loginStaff).start();
+
+        if (loginStaff != null) {
+            String storedHashedPassword = loginStaff.getPassword();
+
+            // Print for debugging purposes
+            System.out.println("Stored hashed password: " + storedHashedPassword);
+
+            if (BCrypt.checkpw(inputPassword, storedHashedPassword)) {
+                new StaffMenu(loginStaff).start();
+            } else {
+                System.out.println(ansi().bgBrightRed().a("Invalid credentials.").reset());
+                pause();
+            }
         } else {
-            System.out.println(ansi().bgBrightRed().a("Invalid credentials.").reset());
+            System.out.println(ansi().bgBrightRed().a("Staff ID not found.").reset());
             pause();
         }
     }
