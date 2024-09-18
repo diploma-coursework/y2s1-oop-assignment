@@ -170,7 +170,8 @@ public class Item extends BaseItem implements DatabaseOperations {
     @Override
     public String toString(){
 
-        return "ITEM ID            : " + ansi().fgYellow().a(getId()).reset().toString() + "\n" +
+        return "----------------------" + "-".repeat(getId().length()) + "\n" +
+                "ITEM ID            : " + ansi().fgYellow().a(getId()).reset().toString() + "\n" +
                 "ITEM name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
                 "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(getUnitPrice()) + "\n" +
                 "ITEM Quantity      : " + ansi().fgBrightMagenta().a(getQuantity()).reset() + "\n\n" +

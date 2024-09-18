@@ -46,12 +46,12 @@ public class ItemMenu extends BaseMenu {
         queryOptions.put("5", new Option("Search By ItemCategory ID", this::filterByItemCategoryID));
         queryOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), this::quitSearch));
 
-//        queryOptionsUnitPrice.put("1", new Option("Filter Unit Price By Value", () -> {filterByUnitPrice(() -> {System.out.println("Hello");});}));
-//        queryOptionsUnitPrice.put("2", new Option("Filter Unit Price By Range", () -> {filterByUnitPrice(() -> {System.out.println("Hello");});}));
+        queryOptionsUnitPrice.put("1", new Option("Filter Unit Price By Value",this::filterByUnitPriceValue));
+        queryOptionsUnitPrice.put("2", new Option("Filter Unit Price By Range",this::filterByUnitPriceRange));
         queryOptionsUnitPrice.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
 
-        queryOptionsQuantity.put("1", new Option("Filter Quantity by Value", () -> {}));
-        queryOptionsQuantity.put("2", new Option("Filter Quantity by Range", () -> {}));
+        queryOptionsQuantity.put("1", new Option("Filter Quantity by Value",this::filterByQuantityValue));
+        queryOptionsQuantity.put("2", new Option("Filter Quantity by Range", this::filterByQuantityRange));
         queryOptionsQuantity.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
 
         exitFlag = false;
@@ -81,10 +81,11 @@ public class ItemMenu extends BaseMenu {
 
     private void menuFilter(){
         exitAction = false;
-        clearScreen();
         while (!exitAction){
+            clearScreen();
             displayOptions(queryOptions);
             getUserOptions(queryOptions);
+            pause();
         }
     }
 
@@ -534,8 +535,7 @@ public class ItemMenu extends BaseMenu {
         pause();
     }
 
-    // FIXME TESTING
-    // Filter by Name // FIXME: idk wat or not
+    // Filter by Name
     private void filterByName() {
         System.out.print("Enter item name: ");
         String query = scanner.nextLine().trim();
@@ -545,16 +545,12 @@ public class ItemMenu extends BaseMenu {
         displayFilteredItems(filteredItems);
     }
 
-    // Filter by Unit Price TODO: modify
-    // TODO: idea -> can i have 2 printstatement param, if only needed 1, printstatement is empty
-    // TODO: ifLogic is where the if(code) will be in , 1 Runnable for the filteredItems .filter
-    // FIXME: starting to think if its worth the effort.. or should just use overloading methods
-    private void filterByUnitPrice(Runnable printStatement ,Runnable ifLogic) {
+    // Filter by Unit Price
+    private void filterByUnitPriceValue() {
         StringBuilder price = new StringBuilder();
         while (true) {
             price.setLength(0);
             System.out.print("Enter Unit Price     :");
-            printStatement.run();
             // FIXME: NaN would be valid
             if (scanner.hasNextLine()){
                 price.append(scanner.nextLine().trim());
@@ -571,7 +567,6 @@ public class ItemMenu extends BaseMenu {
                     continue;
                 }
 
-                // TODO: this is the line to put as Runnable
                 List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() == Double.parseDouble(price.toString())).collect(Collectors.toList());
                 displayFilteredItems(filteredItems);
                 break;
@@ -582,68 +577,209 @@ public class ItemMenu extends BaseMenu {
         }
     }
 
-    private void filterBySingleQuantity() {
-        System.out.print("Enter quantity: ");
-        try {
-            int quantity = Integer.parseInt(scanner.nextLine());
-            List<Item> filteredItems = items.stream()
-                    .filter(item -> item.getQuantity() == quantity)
-                    .collect(Collectors.toList());
-            displayFilteredItems(filteredItems);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input for quantity.");
+    private void filterByUnitPriceRange() {
+        StringBuilder price = new StringBuilder();
+        double start, end;
+        while (true) {
+            price.setLength(0);
+            System.out.print("Enter Starting Range     :");
+            // FIXME: NaN would be valid
+            if (scanner.hasNextLine()){
+                price.append(scanner.nextLine().trim());
+
+                if (price.toString().isEmpty() || !price.toString().matches("^[+-]?([0-9]*[.])?[0-9]+([eE][+-]?[0-9]+)?$")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                if (acceptExitAction(Double.valueOf(price.toString())).isEmpty()) {return;}
+
+                if (Double.parseDouble(price.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                start = Double.parseDouble(price.toString());
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
+
+        while (true) {
+            price.setLength(0);
+            System.out.print("Enter Ending Range       :");
+            // FIXME: NaN would be valid
+            if (scanner.hasNextLine()){
+                price.append(scanner.nextLine().trim());
+
+                if (price.toString().isEmpty() || !price.toString().matches("^[+-]?([0-9]*[.])?[0-9]+([eE][+-]?[0-9]+)?$")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                if (acceptExitAction(Double.valueOf(price.toString())).isEmpty()) {return;}
+
+                if (Double.parseDouble(price.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                end = Double.parseDouble(price.toString());
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
+
+        List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() >= start && item.getUnitPrice() <= end).collect(Collectors.toList());
+        displayFilteredItems(filteredItems);
+    }
+
+    // Filter by Quantity
+    private void filterByQuantityValue() {
+        StringBuilder scannerValue = new StringBuilder();
+        while (true) {
+            scannerValue.setLength(0);
+            System.out.print("Item Quantity       :");
+            if (scanner.hasNextLine()){
+                scannerValue.append(scanner.nextLine().trim());
+
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()) {return;}
+
+                if (Integer.parseInt(scannerValue.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+                List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() == Integer.parseInt(scannerValue.toString())).collect(Collectors.toList());
+                displayFilteredItems(filteredItems);
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
         }
     }
 
     // Filter by Quantity Range
     private void filterByQuantityRange() {
-        System.out.print("Enter starting range value: ");
-        try {
-            int start = Integer.parseInt(scanner.nextLine());
-            System.out.print("Enter ending range value: ");
-            int end = Integer.parseInt(scanner.nextLine());
-            List<Item> filteredItems = items.stream()
-                    .filter(item -> item.getQuantity() >= start && item.getQuantity() <= end)
-                    .collect(Collectors.toList());
-            displayFilteredItems(filteredItems);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input for range.");
-        }
-    }
+        StringBuilder scannerValue = new StringBuilder();
+        int start,end;
+        while (true) {
+            scannerValue.setLength(0);
+            System.out.print("Item Quantity       :");
+            if (scanner.hasNextLine()){
+                scannerValue.append(scanner.nextLine().trim());
 
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
 
-    // Filter by Quantity TODO: modify
-    private void filterByQuantity() {
-        System.out.print("Enter quantity: ");
-        try {
-            int quantity = Integer.parseInt(scanner.nextLine());
-            List<Item> filteredItems = items.stream()
-                    .filter(item -> item.getQuantity() == quantity)
-                    .collect(Collectors.toList());
-            displayFilteredItems(filteredItems);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input for quantity.");
+                if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()) {return;}
+
+                if (Integer.parseInt(scannerValue.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+                start = Integer.parseInt(scannerValue.toString());
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
         }
+
+        while (true) {
+            scannerValue.setLength(0);
+            System.out.print("Item Quantity       :");
+            if (scanner.hasNextLine()){
+                scannerValue.append(scanner.nextLine().trim());
+
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+
+                if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()) {return;}
+
+                if (Integer.parseInt(scannerValue.toString()) <0){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+                end = Integer.parseInt(scannerValue.toString());
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
+
+        List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() >= start && item.getQuantity() <= end).collect(Collectors.toList());
+        displayFilteredItems(filteredItems);
     }
 
     // Filter by Supplier ID
     private void filterBySupplierID() {
-        System.out.print("Enter supplier ID: ");
-        String query = scanner.nextLine();
-        List<Item> filteredItems = items.stream()
-                .filter(item -> item.getSupplier().getId().equals(query))
-                .collect(Collectors.toList());
-        displayFilteredItems(filteredItems);
+        StringBuilder scannerValue = new StringBuilder();
+
+        while (true) {
+            scannerValue.setLength(0);
+            System.out.print("Supplier ID         :");
+            if (scanner.hasNext()) {
+                scannerValue.append(scanner.next());
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                    return;
+                }
+                if (!DbMethods.isValidCode("SUP",scannerValue.toString())){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+                List<Item> filteredItems = items.stream()
+                        .filter(item -> item.getSupplier().getId().contentEquals(scannerValue))
+                        .collect(Collectors.toList());
+                displayFilteredItems(filteredItems);
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
     }
 
     // Filter by ItemCategory ID
     private void filterByItemCategoryID() {
-        System.out.print("Enter item category ID: ");
-        String query = scanner.nextLine();
-        List<Item> filteredItems = items.stream()
-                .filter(item -> item.getItemCategory().getId().equals(query))
-                .collect(Collectors.toList());
-        displayFilteredItems(filteredItems);
+        StringBuilder scannerValue = new StringBuilder();
+
+        while (true) {
+            scannerValue.setLength(0);
+            System.out.print("ItemCategory ID         :");
+            if (scanner.hasNext()) {
+                scannerValue.append(scanner.next());
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){
+                    return;
+                }
+                if (!DbMethods.isValidCode("CAT",scannerValue.toString())){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
+                }
+                List<Item> filteredItems = items.stream()
+                        .filter(item -> item.getItemCategory().getId().contentEquals(scannerValue))
+                        .collect(Collectors.toList());
+                displayFilteredItems(filteredItems);
+                break;
+            } else{
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                scanner.nextLine();
+            }
+        }
     }
 
     // Display the filtered items
