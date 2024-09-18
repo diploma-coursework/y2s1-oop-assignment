@@ -41,25 +41,25 @@ public class SupplierMenu extends BaseMenu {
 
         while (!confirmed) {
             // Name
-            System.out.println("Supplier Name       : ");
+            System.out.print("Supplier Name       : ");
             supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
 
             // Contact number
-            System.out.println("Contact Number      : ");
+            System.out.print("Contact Number      : ");
             supplier.setContactNumber(scanner.nextLine());
 
             // Email
-            System.out.println("Email               : ");
+            System.out.print("Email               : ");
             supplier.setEmail(scanner.nextLine());
             // Validation Check
 
             // Address
-            System.out.println("Address             : ");
+            System.out.print("Address             : ");
             supplier.setAddress(scanner.nextLine());
 
             // Ask for confirmation,
             // TODO: if confirm skip,else run clear and loop (maybe done???)
-            System.out.print("Confirm to add supplier? (Y/N): ");
+            System.out.print("\nConfirm to add supplier? (Y/N): ");
             char confirmation = Character.toUpperCase(scanner.nextLine().charAt(0));
 
             if (confirmation == 'Y')
@@ -73,7 +73,7 @@ public class SupplierMenu extends BaseMenu {
 
         supplier.setId(DbMethods.dbCreateNewId("Supplier","SUP0",4));
         supplier.setContractStartDate(LocalDate.now());
-
+        supplier.setContractEndDate(supplier.getContractStartDate().plusYears(2));
 
 //        Supplier supplier = new Supplier( name, contactNumber, email, address, contractStartDate);
         // add to database
