@@ -8,8 +8,6 @@ import org.assignment.util.validationCheck;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.fusesource.jansi.Ansi.ansi;
-
 public class SupplierMenu extends BaseMenu {
     private final HashMap<String, Option> supplierMenuOptions = new HashMap<>();
 
@@ -95,7 +93,7 @@ public class SupplierMenu extends BaseMenu {
             yn = Character.toUpperCase(scanner.nextLine().charAt(0));
 
             if (yn == 'Y') {
-                searchSupplier().deleteFromDb();
+                supplier.deleteFromDb();
                 System.out.println("\nSuccessfully delete supplier.");
             }
             else if (yn == 'N') {
