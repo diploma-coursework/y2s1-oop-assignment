@@ -382,15 +382,14 @@ public class StaffMenu extends BaseMenu {
                                 =====================================
                                 1.  Name
                                 2.  Gender
-                                3.  Position
-                                4.  Contact Number
-                                5.  Email
-                                6.  Address
-                                7.  Salary
-                                8.  Password
+                                3.  Contact Number
+                                4.  Email
+                                5.  Address
+                                6.  Salary
+                                7.  Password
                                 =====================================
                                 """);
-            System.out.print("\nChoice (1-8): ");
+            System.out.print("\nChoice (1-7): ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume the newline character (prevent index out of bounds error)
 
@@ -424,15 +423,13 @@ public class StaffMenu extends BaseMenu {
                     }
                     break;
                 case 3:
-                    int positionNumber;
-                    StaffPosition.printPosition();
                     while (true) {
-                        System.out.print(ansi().fgRgb(8552916).a("Enter the number corresponding to the position: "));
-                        positionNumber = scanner.nextInt();
+                        System.out.print(ansi().fgRgb(8552916).a("Enter new password: "));
+                        String newPassword = scanner.nextLine();
                         newline();
                         try {
-                            updateResult = staff.setPosition(StaffPosition.fromNumber(positionNumber), true);
-                            break; // Exit loop if position is valid
+                            updateResult = staff.setPassword(newPassword, true, false);
+                            break;
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -502,19 +499,21 @@ public class StaffMenu extends BaseMenu {
                         }
                     }
                     break;
-                case 8:
-                    while (true) {
-                        System.out.print(ansi().fgRgb(8552916).a("Enter new password: "));
-                        String newPassword = scanner.nextLine();
-                        newline();
-                        try {
-                            updateResult = staff.setPassword(newPassword, true, false);
-                            break;
-                        } catch (IllegalArgumentException e) {
-                            System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
-                        }
+                /*case 8:
+                int positionNumber;
+                StaffPosition.printPosition();
+                while (true) {
+                    System.out.print(ansi().fgRgb(8552916).a("Enter the number corresponding to the position: "));
+                    positionNumber = scanner.nextInt();
+                    newline();
+                    try {
+                        updateResult = staff.setPosition(StaffPosition.fromNumber(positionNumber), true);
+                        break; // Exit loop if position is valid
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                     }
-                    break;
+                }
+                break;*/
                 default:
                     System.out.println(ansi().bgBrightRed().a("Invalid choice.").reset());
                     return;
