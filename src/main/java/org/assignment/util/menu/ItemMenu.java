@@ -516,7 +516,11 @@ public class ItemMenu extends BaseMenu {
         System.out.print("Enter item name: ");
         String query = scanner.nextLine().trim();
 
-        List<Item> filteredItems = items.stream().filter(item -> item.getName().toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
+        if (query.isEmpty()) {System.out.print(ansi().cursorUp(1).eraseLine());};
+
+        List<Item> filteredItems = items.stream()
+                .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
 
         displayFilteredItems(filteredItems);
     }
@@ -709,12 +713,16 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             scannerValue.setLength(0);
             System.out.print("Supplier ID         :");
-            if (scanner.hasNext()) {
-                scannerValue.append(scanner.next());
-                if (acceptExitAction(scannerValue.toString()).isEmpty()){
-                    return;
+            if (scanner.hasNextLine()) {
+                scannerValue.append(scanner.nextLine().trim());
+                if (scannerValue.isEmpty()){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
                 }
-                if (!DbMethods.isValidCode("SUP",scannerValue.toString())){
+
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
+
+                if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -723,10 +731,7 @@ public class ItemMenu extends BaseMenu {
                         .collect(Collectors.toList());
                 displayFilteredItems(filteredItems);
                 break;
-            } else{
-                System.out.print(ansi().cursorUp(1).eraseLine());
-                scanner.nextLine();
-            }
+            } else{System.out.print(ansi().cursorUp(1).eraseLine());}
         }
     }
 
@@ -737,12 +742,17 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             scannerValue.setLength(0);
             System.out.print("ItemCategory ID         :");
-            if (scanner.hasNext()) {
-                scannerValue.append(scanner.next());
-                if (acceptExitAction(scannerValue.toString()).isEmpty()){
-                    return;
+            if (scanner.hasNextLine()) {
+                scannerValue.append(scanner.nextLine().trim());
+
+                if (scannerValue.isEmpty()){
+                    System.out.print(ansi().cursorUp(1).eraseLine());
+                    continue;
                 }
-                if (!DbMethods.isValidCode("CAT",scannerValue.toString())){
+
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
+
+                if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
