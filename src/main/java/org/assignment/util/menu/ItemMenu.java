@@ -6,18 +6,13 @@ import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.validationCheck;
-import org.checkerframework.checker.units.qual.A;
-import org.fusesource.jansi.Ansi;
-
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.google.api.client.util.FieldInfo.setFieldValue;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ItemMenu extends BaseMenu {
-    private List<Item> items = Item.getAllItem(); // FIXME: testing
+    private static final List<Item> items = Item.getAllItem(); // FIXME: testing
     private static final Scanner scanner = new Scanner(System.in);
     private static final HashMap<String, Option> menuOptions = new HashMap<>()
             , modifyOptions = new HashMap<>(), queryOptions = new HashMap<>()
@@ -67,6 +62,7 @@ public class ItemMenu extends BaseMenu {
         }
     }
 
+    // Menu
     private void menuUnitPrice(){
         clearScreen();
         displayOptions(queryOptionsUnitPrice);
@@ -89,6 +85,7 @@ public class ItemMenu extends BaseMenu {
         }
     }
 
+    // CRUD
     private void addItem() {
         clearScreen();
         Item item = new Item();
@@ -149,8 +146,7 @@ public class ItemMenu extends BaseMenu {
             System.out.print("Item Quantity       :");
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
-
-                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -175,10 +171,8 @@ public class ItemMenu extends BaseMenu {
             System.out.print("Supplier ID         :");
             if (scanner.hasNext()) {
                 scannerValue.append(scanner.next());
-                if (acceptExitAction(scannerValue.toString()).isEmpty()){
-                    return;
-                }
-                if (!DbMethods.isValidCode("SUP",scannerValue.toString())){
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
+                if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -197,10 +191,8 @@ public class ItemMenu extends BaseMenu {
             System.out.print("ItemCategory ID     :");
             if (scanner.hasNext()) {
                 scannerValue.append(scanner.next());
-                if (acceptExitAction(scannerValue.toString()).isEmpty()){
-                    return;
-                }
-                if (!DbMethods.isValidCode("CAT",scannerValue.toString())){
+                if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
+                if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -213,32 +205,6 @@ public class ItemMenu extends BaseMenu {
         }
 
         // Confirmation Section:
-        clearScreen();
-        System.out.println(item);
-        System.out.print("To Confirm Adding [Enter 1] else [Enter 0]: ");
-        while (true) {
-            if (scanner.hasNextInt()) {
-                int i = scanner.nextInt();
-                if (i != 1 && i != 0) {
-                    System.out.println("Invalid input. Please enter 1 to confirm, or 0 to cancel.");
-                    System.out.print("> ");
-                    continue; // No need to clear the screen again
-                }
-                if (i == 0) {
-                    System.out.println("Action Terminated..");
-                    pause();
-                    clearScreen();
-                    break;
-                }
-                item.addToDb();
-                pause();
-                clearScreen();
-                break;
-            } else {
-                System.out.println("Invalid input. Please enter a valid number.");
-                scanner.nextLine(); // Clear the invalid input
-            }
-        }
         while (true) {
             scannerValue.setLength(0);
             clearScreen();
@@ -316,32 +282,29 @@ public class ItemMenu extends BaseMenu {
                  System.out.println(i + ") " + removeList.get(i-1).getId());
              }
 
-             System.out.println("Enter the Indexes to remove from List, Enter 0 to Confirm, Enter -1 to Exit"); // TODO: print below cursor
+             System.out.println("Enter the Indexes to remove from List, Enter 0 to Confirm, Enter -1 to Exit");
              System.out.print("> ");
              // ----
              String input = scanner.nextLine().trim();
 
-             // Check if input is empty or contains only whitespace
              if (input.isEmpty()) {
-                 // Clear the current line and reprint the prompt
                  System.out.print(ansi().cursorUp(1).eraseLine());
                  System.out.print("> ");
                  continue;
              }
-             if (acceptExitAction(input).isEmpty())return;
+             if (acceptExitAction(input).isEmpty()) return;
 
-             // Check if input is a valid integer using a regular expression
-             if (input.matches("-?\\d+")) {
+             if (input.matches("-1|\\d+")) {
                  option = Integer.parseInt(input);
 
                  if (option > 0 && option <= removeList.size()) {
                      removeList.remove(option - 1);
                  } else if (option == 0) {
-                     // Confirm and delete all remaining items in the list
+
                      for (Item item : removeList) {
                          item.deleteFromDb();
                      }
-                     // Clear the list if you want to remove all items
+
                      removeList.clear();
                  } else if (option == -1) {
                      break;
@@ -350,7 +313,7 @@ public class ItemMenu extends BaseMenu {
                      System.out.print("> ");
                  }
              } else {
-                 // Handle invalid input (not a number)
+
                  System.out.print(ansi().cursorUp(1).eraseLine());
                  System.out.print("> ");
              }
@@ -396,19 +359,24 @@ public class ItemMenu extends BaseMenu {
             if (selectedOption == modifyOptions.get("0")) return;
 
             // "1" for edit name
+            boolean updateSuccess = true;
             if (selectedOption == modifyOptions.get("1")) { // TODO: When invalidName, it doesnt go back to starting position
                 String newName = "";
                 System.out.print("Enter new Name: ");
 
-                if (newName.compareToIgnoreCase("exit") == 0) {return;}
-
                 while (newName.isEmpty() || !validationCheck.isValidName(newName) || newName.equals(item.getName())) {
                     newName = scanner.nextLine().trim();
-                    if (newName.isEmpty()) System.out.print(ansi().cursorUp(1).eraseLine());
+                    if (newName.isEmpty() || !validationCheck.isValidName(newName) || newName.equals(item.getName())) {
+                        System.out.print(ansi().cursorUp(1).eraseLine());
+                        System.out.print("Enter new Name: ");
+                    }
                 }
 
+                if (newName.compareToIgnoreCase("exit") == 0) {return;}
+
                 System.out.println("\nAre you sure about the change? (y / n)");
-                if (getYesNoOption()) item.setName(newName, true);
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = item.setName(newName, true);
             } else if (selectedOption == modifyOptions.get("2")) { //
 
                 while (true) {
@@ -438,16 +406,16 @@ public class ItemMenu extends BaseMenu {
                 }
 
                 System.out.println("\nAre you sure about the change? (y / n)");
-                if (getYesNoOption()) item.setUnitPrice(Double.parseDouble(scannerValue.toString()), true);
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = item.setUnitPrice(Double.parseDouble(scannerValue.toString()), true);
             } else if (selectedOption == modifyOptions.get("3")) {
-
                 while (true) {
                     scannerValue.setLength(0);
                     System.out.print("Enter new Quantity: ");
                     if (scanner.hasNextLine()){
                         scannerValue.append(scanner.nextLine().trim());
 
-                        if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                        if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -467,7 +435,8 @@ public class ItemMenu extends BaseMenu {
                 }
 
                 System.out.println("\nAre you sure about the change? (y / n)");
-                if (getYesNoOption()) item.setQuantity(Integer.parseInt(scannerValue.toString()), true);
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = item.setQuantity(Integer.parseInt(scannerValue.toString()), true);
             } else if (selectedOption == modifyOptions.get("4")){
                 while (true) {
                     scannerValue.setLength(0);
@@ -477,7 +446,7 @@ public class ItemMenu extends BaseMenu {
                         if (acceptExitAction(scannerValue.toString()).isEmpty()){
                             return;
                         }
-                        if (!DbMethods.isValidCode("SUP",scannerValue.toString())){
+                        if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -491,7 +460,8 @@ public class ItemMenu extends BaseMenu {
                 }
 
                 System.out.println("\nAre you sure about the change? (y / n)");
-                if (getYesNoOption()) item.setSupplier(Supplier.getFromDb(scannerValue.toString()), true);
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = item.setSupplier(Supplier.getFromDb(scannerValue.toString()), true);
             } else {
                 while (true) {
                     scannerValue.setLength(0);
@@ -501,7 +471,7 @@ public class ItemMenu extends BaseMenu {
                         if (acceptExitAction(scannerValue.toString()).isEmpty()){
                             return;
                         }
-                        if (!DbMethods.isValidCode("CAT",scannerValue.toString())){
+                        if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -514,7 +484,13 @@ public class ItemMenu extends BaseMenu {
                 }
 
                 System.out.println("\nAre you sure about the change? (y / n)");
-                if (getYesNoOption()) item.setItemCategory(ItemCategory.getFromDb(scannerValue.toString()), true);
+                boolean updateConfirmation = getYesNoOption();
+                if (updateConfirmation) updateSuccess = item.setItemCategory(ItemCategory.getFromDb(scannerValue.toString()), true);
+            }
+
+            if (!updateSuccess) {
+                System.out.println(ansi().fgRed().a("Something went wrong when updating, please try again later..."));
+                pause();
             }
 
             clearScreen();
@@ -526,7 +502,7 @@ public class ItemMenu extends BaseMenu {
     private void viewItems() {
         clearScreen();
         List<Item> itemList = Item.getAllItem();
-        if (itemList == null) System.out.println("No item category is present.");
+        if (itemList == null) System.out.println("No item is present.");
         else {
             for (Item item : itemList) {
                 System.out.println(item);
@@ -583,7 +559,7 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             price.setLength(0);
             System.out.print("Enter Starting Range     :");
-            // FIXME: NaN would be valid
+
             if (scanner.hasNextLine()){
                 price.append(scanner.nextLine().trim());
 
@@ -647,7 +623,7 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
 
-                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -678,7 +654,7 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
 
-                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -703,7 +679,7 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
 
-                if (scannerValue.isEmpty() || !scannerValue.toString().matches("\\d+")) {
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }

@@ -1,10 +1,10 @@
 package org.assignment.util.base;
 
 public abstract class BaseItem {
-    protected String id;
-    protected String name;
-    protected double unitPrice;
-    protected int quantity;
+    private String id;
+    private String name;
+    private double unitPrice;
+    private int quantity;
 
     public BaseItem() {
         this("", 0.0, 0);

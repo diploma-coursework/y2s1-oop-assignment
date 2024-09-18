@@ -29,19 +29,19 @@ public class Item extends BaseItem implements DatabaseOperations {
 
     // setters
     public boolean setName(String name, boolean updateToDb) {
-        this.name = name;
+        setName(name);
         if (updateToDb) return this.updateToDb("name");
         return false;
     }
 
     public boolean setUnitPrice(double unitPrice, boolean updateToDb) {
-        this.unitPrice = unitPrice;
+        setUnitPrice(unitPrice);
         if (updateToDb) return this.updateToDb("unitPrice");
         return false;
     }
 
     public boolean setQuantity(int quantity, boolean updateToDb) {
-        this.quantity = quantity;
+        setQuantity(quantity);
         if (updateToDb) return this.updateToDb("quantity");
         return false;
     }
@@ -71,9 +71,9 @@ public class Item extends BaseItem implements DatabaseOperations {
     public boolean addToDb() {
         try {
             HashMap<String, Object> docValues = new HashMap<>();
-            docValues.put("name", this.name);
-            docValues.put("unitPrice", this.unitPrice);
-            docValues.put("quantity", this.quantity);
+            docValues.put("name", getName());
+            docValues.put("unitPrice", getUnitPrice());
+            docValues.put("quantity", getQuantity());
             docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
             docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
@@ -116,23 +116,38 @@ public class Item extends BaseItem implements DatabaseOperations {
         }
     }
 
+    // TODO: i commented in case this is the one not to use
+//    public boolean updateToDb(String fieldName) {
+//        try {
+//            Field field = this.getClass().getDeclaredField(fieldName);
+//            field.setAccessible(true);
+//
+//            if (fieldName.equals("itemCategory")) {
+//                String docRefId = ((ItemCategory) field.get(this)).getId();
+//                DocumentReference docRef = ItemCategory.getItemCategoryCollection().document(docRefId);
+//                itemCollection.document(getId()).update(fieldName, docRef);
+//            } else if (fieldName.equals("supplier")) {
+//                String docRefId = ((Supplier) field.get(this)).getId();
+//                DocumentReference docRef = Supplier.getSupplierCollection().document(docRefId);
+//                itemCollection.document(getId()).update(fieldName, docRef);
+//            } else {
+//                itemCollection.document(getId()).update(fieldName, field.get(this)).get();
+//            }
+//
+//            return true;
+//        } catch (Exception e) {
+//            System.out.println("AWUGAWUGA");
+//            System.err.println(e.getMessage());
+//            return false;
+//        }
+//    }
+
     public boolean updateToDb(String fieldName) {
         try {
             Field field = this.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            if (fieldName.equals("itemCategory")) {
-                String docRefId = ((ItemCategory) field.get(this)).getId();
-                DocumentReference docRef = ItemCategory.getItemCategoryCollection().document(docRefId);
-                itemCollection.document(this.id).update(fieldName, docRef);
-            } else if (fieldName.equals("supplier")) {
-                String docRefId = ((Supplier) field.get(this)).getId();
-                DocumentReference docRef = Supplier.getSupplierCollection().document(docRefId);
-                itemCollection.document(this.id).update(fieldName, docRef);
-            } else {
-                itemCollection.document(this.id).update(fieldName, field.get(this)).get();
-            }
-
+            itemCollection.document(getId()).update(fieldName, field.get(this)).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -142,8 +157,8 @@ public class Item extends BaseItem implements DatabaseOperations {
 
     public boolean deleteFromDb() {
         try {
-            itemCollection.document(this.id).delete().get();
-            FirebaseConnection.deleteCachedDocument(itemCollection, itemCollection.document(this.id));
+            itemCollection.document(getId()).delete().get();
+            FirebaseConnection.deleteCachedDocument(itemCollection, itemCollection.document(getId()));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -169,10 +184,12 @@ public class Item extends BaseItem implements DatabaseOperations {
 
     @Override
     public String toString(){
+        String idPlaceHolder;
+        if (getId() == null) idPlaceHolder = ansi().fgYellow().a("[Unassigned]").reset().toString(); else idPlaceHolder = ansi().fgYellow().a(getId()).reset().toString();
 
-        return "----------------------" + "-".repeat(getId().length()) + "\n" +
-                "ITEM ID            : " + ansi().fgYellow().a(getId()).reset().toString() + "\n" +
-                "ITEM name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
+        return "-------------------------------------------" + "\n" +
+                "ITEM ID            : " + idPlaceHolder + "\n" +
+                "ITEM Name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
                 "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(getUnitPrice()) + "\n" +
                 "ITEM Quantity      : " + ansi().fgBrightMagenta().a(getQuantity()).reset() + "\n\n" +
                 "ITEM Supplier Info\n" + getSupplier() + "\n\n" +
