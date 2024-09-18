@@ -58,7 +58,6 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            timedPause(300);
             clearScreen();
 
             Staff staff = new Staff();
@@ -240,7 +239,6 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            timedPause(300);
             clearScreen();
 
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Delete a Staff Record\n=======================\n").reset());
@@ -296,7 +294,6 @@ public class StaffMenu extends BaseMenu {
 
     private void viewStaff() {
         try {
-            timedPause(300);
             clearScreen();
 
             System.out.println(ansi().fgBrightGreen().a("View All Staff Records\n=======================\n").reset());
@@ -361,7 +358,6 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            timedPause(300);
             clearScreen();
 
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a("Modify staff document\n=====================\n").reset());
@@ -537,7 +533,6 @@ public class StaffMenu extends BaseMenu {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            timedPause(300);
             clearScreen();
 
             System.out.println(ansi().fgBrightGreen().a("Staff Login\n=============").reset());
@@ -602,5 +597,9 @@ public class StaffMenu extends BaseMenu {
             System.out.println("No staff is currently logged in. Please log in first.");
             pause();
         }
+    }
+
+    private void newline() {
+        System.out.println();
     }
 }

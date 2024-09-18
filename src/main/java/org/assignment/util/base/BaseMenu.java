@@ -12,7 +12,7 @@ public abstract class BaseMenu {
 
     public void start() {};
 
-    protected static synchronized void displayOptions(HashMap<String, Option> options) {
+    protected static void displayOptions(HashMap<String, Option> options) {
         options.forEach((optionIdentifier, option) -> {
             if (optionIdentifier.equals("0")) return;
             System.out.printf("%s - %s\n", optionIdentifier, option.description);
@@ -20,7 +20,7 @@ public abstract class BaseMenu {
         if (options.containsKey("0")) System.out.printf("0 - %s\n", options.get("0").description);
     }
 
-    protected static synchronized Option getUserOptions(HashMap<String, Option> options) {
+    protected static Option getUserOptions(HashMap<String, Option> options) {
         while (true) {
             System.out.print("> ");
             final String enterValue = scanner.nextLine();
@@ -59,19 +59,7 @@ public abstract class BaseMenu {
         scanner.nextLine();
     }
 
-    protected static void timedPause(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    public void newline() {
-        System.out.println();
-    }
-
-    public static<T> Optional<T> acceptExitAction(T result){
+    protected static<T> Optional<T> acceptExitAction(T result){
         if (result instanceof String && result.toString().equalsIgnoreCase("exit")){
             return Optional.empty();
         }
