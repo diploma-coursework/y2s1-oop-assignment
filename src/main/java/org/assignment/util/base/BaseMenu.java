@@ -8,7 +8,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public abstract class BaseMenu {
     protected static final Scanner scanner = new Scanner(System.in);
     protected boolean exitFlag;
-    protected boolean exitAction;
+    protected boolean subMenuExitAction;
 
     public void start() {};
 

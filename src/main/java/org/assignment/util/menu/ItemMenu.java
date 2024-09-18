@@ -76,8 +76,8 @@ public class ItemMenu extends BaseMenu {
     }
 
     private void menuFilter(){
-        exitAction = false;
-        while (!exitAction){
+        subMenuExitAction = false;
+        while (!subMenuExitAction){
             clearScreen();
             displayOptions(queryOptions);
             getUserOptions(queryOptions);
@@ -773,5 +773,6 @@ public class ItemMenu extends BaseMenu {
 
     private void quit() {exitFlag = true;}
 
-    private void quitSearch() {exitAction = true;}
+    private void quitSearch() {
+        subMenuExitAction = true;}
 }
