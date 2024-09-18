@@ -124,6 +124,7 @@ public class Supplier extends Person implements DatabaseOperations {
         try {
             Field field = this.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
+
             supplierCollection.document(this.id).update(fieldName, field.get(this)).get();
             return true;
         } catch (Exception e) {

@@ -102,6 +102,8 @@ public class SupplierMenu extends BaseMenu {
             else
             System.out.println("\nInvalid input. Y/N only.\n");
         } while (yn != 'Y');
+
+        pause();
     }
 
     public void listSupplier() {
@@ -127,15 +129,16 @@ public class SupplierMenu extends BaseMenu {
             System.out.println(" 3 | Email");
             System.out.println(" 4 | Address");
 
-            System.out.println("Select 1 - 5 to edit: ");
+            System.out.println("Select 1 - 4 to edit: ");
             int selection = scanner.nextInt();
+            scanner.nextLine();
 
             boolean updateResult;
 
             switch (selection) {
                 case 1:
                     System.out.println("\nSupplier Name: " + supplier.getName());
-                    System.out.println("Enter new name: ");
+                    System.out.print("Enter new name: ");
 
                     String newName = scanner.nextLine();
 
@@ -180,6 +183,8 @@ public class SupplierMenu extends BaseMenu {
                 System.out.println("Update failed.");
         }
         // select data field to edit (except id and contract infos)
+
+        pause();
     }
 
     public Supplier searchSupplier() {
@@ -196,7 +201,6 @@ public class SupplierMenu extends BaseMenu {
             return Supplier.getFromDb(id);
         }
 
-        System.out.println("Returning to the menu...");
         return null;
     }
 
@@ -217,6 +221,7 @@ public class SupplierMenu extends BaseMenu {
 
                 if (yn == 'Y') {
                     supplier.extendContract();
+                    // TODO: Figure out how to update date in contract
                     System.out.println("\nContract successfully renewed.\n");
                 }
                 else if (yn != 'N') {
@@ -231,6 +236,8 @@ public class SupplierMenu extends BaseMenu {
             System.out.println("\nContract expired. Unable to renew contract.\n");
         else if (ableToRenew == -1)
             System.out.println(("\nNot within renew period. Unable to renew contract.\n"));
+
+        pause();
     }
 
     public void returnToMenu() {
