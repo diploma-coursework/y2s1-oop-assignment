@@ -3,6 +3,7 @@ package org.assignment.util.extended;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
@@ -13,10 +14,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Supplier extends Person implements DatabaseOperations {
     protected LocalDate contractStartDate;
@@ -242,6 +240,23 @@ public class Supplier extends Person implements DatabaseOperations {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+
+    public static List<Supplier> getAllItem() {
+        try {
+            List<QueryDocumentSnapshot> documents = Supplier.supplierCollection.get().get().getDocuments();
+
+            List<Supplier> suppliers = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : documents) {
+                suppliers.add(Supplier.getFromDb(doc.getId()));
+            }
+
+            return suppliers;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
         }
     }
 }

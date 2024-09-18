@@ -2,6 +2,7 @@ package org.assignment.util.menu;
 
 import org.assignment.util.DbMethods;
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.extended.Item;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.validationCheck;
 
@@ -91,8 +92,15 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void listSupplier() {
-        // get all supplier info from database
-        // list out all suppliers
+        clearScreen();
+        List<Supplier> supplierList = Supplier.getAllItem();
+        if (supplierList == null) System.out.println("No item is present.");
+        else {
+            for (Supplier supplier : supplierList) {
+                System.out.println(supplier.toString() + "\n");
+            }
+        }
+        pause();
     }
 
     public void editSupplier() {
