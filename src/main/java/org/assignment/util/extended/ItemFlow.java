@@ -1,37 +1,41 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import org.assignment.util.DbMethods;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ItemFlow implements DatabaseOperations {
+    private LocalDateTime updateTimeId;
     private Supplier supplier;
     private Item item;
     private int delta;
-    private LocalDate updateTime;
-    private static final CollectionReference itemFlowCategory = FirebaseConnection.getDb().collection("ItemFlow");
+    private static final DateTimeFormatter updateTimeIdFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final CollectionReference itemFlowCollection = FirebaseConnection.getDb().collection("ItemFlow");
 
     public ItemFlow() {
-        this(null, null, 0, LocalDate.now());
+        this(LocalDateTime.now(), null, null, 0);
     }
 
-    public ItemFlow(Supplier supplier, Item item, int delta, LocalDate updateTime) {
+    public ItemFlow(LocalDateTime updateTimeId, Supplier supplier, Item item, int delta) {
+        this.updateTimeId = updateTimeId;
         this.supplier = supplier;
         this.item = item;
         this.delta = delta;
-        this.updateTime = updateTime;
     }
 
     // setters
+    public void setUpdateTimeId(LocalDateTime updateTimeId) { this.updateTimeId = updateTimeId; }
+
     public void setSupplier(Supplier supplier) { this.supplier = supplier; }
 
     public boolean setSupplier(Supplier supplier, boolean updateToDb) {
@@ -56,30 +60,24 @@ public class ItemFlow implements DatabaseOperations {
         return false;
     }
 
-    public void setUpdateTime(LocalDate updateTime) { this.updateTime = updateTime; }
-
-    public boolean setUpdateTime(LocalDate updateTime, boolean updateToDb) {
-        this.updateTime = updateTime;
-        if (updateToDb) return this.updateToDb("updateTime");
-        return false;
-    }
-
     // getters
-    public Supplier getSupplier(){ return this.supplier;}
+    public LocalDateTime getUpdateTimeId() { return this.updateTimeId;}
+    public String getUpdateTimeIdAsString() { return this.updateTimeId.format(updateTimeIdFormatter); }
+    public Supplier getSupplier(){ return this.supplier; }
     public Item getItem() { return this.item; }
-    public int getDelta() { return this.delta;}
-    public LocalDate getUpdateTime() { return this.updateTime;}
-    public static CollectionReference getItemFlowCategory() { return ItemFlow.itemFlowCategory; }
+    public int getDelta() { return this.delta; }
+    public static CollectionReference getItemFlowCollection() { return ItemFlow.itemFlowCollection; }
 
     // database operations implementation
     public boolean addToDb() {
         try {
             HashMap<String, Object> docValues = new HashMap<>();
-            docValues.put("name", this.name);
-            docValues.put("description", this.description);
+            docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
+            docValues.put("item", Item.getItemCollection().document(this.item.getId()));
+            docValues.put("delta", this.delta);
 
-            this.id = DbMethods.dbCreateNewId("ItemCategory","CAT",4);
-            itemCategoryCollection.document(this.id).set(docValues).get();
+            this.updateTimeId = LocalDateTime.now();
+            itemFlowCollection.document(this.getUpdateTimeIdAsString()).set(docValues).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -87,27 +85,28 @@ public class ItemFlow implements DatabaseOperations {
         }
     }
 
-    public static ItemCategory getFromDb(String id) {
+    public static ItemFlow getFromDb(String id) {
         try {
             // get from cache if available
-            ItemCategory cachedItemCategoryObject = (ItemCategory) FirebaseConnection.getCachedDocument(itemCategoryCollection, itemCategoryCollection.document(id));
-            if (cachedItemCategoryObject != null) return cachedItemCategoryObject;
+            ItemFlow cachedItemFlowObject = (ItemFlow) FirebaseConnection.getCachedDocument(itemFlowCollection, itemFlowCollection.document(id));
+            if (cachedItemFlowObject != null) return cachedItemFlowObject;
 
             // fetch from db
-            DocumentSnapshot doc = itemCategoryCollection.document(id).get().get();
+            DocumentSnapshot doc = itemFlowCollection.document(id).get().get();
             if (!doc.exists()) return null;
             Map<String, Object> docData = doc.getData();
             if (docData == null) return null;
 
             // create new instance and assign values
-            ItemCategory fetchedItemCategory = new ItemCategory();
-            fetchedItemCategory.setId(doc.getId());
-            fetchedItemCategory.setName(Optional.ofNullable(docData.get("name")).orElse("").toString());
-            fetchedItemCategory.setDescription(Optional.ofNullable(docData.get("description")).orElse("").toString());
+            ItemFlow fetchedItemFlow = new ItemFlow();
+            fetchedItemFlow.setUpdateTimeId(LocalDateTime.parse(doc.getId(), ItemFlow.updateTimeIdFormatter));
+            fetchedItemFlow.setSupplier(Supplier.getFromDb(((DocumentReference)docData.get("supplier")).getId()));
+            fetchedItemFlow.setItem(Item.getFromDb(((DocumentReference)docData.get("item")).getId()));
+            fetchedItemFlow.setDelta(Integer.parseInt(Optional.ofNullable(docData.get("delta")).orElse(0).toString()));
 
             // cache and return
-            FirebaseConnection.cacheNewDocument(itemCategoryCollection, itemCategoryCollection.document(id), fetchedItemCategory);
-            return fetchedItemCategory;
+            FirebaseConnection.cacheNewDocument(itemFlowCollection, itemFlowCollection.document(id), fetchedItemFlow);
+            return fetchedItemFlow;
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
@@ -119,7 +118,7 @@ public class ItemFlow implements DatabaseOperations {
             Field field = this.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            itemCategoryCollection.document(this.id).update(fieldName, field.get(this)).get();
+            itemFlowCollection.document(this.getUpdateTimeIdAsString()).update(fieldName, field.get(this)).get();
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -129,8 +128,8 @@ public class ItemFlow implements DatabaseOperations {
 
     public boolean deleteFromDb() {
         try {
-            itemCategoryCollection.document(this.id).delete().get();
-            FirebaseConnection.deleteCachedDocument(itemCategoryCollection, itemCategoryCollection.document(this.id));
+            itemFlowCollection.document(this.getUpdateTimeIdAsString()).delete().get();
+            FirebaseConnection.deleteCachedDocument(itemFlowCollection, itemFlowCollection.document(this.getUpdateTimeIdAsString()));
             return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -138,44 +137,30 @@ public class ItemFlow implements DatabaseOperations {
         }
     }
 
-    public static List<ItemCategory> getAllItemCategory() {
-        try {
-            List<QueryDocumentSnapshot> documents = ItemCategory.itemCategoryCollection.get().get().getDocuments();
 
-            List<ItemCategory> itemCategories = new ArrayList<>();
-            for (QueryDocumentSnapshot doc : documents) {
-                itemCategories.add(ItemCategory.getFromDb(doc.getId()));
-            }
-
-            return itemCategories;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
-
-    public String toString() {
-        StringBuilder returnString = new StringBuilder();
-
-        returnString
-                .append("Id         : ").append(ansi().fgYellow().a(this.getId()).reset().toString()).append("\n")
-                .append("Name       : ").append(ansi().fgBlue().a(this.getName()).reset().toString()).append("\n")
-                .append("Description: ").append(ansi().fgBrightMagenta());
-
-        // do text wrap for description with alignment
-        String[] tokenizedDescription = this.getDescription().split(" ");
-        int currentLineLength = 0;
-
-        for (String word : tokenizedDescription) {
-            if (currentLineLength > 50) {
-                returnString.append("\n             ");
-                currentLineLength = 0;
-            }
-
-            returnString.append(word).append(" ");
-            currentLineLength += word.length() + 1 ;
-        }
-        returnString.append(ansi().reset()).append("\n");
-        return returnString.toString();
-    }
+    // TODO
+//    public String toString() {
+//        StringBuilder returnString = new StringBuilder();
+//
+//        returnString
+//                .append("Id         : ").append(ansi().fgYellow().a(this.getId()).reset().toString()).append("\n")
+//                .append("Name       : ").append(ansi().fgBlue().a(this.getName()).reset().toString()).append("\n")
+//                .append("Description: ").append(ansi().fgBrightMagenta());
+//
+//        // do text wrap for description with alignment
+//        String[] tokenizedDescription = this.getDescription().split(" ");
+//        int currentLineLength = 0;
+//
+//        for (String word : tokenizedDescription) {
+//            if (currentLineLength > 50) {
+//                returnString.append("\n             ");
+//                currentLineLength = 0;
+//            }
+//
+//            returnString.append(word).append(" ");
+//            currentLineLength += word.length() + 1 ;
+//        }
+//        returnString.append(ansi().reset()).append("\n");
+//        return returnString.toString();
+//    }
 }
