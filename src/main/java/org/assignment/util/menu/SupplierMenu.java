@@ -188,22 +188,16 @@ public class SupplierMenu extends BaseMenu {
         Supplier supplier = new Supplier();
         String id = " ";
 
-        do {
-            System.out.println("Please enter the ID of the supplier: ");
-            System.out.print("(Key in XXX to cancel action): ");
-            id = (scanner.nextLine()).toUpperCase();
+        System.out.println("Please enter the ID of the supplier: ");
+        System.out.print("(Key in XXX to cancel action): ");
+        id = (scanner.nextLine()).toUpperCase();
 
-            if (!id.equals("XXX")) {
-                supplier = Supplier.getFromDb(id);
-            }
-        } while (!id.equals("XXX"));
-
-        if (id.equals("XXX")) {
-            System.out.println("Returning to the menu...");
-            return null;
+        if (!id.equals("XXX")) {
+            return Supplier.getFromDb(id);
         }
-        else
-            return supplier;
+
+        System.out.println("Returning to the menu...");
+        return null;
     }
 
     public void renewSupplierContract() {
