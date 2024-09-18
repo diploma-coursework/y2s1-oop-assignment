@@ -137,8 +137,24 @@ public class ItemFlow implements DatabaseOperations {
         }
     }
 
+    public static List<ItemFlow> getAllItemFlow() {
+        try {
+            List<QueryDocumentSnapshot> documents = ItemFlow.itemFlowCollection.get().get().getDocuments();
 
-    // TODO
+            List<ItemFlow> itemFlows = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : documents) {
+                itemFlows.add(ItemFlow.getFromDb(doc.getId()));
+            }
+
+            return itemFlows;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+    // TODO: someone do this pls im lazy
 //    public String toString() {
 //        StringBuilder returnString = new StringBuilder();
 //
