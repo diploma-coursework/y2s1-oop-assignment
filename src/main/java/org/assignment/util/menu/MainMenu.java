@@ -50,8 +50,8 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //TODO: check the password hashing methods for ADM0000, STF0002
-    // password: pop12345@, joelwong123#
+    //TODO: Id: ADM0000
+    //      password: pop12345@
     private void staffLogin() {
         clearScreen();
 
@@ -68,9 +68,6 @@ public class MainMenu extends BaseMenu {
 
         if (loginStaff != null) {
             String storedHashedPassword = loginStaff.getPassword();
-
-            // Print for debugging purposes
-            System.out.println("Stored hashed password: " + storedHashedPassword);
 
             if (BCrypt.checkpw(inputPassword, storedHashedPassword)) {
                 new StaffMenu(loginStaff).start();
