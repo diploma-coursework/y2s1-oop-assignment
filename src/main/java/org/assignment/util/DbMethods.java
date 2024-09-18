@@ -1,21 +1,12 @@
 package org.assignment.util;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
-import org.assignment.util.extended.Item;
-import org.assignment.util.extended.ItemCategory;
-import org.assignment.util.extended.Supplier;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class DbMethods {
     public static Firestore db = FirebaseConnection.getDb();

@@ -27,16 +27,23 @@ public class StaffMenu extends BaseMenu {
         StaffMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
         StaffMenuOptions.put("2", new Option("Delete staff document", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
         StaffMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
+
         StaffMenuOptions.put("4", new Option("Display List of staffs", () -> restrictedAction(this::viewStaff, AccessLevel.MANAGER)));
         StaffMenuOptions.put("5", new Option("Search staff document", () -> restrictedAction(this::searchStaff, AccessLevel.MANAGER)));
+
+        StaffMenuOptions.put("6", new Option("Item category Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
+        StaffMenuOptions.put("7", new Option("Item Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
+        StaffMenuOptions.put("8", new Option("Supplier Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
+
         StaffMenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitStaffMenu));
+
         exitFlag = false;
     }
 
     @Override
     public void start() {
 
-        String staffMenuGreet = "Welcome to Staff Menu " + loggedInStaff.getName() + "!\n==============================";
+        String staffMenuGreet = "Welcome to Staff Menu " + loggedInStaff.getName() + "!\n=================================";
 
         while (!exitFlag) {
             clearScreen();
@@ -297,14 +304,39 @@ public class StaffMenu extends BaseMenu {
             // Retrieve all staff records from the database
             List<Staff> allStaff = Staff.getAllStaffInfo();
 
-            if (allStaff.isEmpty()) {
+            int totalStaffCount = allStaff.size();
+            int staffCount = 0;
+            int managerCount = 0;
+            int adminCount = 0;
+
+            for (Staff staff : allStaff) {
+                switch (staff.getPosition().getAccessLevel()) {
+                    case STAFF:
+                        staffCount++;
+                        break;
+                    case MANAGER:
+                        managerCount++;
+                        break;
+                    case ADMIN:
+                        adminCount++;
+                        break;
+                }
+            }
+
+            // Display counts
+            System.out.println(ansi().fgRgb(8552916).a("Total number of staff records: " + totalStaffCount).reset());
+            System.out.println(ansi().fgRgb(8552916).a("Number of Staff: " + staffCount).reset());
+            System.out.println(ansi().fgRgb(8552916).a("Number of Managers: " + managerCount).reset());
+            System.out.println(ansi().fgRgb(8552916).a("Number of Admins: " + adminCount).reset());
+
+            if (totalStaffCount == 0) {
                 System.out.println(ansi().bgBrightRed().a("No staff records found in the database.").reset());
                 return;
             }
 
             // Print details of each staff member
             for (Staff staff : allStaff) {
-                System.out.println(ansi().fgRgb(8552916).a("==========================================\n"));
+                System.out.println(ansi().fgRgb(8552916).a("\n=========================================="));
                 System.out.println("Staff ID: " + staff.getId());
                 System.out.println("Name: " + staff.getName());
                 System.out.println("Gender: " + staff.getGender());

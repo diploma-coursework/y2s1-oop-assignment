@@ -1,9 +1,9 @@
 package org.assignment.util.enums;
 
-
 public enum StaffPosition {
     INVENTORY_CLERK(AccessLevel.STAFF),         // STF
     STOCK_CONTROLLER(AccessLevel.STAFF),        // STF
+    SUPPLIER(AccessLevel.STAFF),                // STF
     WAREHOUSE_MANAGER(AccessLevel.MANAGER),     // MNG
     INVENTORY_SUPERVISOR(AccessLevel.MANAGER),  // MNG
     ADMIN(AccessLevel.ADMIN);                   // ADM
@@ -29,9 +29,10 @@ public enum StaffPosition {
         System.out.println("========================================");
         System.out.println("0) INVENTORY_CLERK\n" +
                            "1) STOCK_CONTROLLER\n" +
-                           "2) WAREHOUSE_MANAGER   \n" +
-                           "3) INVENTORY_SUPERVISOR \n" +
-                           "4) ADMIN");
+                           "2) SUPPLIER   \n" +
+                           "3) WAREHOUSE_MANAGER   \n" +
+                           "4) INVENTORY_SUPERVISOR \n" +
+                           "5) ADMIN");
         System.out.println("========================================");
     }
 
@@ -42,5 +43,4 @@ public enum StaffPosition {
             throw new IllegalArgumentException("Invalid position number.");
         }
     }
-    
 }

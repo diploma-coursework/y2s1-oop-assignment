@@ -94,7 +94,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public boolean setPassword(String password, boolean updateToDb, boolean signup) {
         try {
             String validatedPassword = validationCheck.checkPassword(password);
@@ -119,7 +118,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public boolean setName(String name, boolean updateToDb) {
         try{
             String formattedName = validationCheck.checkAndFormatName(name);
@@ -137,7 +135,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public boolean setContactNumber(String contactNumber, boolean updateToDb) {
         try {
             validationCheck.checkContactNumber(contactNumber);
@@ -151,7 +148,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public boolean setEmail(String email, boolean updateToDb) {
         try {
             validationCheck.checkEmail(email);
@@ -165,7 +161,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public boolean setAddress(String address, boolean updateToDb) {
         try {
             validationCheck.checkAddress(address);
@@ -180,7 +175,7 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    //I don't know what am I doing, but
+    //overloaded methods gg
     public void setPassword(String password) {
         setPassword(password, false, false); // Default values for `updateToDb` and `isSignup`
     }
@@ -195,7 +190,6 @@ public class Staff extends Person implements DatabaseOperations {
     public void setSalary(double salary) {
         setSalary(salary, false);
     }
-
 
     // getters
     public String getGender() { return this.gender; }
