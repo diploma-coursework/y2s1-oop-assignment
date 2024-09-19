@@ -1,6 +1,6 @@
 package org.assignment.util.menu;
 
-import org.assignment.util.DbMethods;
+import org.assignment.util.IdUtils;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
@@ -172,7 +172,7 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNext()) {
                 scannerValue.append(scanner.next());
                 if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
-                if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
+                if (!IdUtils.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -192,7 +192,7 @@ public class ItemMenu extends BaseMenu {
             if (scanner.hasNext()) {
                 scannerValue.append(scanner.next());
                 if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
-                if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
+                if (!IdUtils.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -254,7 +254,7 @@ public class ItemMenu extends BaseMenu {
                     exitForLoop = true;
                     break;
                 }
-                if (DbMethods.isValidCode("ITEM",word) && Item.getFromDb(word)!= null){
+                if (IdUtils.isValidCode("ITEM",word) && Item.getFromDb(word)!= null){
                     containCorrectSequence =true;
                     if (!removeList.contains(Item.getFromDb(word))){
                         removeList.add(Item.getFromDb(word));
@@ -338,7 +338,7 @@ public class ItemMenu extends BaseMenu {
                 if (scannerValue.isEmpty()){System.out.print(ansi().cursorUp(1).eraseLine());}
 
                 item = Item.getFromDb(scannerValue.toString());
-                if (DbMethods.isValidCode("ITEM", scannerValue.toString()) && Item.getFromDb(scannerValue.toString()) != null) {break;}
+                if (IdUtils.isValidCode("ITEM", scannerValue.toString()) && Item.getFromDb(scannerValue.toString()) != null) {break;}
 
                 System.out.print(ansi().cursorUp(1).eraseLine());
                 System.out.print("> ");
@@ -446,7 +446,7 @@ public class ItemMenu extends BaseMenu {
                         if (acceptExitAction(scannerValue.toString()).isEmpty()){
                             return;
                         }
-                        if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
+                        if (!IdUtils.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -471,7 +471,7 @@ public class ItemMenu extends BaseMenu {
                         if (acceptExitAction(scannerValue.toString()).isEmpty()){
                             return;
                         }
-                        if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
+                        if (!IdUtils.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -722,7 +722,7 @@ public class ItemMenu extends BaseMenu {
 
                 if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
 
-                if (!DbMethods.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
+                if (!IdUtils.isValidCode("SUP",scannerValue.toString()) || Supplier.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -752,7 +752,7 @@ public class ItemMenu extends BaseMenu {
 
                 if (acceptExitAction(scannerValue.toString()).isEmpty()){return;}
 
-                if (!DbMethods.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
+                if (!IdUtils.isValidCode("CAT",scannerValue.toString()) || ItemCategory.getFromDb(scannerValue.toString()) == null){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -773,6 +773,5 @@ public class ItemMenu extends BaseMenu {
 
     private void quit() {exitFlag = true;}
 
-    private void quitSearch() {
-        subMenuExitAction = true;}
+    private void quitSearch() {subMenuExitAction = true;}
 }

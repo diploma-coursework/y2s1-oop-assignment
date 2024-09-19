@@ -1,10 +1,9 @@
 package org.assignment.util.extended;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import org.assignment.util.DbMethods;
+import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
@@ -13,7 +12,6 @@ import org.assignment.util.validationCheck;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.*;
 
 public class Supplier extends Person implements DatabaseOperations {
@@ -71,7 +69,7 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("contractStartDate", getContractStartDate().toString());
             docValues.put("contractEndDate", getContractEndDate().toString());
 
-            this.id = DbMethods.dbCreateNewId("Supplier","SUP",4);
+            this.id = IdUtils.dbCreateNewId("Supplier","SUP",4);
             supplierCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {

@@ -8,7 +8,7 @@ import com.google.cloud.firestore.WriteResult;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DbMethods {
+public class IdUtils {
     public static Firestore db = FirebaseConnection.getDb();
 
     // No. of Item

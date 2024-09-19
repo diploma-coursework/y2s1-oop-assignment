@@ -1,6 +1,6 @@
 package org.assignment.util.menu;
 
-import org.assignment.util.DbMethods;
+import org.assignment.util.IdUtils;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.validationCheck;
@@ -71,7 +71,7 @@ public class SupplierMenu extends BaseMenu {
             }
         }
 
-        supplier.setId(DbMethods.dbCreateNewId("Supplier","SUP0",4));
+        supplier.setId(IdUtils.dbCreateNewId("Supplier","SUP0",4));
         supplier.setContractStartDate(LocalDate.now());
         supplier.setContractEndDate(supplier.getContractStartDate().plusYears(2));
 
