@@ -32,11 +32,13 @@ public class StaffMenu extends BaseMenu {
         MenuOptions.put("2", new Option("Manager menu", this::managerMenu));
         MenuOptions.put("3", new Option("Staff relevant menu", this::staffRelevantMenu));
         MenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitMenu));
+        MenuOptions.put("4", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
+        MenuOptions.put("5", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
 
         //admin functionality
-        AdminMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
+        //AdminMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
         AdminMenuOptions.put("2", new Option("Delete staff document", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
-        AdminMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
+        //AdminMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
         AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
 
         //Manager or a supervisor statistical view of employee
@@ -242,7 +244,7 @@ public class StaffMenu extends BaseMenu {
             staff.setDateJoined(LocalDate.now()); // Set the date joined to the current date
 
             while (true) {
-                System.out.print(ansi().bgBrightGreen().a("\nTo Confirm Adding (Enter 1) else (Enter 0): ").reset());
+                System.out.print(ansi().bgBrightGreen().a("To Confirm Adding (Enter 1) else (Enter 0): ").reset());
                 int i = scanner.nextInt();
 
                 if (i == 1) {
@@ -477,7 +479,7 @@ public class StaffMenu extends BaseMenu {
                             if (newPosition == null) {
                                 throw new IllegalArgumentException("Invalid position number.");
                             }
-                            updateResult = staff.updatePositionAndId(newPosition);
+                            updateResult = staff.setPosition(newPosition, true);
                             break;
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
@@ -564,24 +566,9 @@ public class StaffMenu extends BaseMenu {
 
             for (Staff staff : allStaff) {
                 switch (staff.getPosition()) {
-                    case INVENTORY_CLERK:
-                        staffCount++;
-                        break;
-                    case STOCK_CONTROLLER:
-                        staffCount++;
-                        break;
-                    case SUPPLIER:
-                        adminCount++;
-                        break;
-                    case WAREHOUSE_MANAGER:
-                        managerCount++;
-                        break;
-                    case INVENTORY_SUPERVISOR:
-                        managerCount++;
-                        break;
-                    case ADMIN:
-                        adminCount++;
-                        break;
+                    case INVENTORY_CLERK, STOCK_CONTROLLER, SUPPLIER -> staffCount++;
+                    case WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR -> managerCount++;
+                    case ADMIN -> adminCount++;
                 }
             }
 

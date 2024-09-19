@@ -232,12 +232,7 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("password", getPassword());
 
             String prefix = switch (getPosition()) {
-                case INVENTORY_CLERK -> "INC";
-                case STOCK_CONTROLLER -> "STC";
-                case SUPPLIER -> "SPR";
-                case WAREHOUSE_MANAGER -> "WHM";
-                case INVENTORY_SUPERVISOR -> "IVS";
-                case ADMIN -> "ADM";
+                case INVENTORY_CLERK, STOCK_CONTROLLER, SUPPLIER, WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR, ADMIN -> "STF";
             };
 
             this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
@@ -352,6 +347,8 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
+    //Test the unique id
+    /*
     public boolean updatePositionAndId(StaffPosition newPosition) {
         try {
             // Generate new ID based on the new position
@@ -394,7 +391,7 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
+    */
     @Override
     public String toString(){
         return "Staff ID: " + getId()
