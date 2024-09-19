@@ -221,7 +221,7 @@ public class SupplierMenu extends BaseMenu {
 
                 if (yn == 'Y') {
                     supplier.extendContract();
-                    // TODO: Figure out how to update date in contract
+                    supplier.setContractEndDate(supplier.getContractEndDate(), true);
                     System.out.println("\nContract successfully renewed.\n");
                 }
                 else if (yn != 'N') {

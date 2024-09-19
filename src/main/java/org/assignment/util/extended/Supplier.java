@@ -244,6 +244,24 @@ public class Supplier extends Person implements DatabaseOperations {
         }
     }
 
+    public boolean setContractEndDate(LocalDate contractEndDate, boolean updateToDb) {
+        try {
+            // Set the contract end date
+            this.contractEndDate = contractEndDate;
+
+            // If updating to the database
+            if (updateToDb) {
+                // Convert LocalDate to string before updating to database
+                String contractEndDateStr = this.contractEndDate.toString();
+                supplierCollection.document(this.id).update("contractEndDate", contractEndDateStr).get();
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
 
     public static List<Supplier> getAllItem() {
         try {
