@@ -3,19 +3,20 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.Timestamp;
+
 import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.ValidationCheck;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.Timestamp;
-import java.time.ZoneId;
 import org.mindrot.jbcrypt.BCrypt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.ZoneId;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.HashMap;

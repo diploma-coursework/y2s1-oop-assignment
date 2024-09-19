@@ -28,31 +28,31 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        MenuOptions.put("1", new Option("Admin Menu", this::adminMenu));
-        MenuOptions.put("2", new Option("Manager menu", this::managerMenu));
-        MenuOptions.put("3", new Option("Staff relevant menu", this::staffRelevantMenu));
-        MenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitMenu));
+        MenuOptions.put("1", new Option("Admin Menu", this::AdminMenu));
+        MenuOptions.put("2", new Option("Manager menu", this::ManagerMenu));
+        MenuOptions.put("3", new Option("Staff relevant menu", this::StaffRelevantMenu));
+        MenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::QuitMenu));
 
         //admin functionality
-        AdminMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
-        AdminMenuOptions.put("2", new Option("Delete staff document", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
-        AdminMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
-        AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
+        AdminMenuOptions.put("1", new Option("Signup staff", () -> RestrictedAction(this::SignUpStaff, AccessLevel.ADMIN)));
+        AdminMenuOptions.put("2", new Option("Delete staff document", () -> RestrictedAction(this::DeleteStaff, AccessLevel.ADMIN)));
+        AdminMenuOptions.put("3", new Option("Modify staff document", () -> RestrictedAction(this::ModifyStaff, AccessLevel.ADMIN)));
+        AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Manager or a supervisor statistical view of employee
-        ManagerMenuOption.put("4", new Option("View staffs", () -> restrictedAction(this::viewStaff, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("5", new Option("Search staff document", () -> restrictedAction(this::searchStaff, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("6", new Option("view Employee salary distribution", () -> restrictedAction(this::viewSalaryDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("7", new Option("View Employee genders distribution", () -> restrictedAction(this::viewGenderDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("8", new Option("View Employee position distribution", () -> restrictedAction(this::viewPositionDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("9", new Option("View Tenure analysis", () -> restrictedAction(this::viewTenureAnalysis, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
+        ManagerMenuOption.put("4", new Option("View staffs", () -> RestrictedAction(this::ViewStaff, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("5", new Option("Search staff document", () -> RestrictedAction(this::SearchStaff, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("6", new Option("view Employee salary distribution", () -> RestrictedAction(this::ViewSalaryDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("7", new Option("View Employee genders distribution", () -> RestrictedAction(this::ViewGenderDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("8", new Option("View Employee position distribution", () -> RestrictedAction(this::ViewPositionDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("9", new Option("View Tenure analysis", () -> RestrictedAction(this::ViewTenureAnalysis, AccessLevel.MANAGER)));
+        ManagerMenuOption.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Staff or employee functionality
-        StaffMenuOptions.put("1", new Option("Item category Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
-        StaffMenuOptions.put("2", new Option("Item Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
-        StaffMenuOptions.put("3", new Option("Supplier Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
-        StaffMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
+        StaffMenuOptions.put("1", new Option("Item category Menu", () -> RestrictedAction(this::ItemCategoryMenu, AccessLevel.STAFF)));
+        StaffMenuOptions.put("2", new Option("Item Menu", () -> RestrictedAction(this::ItemMenu, AccessLevel.STAFF)));
+        StaffMenuOptions.put("3", new Option("Supplier Menu", () -> RestrictedAction(this::SupplierMenu, AccessLevel.STAFF)));
+        StaffMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         exitFlag = false;
     }
@@ -70,7 +70,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void adminMenu(){
+    private void AdminMenu(){
         subMenuExitAction = false;
         String adminMenuGreet = "Welcome to Admin Menu " + loggedInStaff.getName() + "!\n=================================";
         while (!subMenuExitAction) {
@@ -81,7 +81,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void managerMenu(){
+    private void ManagerMenu(){
         subMenuExitAction = false;
         String managerMenuGreet = "Welcome to Manager and Supervisor Menu " + loggedInStaff.getName() + "!\n=================================";
         while (!subMenuExitAction) {
@@ -92,7 +92,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void staffRelevantMenu(){
+    private void StaffRelevantMenu(){
         subMenuExitAction = false;
         String staffMenuGreet = "Welcome to Manager and Supervisor Menu " + loggedInStaff.getName() + "!\n=================================";
             while (!subMenuExitAction) {
@@ -103,7 +103,22 @@ public class StaffMenu extends BaseMenu {
             }
     }
 
-    private void signUpStaff() {
+    private void ItemMenu() {
+        ItemMenu itemMenu = new ItemMenu(); // Create an instance of ItemMenu
+        itemMenu.start(); // Call its start method to display the item menu
+    }
+
+    private void ItemCategoryMenu() {
+        ItemCategoryMenu itemCategoryMenu = new ItemCategoryMenu();
+        itemCategoryMenu.start();
+    }
+
+    private void SupplierMenu() {
+        SupplierMenu suppliermenu = new SupplierMenu();
+        suppliermenu.start();
+    }
+
+    private void SignUpStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -272,7 +287,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void deleteStaff() {
+    private void DeleteStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -330,7 +345,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void modifyStaff() {
+    private void ModifyStaff() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -502,7 +517,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    public void searchStaff() {
+    public void SearchStaff() {
         Scanner scanner = new Scanner(System.in);
 
         try {
@@ -548,7 +563,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void viewStaff() {
+    private void ViewStaff() {
         try {
             clearScreen();
 
@@ -571,12 +586,13 @@ public class StaffMenu extends BaseMenu {
             }
 
             // Display counts
-            System.out.println("==================================================");
-            System.out.println(ansi().fgRgb(8552916).a("Total number of staff records: " + totalStaffCount).reset());
-            System.out.println(ansi().fgRgb(8552916).a("Number of Staff: " + staffCount).reset());
-            System.out.println(ansi().fgRgb(8552916).a("Number of Managers: " + managerCount).reset());
-            System.out.println(ansi().fgRgb(8552916).a("Number of Admins: " + adminCount).reset());
+            System.out.println(ansi().fgRgb(8552916).a("=================================================="));
+            System.out.println("Total number of staff records: " + totalStaffCount);
+            System.out.println("Number of Staff: " + staffCount);
+            System.out.println("Number of Managers: " + managerCount);
+            System.out.println("Number of Admins: " + adminCount);
             System.out.println("===================================================");
+            System.out.println(ansi().reset());
 
             if (totalStaffCount == 0) {
                 System.out.println(ansi().bgBrightRed().a("No staff records found in the database.").reset());
@@ -605,7 +621,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void viewSalaryDistribution() {
+    private void ViewSalaryDistribution() {
         try {
             clearScreen();
 
@@ -632,9 +648,11 @@ public class StaffMenu extends BaseMenu {
             double averageSalary = totalSalary / allStaff.size();
 
             // Display salary distribution
-            System.out.println(ansi().fgRgb(8552916).a("Average Salary: RM" + String.format("%.2f", averageSalary)).reset());
-            System.out.println(ansi().fgRgb(8552916).a("Minimum Salary: RM" + String.format("%.2f", minSalary)).reset());
-            System.out.println(ansi().fgRgb(8552916).a("Maximum Salary: RM" + String.format("%.2f", maxSalary)).reset());
+            System.out.println(ansi().fgRgb(8552916).a("Total Salary: RM" + String.format("%.2f", totalSalary)));
+            System.out.println("Average Salary: RM" + String.format("%.2f", averageSalary));
+            System.out.println("Minimum Salary: RM" + String.format("%.2f", minSalary));
+            System.out.println("Maximum Salary: RM" + String.format("%.2f", maxSalary));
+            System.out.println(ansi().reset());
 
             // Define salary ranges
             int[] ranges = {0, 5000, 10000, 15000, 20000, 50000};
@@ -664,7 +682,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void viewGenderDistribution() {
+    private void ViewGenderDistribution() {
         try {
             clearScreen();
 
@@ -692,11 +710,11 @@ public class StaffMenu extends BaseMenu {
             double malePercentage = ((double) maleCount / totalStaffCount) * 100;
             double femalePercentage = ((double) femaleCount / totalStaffCount) * 100;
 
-            System.out.println(ansi().fgRgb(8552916).a("\n===================="));
+            System.out.println(ansi().fgRgb(8552916).a("\n========================"));
             System.out.println("Total number of employee: " + totalStaffCount);
             System.out.println("Male: " + maleCount + " (" + String.format("%.2f", malePercentage) + "%)");
             System.out.println("Female: " + femaleCount + " (" + String.format("%.2f", femalePercentage) + "%)");
-            System.out.println("====================\n");
+            System.out.println("========================\n");
             System.out.println(ansi().reset());
             pause();
 
@@ -705,7 +723,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void viewPositionDistribution() {
+    private void ViewPositionDistribution() {
         try {
             clearScreen();
 
@@ -725,12 +743,13 @@ public class StaffMenu extends BaseMenu {
                 positionCounts.put(position, positionCounts.getOrDefault(position, 0) + 1);
             }
 
-            System.out.println("\n=====================");
-            System.out.println(ansi().fgRgb(8552916).a("Position Distribution:").reset());
+            System.out.println(ansi().fgRgb(8552916).a("\n=========================="));
+            System.out.println("Position Distribution:");
             for (Map.Entry<StaffPosition, Integer> entry : positionCounts.entrySet()) {
-                System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()).reset());
+                System.out.println(entry.getKey() + ": " + entry.getValue());
             }
-            System.out.println("=====================\n");
+            System.out.println("==========================\n");
+            System.out.println(ansi().reset());
 
             pause();
 
@@ -739,7 +758,7 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void viewTenureAnalysis() {
+    private void ViewTenureAnalysis() {
         try {
             clearScreen();
 
@@ -774,12 +793,13 @@ public class StaffMenu extends BaseMenu {
                 }
             }
 
-            System.out.println("\n=====================");
-            System.out.println(ansi().fgRgb(8552916).a("Tenure Distribution:").reset());
+            System.out.println(ansi().fgRgb(8552916).a("\n====================="));
+            System.out.println("Tenure Distribution of Staffs/Employees:");
             for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
                 System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()).reset());
             }
             System.out.println("=====================\n");
+            System.out.println(ansi().reset());
 
             pause();
 
@@ -788,17 +808,17 @@ public class StaffMenu extends BaseMenu {
         }
     }
 
-    private void quitMenu() {
+    private void QuitMenu() {
         System.out.println("\nSee you again " + loggedInStaff.getName() +"! >:)");
         pause();
         exitFlag = true;
     }
 
-    private void exit() {
+    private void Exit() {
         subMenuExitAction = true;
     }
 
-    private void restrictedAction(Runnable action, AccessLevel requiredAccessLevel) {
+    private void RestrictedAction(Runnable action, AccessLevel requiredAccessLevel) {
         if (loggedInStaff != null) {
             // Check if the logged-in staff's access level is equal to or higher than the required access level
             if (loggedInStaff.getPosition().getAccessLevel().ordinal() >= requiredAccessLevel.ordinal()) {
