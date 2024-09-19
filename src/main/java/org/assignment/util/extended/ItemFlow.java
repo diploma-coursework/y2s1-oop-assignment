@@ -153,30 +153,12 @@ public class ItemFlow implements DatabaseOperations {
         }
     }
 
+    @Override
+    public String toString() {
 
-    // TODO: someone do this pls im lazy
-//    public String toString() {
-//        StringBuilder returnString = new StringBuilder();
-//
-//        returnString
-//                .append("Id         : ").append(ansi().fgYellow().a(this.getId()).reset().toString()).append("\n")
-//                .append("Name       : ").append(ansi().fgBlue().a(this.getName()).reset().toString()).append("\n")
-//                .append("Description: ").append(ansi().fgBrightMagenta());
-//
-//        // do text wrap for description with alignment
-//        String[] tokenizedDescription = this.getDescription().split(" ");
-//        int currentLineLength = 0;
-//
-//        for (String word : tokenizedDescription) {
-//            if (currentLineLength > 50) {
-//                returnString.append("\n             ");
-//                currentLineLength = 0;
-//            }
-//
-//            returnString.append(word).append(" ");
-//            currentLineLength += word.length() + 1 ;
-//        }
-//        returnString.append(ansi().reset()).append("\n");
-//        return returnString.toString();
-//    }
+        return "Update Time : " + ansi().fgYellow().a(getUpdateTimeId()).reset().toString() + "\n" +
+                "Supplier ID     : " + ansi().fgBlue().a(getSupplier().getId()).toString() + "\n" +
+                "Item ID         : " + ansi().a(getItem().getId()).reset().toString() + "\n" +
+                "delta           : " + ansi().fgBrightMagenta().a(getDelta());
+    }
 }
