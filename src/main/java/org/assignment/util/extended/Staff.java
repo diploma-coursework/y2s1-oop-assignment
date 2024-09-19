@@ -178,7 +178,7 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    //overloaded methods gg
+    //overloaded setter methods gg
     public void setPassword(String password) {
         setPassword(password, false, false); // Default values for `updateToDb` and `isSignup`
     }

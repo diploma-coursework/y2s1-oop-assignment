@@ -20,7 +20,7 @@ public class StaffMenu extends BaseMenu {
     private final Staff loggedInStaff;
     private final HashMap<String, BaseMenu.Option> MenuOptions = new HashMap<>(),
             AdminMenuOptions = new HashMap<>(),
-            ManagerMenuOption = new HashMap<>(),
+            ManagerMenuOptions = new HashMap<>(),
             StaffMenuOptions = new HashMap<>();
 
     public StaffMenu(Staff loggedInStaff) {
@@ -28,9 +28,9 @@ public class StaffMenu extends BaseMenu {
         this.loggedInStaff = loggedInStaff;
 
         // Initialize menu options using createOption
-        MenuOptions.put("1", new Option("Admin Menu", this::AdminMenu));
-        MenuOptions.put("2", new Option("Manager menu", this::ManagerMenu));
-        MenuOptions.put("3", new Option("Staff relevant menu", this::StaffRelevantMenu));
+        MenuOptions.put("1", new Option("Admin Menu", () -> RestrictedAction(this::AdminMenu, AccessLevel.ADMIN)));
+        MenuOptions.put("2", new Option("Manager menu", () -> RestrictedAction(this::ManagerMenu, AccessLevel.MANAGER)));
+        MenuOptions.put("3", new Option("Staff relevant menu", () -> RestrictedAction(this::StaffRelevantMenu, AccessLevel.STAFF)));
         MenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::QuitMenu));
 
         //admin functionality
@@ -40,13 +40,13 @@ public class StaffMenu extends BaseMenu {
         AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Manager or a supervisor statistical view of employee
-        ManagerMenuOption.put("4", new Option("View staffs", () -> RestrictedAction(this::ViewStaff, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("5", new Option("Search staff document", () -> RestrictedAction(this::SearchStaff, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("6", new Option("view Employee salary distribution", () -> RestrictedAction(this::ViewSalaryDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("7", new Option("View Employee genders distribution", () -> RestrictedAction(this::ViewGenderDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("8", new Option("View Employee position distribution", () -> RestrictedAction(this::ViewPositionDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("9", new Option("View Tenure analysis", () -> RestrictedAction(this::ViewTenureAnalysis, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
+        ManagerMenuOptions.put("4", new Option("View staffs", () -> RestrictedAction(this::ViewStaff, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("5", new Option("Search staff document", () -> RestrictedAction(this::SearchStaff, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("6", new Option("view Employee salary distribution", () -> RestrictedAction(this::ViewSalaryDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("7", new Option("View Employee genders distribution", () -> RestrictedAction(this::ViewGenderDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("8", new Option("View Employee position distribution", () -> RestrictedAction(this::ViewPositionDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("9", new Option("View Tenure analysis", () -> RestrictedAction(this::ViewTenureAnalysis, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Staff or employee functionality
         StaffMenuOptions.put("1", new Option("Item category Menu", () -> RestrictedAction(this::ItemCategoryMenu, AccessLevel.STAFF)));
@@ -87,8 +87,8 @@ public class StaffMenu extends BaseMenu {
         while (!subMenuExitAction) {
             clearScreen();
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(managerMenuGreet).reset());
-            displayOptions(ManagerMenuOption);
-            getUserOptions(ManagerMenuOption);
+            displayOptions(ManagerMenuOptions);
+            getUserOptions(ManagerMenuOptions);
         }
     }
 
