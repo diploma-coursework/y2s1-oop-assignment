@@ -181,8 +181,6 @@ public class Staff extends Person implements DatabaseOperations {
     public void setPassword(String password) {
         setPassword(password, false, false); // Default values for `updateToDb` and `isSignup`
     }
-
-    // Overloaded methods
     public void setGender(String gender) {
         setGender(gender, false);
     }
@@ -199,7 +197,6 @@ public class Staff extends Person implements DatabaseOperations {
     public LocalDate getDateJoined() { return this.dateJoined; }
     public double getSalary() { return this.salary; }
     public String getPassword() { return this.password; }
-    //public static CollectionReference getStaffCollection() { return Staff.staffCollection; }
 
     // database operations implementation
     public boolean addToDb() {
@@ -347,51 +344,6 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
-    //Test the unique id
-    /*
-    public boolean updatePositionAndId(StaffPosition newPosition) {
-        try {
-            // Generate new ID based on the new position
-            String newPrefix = switch (newPosition) {
-                case INVENTORY_CLERK -> "INC";
-                case STOCK_CONTROLLER -> "STC";
-                case SUPPLIER -> "SPR";
-                case WAREHOUSE_MANAGER -> "WHM";
-                case INVENTORY_SUPERVISOR -> "INS";
-                case ADMIN -> "ADM";
-            };
-
-            String newId = IdUtils.dbCreateNewId("Staff", newPrefix, 4);
-
-            // Prepare new document data
-            HashMap<String, Object> updates = new HashMap<>();
-            updates.put("name", this.name);  // Add other fields if needed
-            updates.put("contactNumber", this.contactNumber);
-            updates.put("email", this.email);
-            updates.put("address", this.address);
-            updates.put("gender", this.gender);
-            updates.put("position", newPosition.toString());
-            updates.put("dateJoined", Timestamp.ofTimeSecondsAndNanos(this.dateJoined.atStartOfDay(ZoneId.systemDefault()).toEpochSecond(), 0));
-            updates.put("salary", this.salary);
-            updates.put("password", this.password);
-
-            // Delete old document
-            staffCollection.document(this.id).delete().get();
-
-            // Set new document with the new ID
-            staffCollection.document(newId).set(updates).get();
-
-            // Update staff object ID
-            this.id = newId;
-            this.position = newPosition;
-
-            return true;
-        } catch (Exception e) {
-            logger.error("Error updating position and ID: {}", e.getMessage(), e);
-            return false;
-        }
-    }
-    */
     @Override
     public String toString(){
         return "Staff ID: " + getId()

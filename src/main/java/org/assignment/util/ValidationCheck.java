@@ -3,10 +3,7 @@ package org.assignment.util;
 import java.time.LocalDate;
 import org.assignment.util.enums.StaffPosition;
 
-import static org.fusesource.jansi.Ansi.ansi;
-
-// Staff data field validations utility
-
+// data validations utility
 public class ValidationCheck {
 
     public static boolean isValidName(String name) {
