@@ -21,7 +21,7 @@ public class StaffMenu extends BaseMenu {
     private final HashMap<String, BaseMenu.Option> MenuOptions = new HashMap<>(),
             AdminMenuOptions = new HashMap<>(),
             ManagerMenuOption = new HashMap<>(),
-            StaffMenuOptions = new HashMap<>(),
+            StaffMenuOptions = new HashMap<>();
 
     public StaffMenu(Staff loggedInStaff) {
 
@@ -561,7 +561,6 @@ public class StaffMenu extends BaseMenu {
             int staffCount = 0;
             int managerCount = 0;
             int adminCount = 0;
-            double totalSalary = 0;
 
             for (Staff staff : allStaff) {
                 switch (staff.getPosition()) {
@@ -569,16 +568,16 @@ public class StaffMenu extends BaseMenu {
                         staffCount++;
                         break;
                     case STOCK_CONTROLLER:
-                        managerCount++;
+                        staffCount++;
                         break;
                     case SUPPLIER:
                         adminCount++;
                         break;
                     case WAREHOUSE_MANAGER:
-                        adminCount++;
+                        managerCount++;
                         break;
                     case INVENTORY_SUPERVISOR:
-                        adminCount++;
+                        managerCount++;
                         break;
                     case ADMIN:
                         adminCount++;
