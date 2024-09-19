@@ -116,7 +116,7 @@ public class ValidationCheck {
     }
 
     // Validate the salary
-    public static int checkSalary(int salary) {
+    public static double checkSalary(double salary) {
         if (salary < 0) {
             throw new IllegalArgumentException("Salary cannot be negative");
         }

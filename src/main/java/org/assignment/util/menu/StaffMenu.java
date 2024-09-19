@@ -200,13 +200,13 @@ public class StaffMenu extends BaseMenu {
 
                 try {
                     // Handle non-integer inputs
-                    if (!scanner.hasNextInt()) {
+                    if (!scanner.hasNextDouble()) {
                         System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a valid number.\n").reset());
                         scanner.next(); // Clear the invalid input
                         continue;
                     }
 
-                    int salary = scanner.nextInt();
+                    double salary = scanner.nextDouble();
 
                     // Validation check
                     try {
