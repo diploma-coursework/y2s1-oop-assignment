@@ -1,11 +1,11 @@
 package org.assignment.util.enums;
 
 public enum StaffPosition {
-    INVENTORY_CLERK(AccessLevel.STAFF),         // STF
-    STOCK_CONTROLLER(AccessLevel.STAFF),        // STF
-    SUPPLIER(AccessLevel.STAFF),                // STF
-    WAREHOUSE_MANAGER(AccessLevel.MANAGER),     // MNG
-    INVENTORY_SUPERVISOR(AccessLevel.MANAGER),  // MNG
+    INVENTORY_CLERK(AccessLevel.STAFF),         // INC
+    STOCK_CONTROLLER(AccessLevel.STAFF),        // STC
+    SUPPLIER(AccessLevel.STAFF),                // SPR
+    WAREHOUSE_MANAGER(AccessLevel.MANAGER),     // WHM
+    INVENTORY_SUPERVISOR(AccessLevel.MANAGER),  // INS
     ADMIN(AccessLevel.ADMIN);                   // ADM
 
     private final AccessLevel accessLevel;  // Changed to instance variable
@@ -26,7 +26,7 @@ public enum StaffPosition {
     }
 
     public static void printPosition() {
-        System.out.println("========================================");
+        System.out.println("\n========================================");
         System.out.println("0) INVENTORY_CLERK\n" +
                            "1) STOCK_CONTROLLER\n" +
                            "2) SUPPLIER   \n" +
