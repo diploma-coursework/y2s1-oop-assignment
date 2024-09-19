@@ -8,7 +8,7 @@ import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
 import org.assignment.util.enums.StaffPosition;
-import org.assignment.util.validationCheck;
+import org.assignment.util.ValidationCheck;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 import java.time.ZoneId;
@@ -53,7 +53,7 @@ public class Staff extends Person implements DatabaseOperations {
     // setters
     public boolean setGender(String gender, boolean updateToDb) {
         try {
-            this.gender = validationCheck.checkGender(gender.charAt(0));
+            this.gender = ValidationCheck.checkGender(gender.charAt(0));
             if (updateToDb) {
                 return this.updateToDb("gender");
             }
@@ -66,7 +66,7 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean setPosition(StaffPosition position, boolean updateToDb) {
         try {
             String positionName = position.name();
-            if (validationCheck.isValidPosition(positionName)) {
+            if (ValidationCheck.isValidPosition(positionName)) {
                 this.position = position;
                 if (updateToDb) {
                     return this.updateToDb("position");
@@ -81,12 +81,12 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
     public void setDateJoined(LocalDate dateJoined) {
-        validationCheck.checkDateJoined(dateJoined);
+        ValidationCheck.checkDateJoined(dateJoined);
         this.dateJoined = dateJoined;
     }
     public boolean setSalary(double salary, boolean updateToDb) {
         try {
-            this.salary = validationCheck.checkSalary((int) salary);
+            this.salary = ValidationCheck.checkSalary((int) salary);
             if (updateToDb) {
                 return this.updateToDb("salary");
             }
@@ -98,7 +98,7 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setPassword(String password, boolean updateToDb, boolean signup) {
         try {
-            String validatedPassword = validationCheck.checkPassword(password);
+            String validatedPassword = ValidationCheck.checkPassword(password);
 
             if (updateToDb) {
                 this.password = BCrypt.hashpw(validatedPassword, BCrypt.gensalt());
@@ -122,7 +122,7 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setName(String name, boolean updateToDb) {
         try{
-            String formattedName = validationCheck.checkAndFormatName(name);
+            String formattedName = ValidationCheck.checkAndFormatName(name);
             super.setName(formattedName);
 
             if (updateToDb) {
@@ -139,7 +139,7 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setContactNumber(String contactNumber, boolean updateToDb) {
         try {
-            validationCheck.checkContactNumber(contactNumber);
+            ValidationCheck.checkContactNumber(contactNumber);
             super.setContactNumber(contactNumber);
             if (updateToDb) {
                 return this.updateToDb("contactNumber");
@@ -152,7 +152,7 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setEmail(String email, boolean updateToDb) {
         try {
-            validationCheck.checkEmail(email);
+            ValidationCheck.checkEmail(email);
             super.setEmail(email);
             if (updateToDb) {
                 return this.updateToDb("email");
@@ -165,7 +165,7 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setAddress(String address, boolean updateToDb) {
         try {
-            validationCheck.checkAddress(address);
+            ValidationCheck.checkAddress(address);
             super.setAddress(address);
             if (updateToDb) {
                 return this.updateToDb("address");

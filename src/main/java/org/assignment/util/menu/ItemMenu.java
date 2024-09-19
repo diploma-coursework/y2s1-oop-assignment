@@ -5,7 +5,7 @@ import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.Supplier;
-import org.assignment.util.validationCheck;
+import org.assignment.util.ValidationCheck;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,7 +98,7 @@ public class ItemMenu extends BaseMenu {
             System.out.print("Item Name           :");
             if (scanner.hasNextLine()) {
                 scannerValue.append(scanner.nextLine().trim());
-                if (!validationCheck.isValidName(scannerValue.toString())){
+                if (!ValidationCheck.isValidName(scannerValue.toString())){
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
@@ -364,9 +364,9 @@ public class ItemMenu extends BaseMenu {
                 String newName = "";
                 System.out.print("Enter new Name: ");
 
-                while (newName.isEmpty() || !validationCheck.isValidName(newName) || newName.equals(item.getName())) {
+                while (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(item.getName())) {
                     newName = scanner.nextLine().trim();
-                    if (newName.isEmpty() || !validationCheck.isValidName(newName) || newName.equals(item.getName())) {
+                    if (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(item.getName())) {
                         System.out.print(ansi().cursorUp(1).eraseLine());
                         System.out.print("Enter new Name: ");
                     }

@@ -4,7 +4,7 @@ import org.assignment.util.base.BaseMenu;
 import org.assignment.util.enums.StaffPosition;
 import org.assignment.util.enums.AccessLevel;
 import org.assignment.util.extended.Staff;
-import org.assignment.util.validationCheck;
+import org.assignment.util.ValidationCheck;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -134,7 +134,7 @@ public class StaffMenu extends BaseMenu {
                 System.out.print(ansi().fgRgb(8552916).a("\nEnter Gender (M/F): "));
                 char gender = scanner.next().toUpperCase().charAt(0);
                 try {
-                    if (staff.setGender(validationCheck.checkGender(gender), false)) {
+                    if (staff.setGender(ValidationCheck.checkGender(gender), false)) {
                         break; // Exit loop if gender is valid
                     }
                 } catch (IllegalArgumentException e) {
@@ -387,7 +387,7 @@ public class StaffMenu extends BaseMenu {
                         System.out.print(ansi().fgRgb(8552916).a("\nEnter new gender (M/F): "));
                         char newGender = scanner.next().toUpperCase().charAt(0);
                         try {
-                            updateResult = staff.setGender(validationCheck.checkGender(newGender), true);
+                            updateResult = staff.setGender(ValidationCheck.checkGender(newGender), true);
                             break; // Exit loop if gender is valid
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());

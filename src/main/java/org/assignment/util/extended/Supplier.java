@@ -7,7 +7,7 @@ import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
-import org.assignment.util.validationCheck;
+import org.assignment.util.ValidationCheck;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -184,7 +184,7 @@ public class Supplier extends Person implements DatabaseOperations {
     // Update Data Fields (Setters)
     public boolean setName(String name, boolean updateToDb) {
         try{
-            String formattedName = validationCheck.checkAndFormatName(name);
+            String formattedName = ValidationCheck.checkAndFormatName(name);
             super.setName(formattedName);
 
             if (updateToDb) {
@@ -202,7 +202,7 @@ public class Supplier extends Person implements DatabaseOperations {
 
     public boolean setContactNumber(String contactNumber, boolean updateToDb) {
         try {
-            validationCheck.checkContactNumber(contactNumber);
+            ValidationCheck.checkContactNumber(contactNumber);
             super.setContactNumber(contactNumber);
             if (updateToDb) {
                 return this.updateToDb("contactNumber");
@@ -216,7 +216,7 @@ public class Supplier extends Person implements DatabaseOperations {
 
     public boolean setEmail(String email, boolean updateToDb) {
         try {
-            validationCheck.checkEmail(email);
+            ValidationCheck.checkEmail(email);
             super.setEmail(email);
             if (updateToDb) {
                 return this.updateToDb("email");
@@ -230,7 +230,7 @@ public class Supplier extends Person implements DatabaseOperations {
 
     public boolean setAddress(String address, boolean updateToDb) {
         try {
-            validationCheck.checkAddress(address);
+            ValidationCheck.checkAddress(address);
             super.setAddress(address);
             if (updateToDb) {
                 return this.updateToDb("address");

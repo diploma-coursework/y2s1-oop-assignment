@@ -3,7 +3,7 @@ package org.assignment.util.menu;
 import org.assignment.util.IdUtils;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
-import org.assignment.util.validationCheck;
+import org.assignment.util.ValidationCheck;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -42,7 +42,7 @@ public class SupplierMenu extends BaseMenu {
         while (!confirmed) {
             // Name
             System.out.print("Supplier Name       : ");
-            supplier.setName(validationCheck.checkAndFormatName(scanner.nextLine()));
+            supplier.setName(ValidationCheck.checkAndFormatName(scanner.nextLine()));
 
             // Contact number
             System.out.print("Contact Number      : ");

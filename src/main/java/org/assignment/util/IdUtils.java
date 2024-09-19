@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IdUtils {
-    public static Firestore db = FirebaseConnection.getDb();
+    public final static Firestore db = FirebaseConnection.getDb();
 
     // No. of Item
     private static int dbGetIdCount(String collection){

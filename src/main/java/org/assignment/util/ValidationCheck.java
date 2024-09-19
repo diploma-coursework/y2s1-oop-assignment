@@ -4,11 +4,10 @@ import java.time.LocalDate;
 import org.assignment.util.enums.StaffPosition;
 
 import static org.fusesource.jansi.Ansi.ansi;
-import org.fusesource.jansi.Ansi;
 
 // Staff data field validations utility
 
-public class validationCheck {
+public class ValidationCheck {
 
     public static boolean isValidName(String name) {
         if (name == null || name.trim().isEmpty()) {
