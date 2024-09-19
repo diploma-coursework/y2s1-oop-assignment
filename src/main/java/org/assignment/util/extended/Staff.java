@@ -27,11 +27,11 @@ import java.util.concurrent.ExecutionException;
 
 
 public class Staff extends Person implements DatabaseOperations {
-    protected String gender;
-    protected StaffPosition position;
-    protected LocalDate dateJoined;
-    protected double salary;
-    protected String password;
+    private String gender;
+    private StaffPosition position;
+    private LocalDate dateJoined;
+    private double salary;
+    private String password;
     private static final CollectionReference staffCollection = FirebaseConnection.getDb().collection("Staff");
     private static final Logger logger = LogManager.getLogger(Staff.class);
 
