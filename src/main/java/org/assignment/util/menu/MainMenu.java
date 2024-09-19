@@ -50,7 +50,7 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //TODO: Id: ADM0000
+    //TODO: Id: STF0001
     //      password: pop12345@
     private void staffLogin() {
         clearScreen();
