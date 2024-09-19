@@ -85,4 +85,5 @@ public class MainMenu extends BaseMenu {
         System.out.println("Thank you for using OOP Furniture Store Inventory System!");
         exitFlag = true;
     }
+
 }

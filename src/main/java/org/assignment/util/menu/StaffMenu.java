@@ -32,14 +32,12 @@ public class StaffMenu extends BaseMenu {
         MenuOptions.put("2", new Option("Manager menu", this::managerMenu));
         MenuOptions.put("3", new Option("Staff relevant menu", this::staffRelevantMenu));
         MenuOptions.put("0", new Option(ansi().fgRed().a("Quit").reset().toString(), this::quitMenu));
-        MenuOptions.put("4", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
-        MenuOptions.put("5", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
 
         //admin functionality
-        //AdminMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
+        AdminMenuOptions.put("1", new Option("Signup staff", () -> restrictedAction(this::signUpStaff, AccessLevel.ADMIN)));
         AdminMenuOptions.put("2", new Option("Delete staff document", () -> restrictedAction(this::deleteStaff, AccessLevel.ADMIN)));
-        //AdminMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
-        AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
+        AdminMenuOptions.put("3", new Option("Modify staff document", () -> restrictedAction(this::modifyStaff, AccessLevel.ADMIN)));
+        AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
 
         //Manager or a supervisor statistical view of employee
         ManagerMenuOption.put("4", new Option("View staffs", () -> restrictedAction(this::viewStaff, AccessLevel.MANAGER)));
@@ -48,13 +46,13 @@ public class StaffMenu extends BaseMenu {
         ManagerMenuOption.put("7", new Option("View Employee genders distribution", () -> restrictedAction(this::viewGenderDistribution, AccessLevel.MANAGER)));
         ManagerMenuOption.put("8", new Option("View Employee position distribution", () -> restrictedAction(this::viewPositionDistribution, AccessLevel.MANAGER)));
         ManagerMenuOption.put("9", new Option("View Tenure analysis", () -> restrictedAction(this::viewTenureAnalysis, AccessLevel.MANAGER)));
-        ManagerMenuOption.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
+        ManagerMenuOption.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
 
         //Staff or employee functionality
         StaffMenuOptions.put("1", new Option("Item category Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
         StaffMenuOptions.put("2", new Option("Item Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
         StaffMenuOptions.put("3", new Option("Supplier Menu", () -> restrictedAction(this::viewStaff, AccessLevel.STAFF)));
-        StaffMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), () -> {}));
+        StaffMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::exit)));
 
         exitFlag = false;
     }
@@ -794,6 +792,10 @@ public class StaffMenu extends BaseMenu {
         System.out.println("\nSee you again " + loggedInStaff.getName() +"! >:)");
         pause();
         exitFlag = true;
+    }
+
+    private void exit() {
+        subMenuExitAction = true;
     }
 
     private void restrictedAction(Runnable action, AccessLevel requiredAccessLevel) {
