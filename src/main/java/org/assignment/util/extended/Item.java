@@ -1,8 +1,7 @@
 package org.assignment.util.extended;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import org.assignment.util.DbMethods;
+import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.BaseItem;
 import org.assignment.util.base.DatabaseOperations;
@@ -30,7 +29,7 @@ public class Item extends BaseItem implements DatabaseOperations {
     // setters
     public boolean setName(String name, boolean updateToDb) {
         setName(name);
-        if (updateToDb) return this.updateToDb("name");
+        if (updateToDb) {return this.updateToDb("name");}
         return false;
     }
 
@@ -77,7 +76,7 @@ public class Item extends BaseItem implements DatabaseOperations {
             docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
             docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
-            setId(DbMethods.dbCreateNewId("Item","ITEM",4));
+            setId(IdUtils.dbCreateNewId("Item","ITEM",4));
             itemCollection.document(getId()).set(docValues).get();
             return true;
         } catch (Exception e) {
@@ -116,32 +115,7 @@ public class Item extends BaseItem implements DatabaseOperations {
         }
     }
 
-    // TODO: i commented in case this is the one not to use
-//    public boolean updateToDb(String fieldName) {
-//        try {
-//            Field field = this.getClass().getDeclaredField(fieldName);
-//            field.setAccessible(true);
-//
-//            if (fieldName.equals("itemCategory")) {
-//                String docRefId = ((ItemCategory) field.get(this)).getId();
-//                DocumentReference docRef = ItemCategory.getItemCategoryCollection().document(docRefId);
-//                itemCollection.document(getId()).update(fieldName, docRef);
-//            } else if (fieldName.equals("supplier")) {
-//                String docRefId = ((Supplier) field.get(this)).getId();
-//                DocumentReference docRef = Supplier.getSupplierCollection().document(docRefId);
-//                itemCollection.document(getId()).update(fieldName, docRef);
-//            } else {
-//                itemCollection.document(getId()).update(fieldName, field.get(this)).get();
-//            }
-//
-//            return true;
-//        } catch (Exception e) {
-//            System.out.println("AWUGAWUGA");
-//            System.err.println(e.getMessage());
-//            return false;
-//        }
-//    }
-
+    // FIXME: updateToDb not working
     public boolean updateToDb(String fieldName) {
         try {
             Field field = this.getClass().getSuperclass().getDeclaredField(fieldName);

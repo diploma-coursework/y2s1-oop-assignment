@@ -3,7 +3,7 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import org.assignment.util.DbMethods;
+import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
@@ -235,7 +235,7 @@ public class Staff extends Person implements DatabaseOperations {
                 case INVENTORY_CLERK, STOCK_CONTROLLER, SUPPLIER, WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR, ADMIN -> "STF";
             };
 
-            this.id = DbMethods.dbCreateNewId("Staff", prefix, 4);
+            this.id = IdUtils.dbCreateNewId("Staff", prefix, 4);
             staffCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {
@@ -361,7 +361,7 @@ public class Staff extends Person implements DatabaseOperations {
                 case ADMIN -> "ADM";
             };
 
-            String newId = DbMethods.dbCreateNewId("Staff", newPrefix, 4);
+            String newId = IdUtils.dbCreateNewId("Staff", newPrefix, 4);
 
             // Prepare new document data
             HashMap<String, Object> updates = new HashMap<>();
