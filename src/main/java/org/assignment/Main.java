@@ -16,7 +16,7 @@ public class Main extends BaseMenu {
     public static void main(String[] args) {
         while (true) {
             System.out.println("Temporary Menu");
-            System.out.println("1 for Item,2 for ItemCat,3 for Staff, 4 for Supplier");
+            System.out.println("1 for Item,2 for ItemCat,3 for Staff, 4 for Supplier, 5 for ItemFlow");
             System.out.print("> ");
             Scanner scanner = new Scanner(System.in);
             switch (scanner.nextInt()) {
@@ -31,6 +31,9 @@ public class Main extends BaseMenu {
                     break;
                 case 4:
                     new SupplierMenu().start();
+                    break;
+                case 5:
+                    new ItemFlowMenu().start();
                     break;
                 default:
                     break;

@@ -1,6 +1,7 @@
 package org.assignment.util.menu;
 
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
 import org.assignment.util.extended.ItemFlow;
 
@@ -37,22 +38,73 @@ public class ItemFlowMenu extends BaseMenu {
     private void seeItemFlowStatistics() {
         clearScreen();
         List<ItemFlow> itemFlowList = ItemFlow.getAllItemFlow();
-        if (itemFlowList == null) System.out.println("No item flow data is present.");
+        if (itemFlowList == null || itemFlowList.isEmpty()) System.out.println("No item flow data is present.");
         else {
-            // TODO: do stuff, calculate, categorize by month / supplier watever
+            // print all item flow details in table form
+            System.out.println("+" + "-".repeat(48) + "+");
+            for (ItemFlow itemFlow : itemFlowList) {
+                System.out.printf("|%25s|%7s|%8s|%5d|\n",
+                        itemFlow.getUpdateTimeIdAsString(),
+                        itemFlow.getSupplier(),
+                        itemFlow.getItem(),
+                        itemFlow.getDelta());
+            }
+            System.out.println("+" + "-".repeat(48) + "+");
         }
         pause();
     }
 
     private void updateItemFlow() {
         clearScreen();
-        System.out.println(ansi().fgBrightGreen().a(" Create a new Item Category:\n============================\n").reset());
+        System.out.println(ansi().fgBrightGreen().a(" Enter New Flow Update Details:\n===============================\n").reset());
 
+        ItemFlow newItemFlow = new ItemFlow();
 
+        // item input
+        System.out.print(ansi().a("""
+                Enter id for the updating item:
+                Enter delta of the quantity:
+                """).cursorUp(2).cursorRight(32).fgBrightBlue());
+
+        while (newItemFlow.getItem() == null) {
+            String inputItemId = scanner.nextLine().trim();
+            if (inputItemId.isEmpty()) {
+                System.out.print(ansi().cursorUp(1).cursorRight(32));
+                continue;
+            }
+            Item inputItem = Item.getFromDb(inputItemId);
+            if (inputItem != null) {
+                newItemFlow.setItem(inputItem);
+                break;
+            }
+            System.out.print(ansi().cursorDown(2).bgRed().a("Invalid item id.").reset().cursorUp(3));
+            System.out.print(ansi().cursorToColumn(0).eraseLine().a("Enter id for the updating item: "));
+        }
+
+        System.out.print(ansi().cursorRight(29).fgBrightBlue());
+
+        while (newItemFlow.getDelta() == 0) {
+            String inputDelta = scanner.nextLine().trim();
+            if (inputDelta.isEmpty() || !inputDelta.matches("-?\\d+")) {
+                System.out.print(ansi().reset().cursorUp(1).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
+                continue;
+            }
+            try {
+                newItemFlow.setDelta(Integer.parseInt(inputDelta));
+                break;
+            } catch (NumberFormatException e) {
+                System.out.print(ansi().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a("Number is too small / big.").reset()
+                        .cursorUp(2).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
+            }
+        }
+
+        System.out.print(ansi().cursorDown(1).cursorToColumn(0).eraseLine());
+        newItemFlow.setSupplier(newItemFlow.getItem().getSupplier());
+        boolean createSuccessful = newItemFlow.addToDb();
+        if (createSuccessful) System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
+        else System.out.println(ansi().bgRed().a("Item flow creation was unsuccessful, please try again later.").reset());
         pause();
     }
-
-
 
     private void returnToStaffMenu() {
         exitFlag = true;
