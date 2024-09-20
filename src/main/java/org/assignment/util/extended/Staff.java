@@ -230,7 +230,7 @@ public class Staff extends Person implements DatabaseOperations {
             docValues.put("password", getPassword());
 
             String prefix = switch (getPosition()) {
-                case INVENTORY_CLERK, STOCK_CONTROLLER, SUPPLIER, WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR, ADMIN -> "STF";
+                case INVENTORY_CLERK, STOCK_CONTROLLER, WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR, ADMIN -> "STF";
             };
 
             this.id = IdUtils.dbCreateNewId("Staff", prefix, 4);

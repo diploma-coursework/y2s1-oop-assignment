@@ -3,7 +3,6 @@ package org.assignment.util.enums;
 public enum StaffPosition {
     INVENTORY_CLERK(AccessLevel.STAFF),         // INC
     STOCK_CONTROLLER(AccessLevel.STAFF),        // STC
-    SUPPLIER(AccessLevel.STAFF),                // SPR
     WAREHOUSE_MANAGER(AccessLevel.MANAGER),     // WHM
     INVENTORY_SUPERVISOR(AccessLevel.MANAGER),  // INS
     ADMIN(AccessLevel.ADMIN);                   // ADM
@@ -29,10 +28,9 @@ public enum StaffPosition {
         System.out.println("\n========================================");
         System.out.println("0) INVENTORY_CLERK\n" +
                            "1) STOCK_CONTROLLER\n" +
-                           "2) SUPPLIER   \n" +
-                           "3) WAREHOUSE_MANAGER   \n" +
-                           "4) INVENTORY_SUPERVISOR \n" +
-                           "5) ADMIN");
+                           "2) WAREHOUSE_MANAGER   \n" +
+                           "3) INVENTORY_SUPERVISOR   \n" +
+                           "4) ADMIN \n");
         System.out.println("========================================");
     }
 

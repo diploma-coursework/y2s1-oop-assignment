@@ -567,7 +567,7 @@ public class StaffMenu extends BaseMenu {
                 System.out.println(ansi().bgBrightRed().a("No staff record found with ID: " + inputStaffId).reset());
                 return;
             } else{
-                System.out.println(ansi().bgBrightGreen().a("Staff is found! ").reset());
+                System.out.println(ansi().bgBrightGreen().a("\nStaff is found! ").reset());
             }
 
             // Print details of the found staff member
@@ -606,7 +606,7 @@ public class StaffMenu extends BaseMenu {
 
             for (Staff staff : allStaff) {
                 switch (staff.getPosition()) {
-                    case INVENTORY_CLERK, STOCK_CONTROLLER, SUPPLIER -> staffCount++;
+                    case INVENTORY_CLERK, STOCK_CONTROLLER -> staffCount++;
                     case WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR -> managerCount++;
                     case ADMIN -> adminCount++;
                 }
@@ -695,8 +695,8 @@ public class StaffMenu extends BaseMenu {
                 }
             }
 
-            System.out.println("\nSalary Ranges:");
-            System.out.println(ansi().fgRgb(8552916).a("======================================="));
+            System.out.println(ansi().fgRgb(8552916).a("\nSalary Ranges:"));
+            System.out.println("=======================================");
             for (int i = 0; i < ranges.length - 1; i++) {
                 System.out.println("RM" + ranges[i] + " - RM" + (ranges[i + 1] - 1) + ": " + rangeCounts[i]);
             }
@@ -815,14 +815,27 @@ public class StaffMenu extends BaseMenu {
                 }
             }
 
-            System.out.println(ansi().fgRgb(8552916).a("\n====================="));
-            System.out.println("Tenure Distribution of Staffs/Employees:");
+            System.out.println(ansi().fgRgb(8552916).a("Tenure Distribution of Staffs/Employees"));
+            System.out.println("\n=====================");
             for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
                 System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()));
             }
             System.out.println("=====================\n");
             System.out.println(ansi().reset());
 
+            /*
+            System.out.println(ansi().fgRgb(8552916).a("        Tenure Distribution of Staffs/Employees"));
+            System.out.println("=====================================================");
+            System.out.printf("| %-25s | %-20s |\n", "Tenure Range", "Number of Staff");
+            System.out.println("=====================================================");
+
+            for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
+                System.out.printf("| %-25s | %-20d |\n", entry.getKey(), entry.getValue());
+            }
+
+            System.out.println("=====================================================");
+            System.out.println(ansi().reset());
+            */
             pause();
 
         } catch (Exception e) {
