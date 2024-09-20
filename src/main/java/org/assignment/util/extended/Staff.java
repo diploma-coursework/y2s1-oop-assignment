@@ -241,7 +241,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     public static Staff getFromDb(String id) {
         try {
             // get from cache if available
@@ -279,7 +278,6 @@ public class Staff extends Person implements DatabaseOperations {
             return null;
         }
     }
-
     public static List<Staff> getAllStaffInfo() {
         List<Staff> staffList = new ArrayList<>();
         try {
@@ -298,7 +296,6 @@ public class Staff extends Person implements DatabaseOperations {
         }
         return staffList;
     }
-
     public boolean deleteFromDb()  {
         try {
             staffCollection.document(this.id).delete().get();
@@ -309,7 +306,6 @@ public class Staff extends Person implements DatabaseOperations {
             return false;
         }
     }
-
     private Field findField(String fieldName) throws NoSuchFieldException {
         Class<?> currentClass = this.getClass();
         while (currentClass != null) {
@@ -321,7 +317,6 @@ public class Staff extends Person implements DatabaseOperations {
         }
         throw new NoSuchFieldException("Field " + fieldName + " not found in any class.");
     }
-
     public boolean updateToDb(String fieldName) {
         try {
             System.out.println("\nUpdating field " + fieldName + "...");
@@ -345,6 +340,7 @@ public class Staff extends Person implements DatabaseOperations {
         }
     }
 
+    // to string
     @Override
     public String toString(){
         return "Staff ID: " + getId()

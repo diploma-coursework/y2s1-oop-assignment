@@ -805,17 +805,12 @@ public class StaffMenu extends BaseMenu {
                 LocalDate dateJoined = staff.getDateJoined();
                 if (dateJoined != null) {
                     int yearsOfService = now.getYear() - dateJoined.getYear();
-                    if (now.getMonthValue() < dateJoined.getMonthValue() || (now.getMonthValue() == dateJoined.getMonthValue() && now.getDayOfMonth() < dateJoined.getDayOfMonth())) {
+                    if (now.getMonthValue() < dateJoined.getMonthValue() ||
+                            (now.getMonthValue() == dateJoined.getMonthValue() && now.getDayOfMonth() < dateJoined.getDayOfMonth())) {
                         yearsOfService--;
                     }
-                    String range = switch (yearsOfService) {
-                        case 0 -> "Less than 1 year";
-                        case 1 -> "1 year";
-                        case 2 -> "2 years";
-                        case 3 -> "3 years";
-                        case 4 -> "4 years";
-                        default -> "5+ years";
-                    };
+
+                    String range = GetTenureRange(yearsOfService);
                     tenureCounts.put(range, tenureCounts.getOrDefault(range, 0) + 1);
                 }
             }
@@ -823,7 +818,7 @@ public class StaffMenu extends BaseMenu {
             System.out.println(ansi().fgRgb(8552916).a("\n====================="));
             System.out.println("Tenure Distribution of Staffs/Employees:");
             for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
-                System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()).reset());
+                System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()));
             }
             System.out.println("=====================\n");
             System.out.println(ansi().reset());
@@ -833,6 +828,17 @@ public class StaffMenu extends BaseMenu {
         } catch (Exception e) {
             System.out.println(ansi().bgBrightRed().a("Error retrieving tenure analysis: " + e.getMessage()).reset());
         }
+    }
+
+    private String GetTenureRange(int yearsOfService) {
+        return switch (yearsOfService) {
+            case 0 -> "Less than 1 year";
+            case 1 -> "1 year";
+            case 2 -> "2 years";
+            case 3 -> "3 years";
+            case 4 -> "4 years";
+            default -> "5+ years";
+        };
     }
 
     private void QuitMenu() {
