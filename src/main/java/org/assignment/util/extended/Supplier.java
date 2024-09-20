@@ -3,7 +3,7 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import org.assignment.util.IdUtils;
+import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
@@ -69,7 +69,7 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("contractStartDate", getContractStartDate().toString());
             docValues.put("contractEndDate", getContractEndDate().toString());
 
-            this.id = IdUtils.dbCreateNewId("Supplier","SUP",4);
+            this.id = DatabaseIdManager.dbCreateNewId("Supplier","SUP",4);
             supplierCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {

@@ -4,13 +4,11 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class IdUtils {
+public class DatabaseIdManager {
     public final static Firestore db = FirebaseConnection.getDb();
 
     // No. of Item

@@ -3,7 +3,7 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import org.assignment.util.IdUtils;
+import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
@@ -65,7 +65,7 @@ public class ItemCategory implements DatabaseOperations {
             docValues.put("name", this.name);
             docValues.put("description", this.description);
 
-            this.id = IdUtils.dbCreateNewId("ItemCategory","CAT",4);
+            this.id = DatabaseIdManager.dbCreateNewId("ItemCategory","CAT",4);
             itemCategoryCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {

@@ -6,7 +6,7 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.Timestamp;
 
-import org.assignment.util.IdUtils;
+import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 import org.assignment.util.base.Person;
@@ -233,7 +233,7 @@ public class Staff extends Person implements DatabaseOperations {
                 case INVENTORY_CLERK, STOCK_CONTROLLER, WAREHOUSE_MANAGER, INVENTORY_SUPERVISOR, ADMIN -> "STF";
             };
 
-            this.id = IdUtils.dbCreateNewId("Staff", prefix, 4);
+            this.id = DatabaseIdManager.dbCreateNewId("Staff", prefix, 4);
             staffCollection.document(this.id).set(docValues).get();
             return true;
         } catch (Exception e) {

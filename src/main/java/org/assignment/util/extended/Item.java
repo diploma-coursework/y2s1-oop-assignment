@@ -1,7 +1,7 @@
 package org.assignment.util.extended;
 
 import com.google.cloud.firestore.*;
-import org.assignment.util.IdUtils;
+import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
 
@@ -101,7 +101,7 @@ public class Item implements DatabaseOperations {
             docValues.put("itemCategory", ItemCategory.getItemCategoryCollection().document(this.itemCategory.getId()));
             docValues.put("supplier", Supplier.getSupplierCollection().document(this.supplier.getId()));
 
-            setId(IdUtils.dbCreateNewId("Item","ITEM",4));
+            setId(DatabaseIdManager.dbCreateNewId("Item","ITEM",4));
             itemCollection.document(getId()).set(docValues).get();
             return true;
         } catch (Exception e) {
