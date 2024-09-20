@@ -3,7 +3,6 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.*;
 import org.assignment.util.IdUtils;
 import org.assignment.util.FirebaseConnection;
-import org.assignment.util.base.BaseItem;
 import org.assignment.util.base.DatabaseOperations;
 
 import java.lang.reflect.Field;
@@ -11,7 +10,12 @@ import java.util.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class Item extends BaseItem implements DatabaseOperations {
+public class Item implements DatabaseOperations {
+    private String id;
+    private String name;
+    private double unitPrice;
+    private int quantity;
+
     private ItemCategory itemCategory;
     private Supplier supplier;
     private static final CollectionReference itemCollection = FirebaseConnection.getDb().collection("Item");
@@ -21,24 +25,37 @@ public class Item extends BaseItem implements DatabaseOperations {
     }
 
     public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
-        super(name, unitPrice, quantity);
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
         this.itemCategory = itemCategory;
         this.supplier = supplier;
     }
 
     // setters
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public boolean setName(String name, boolean updateToDb) {
         setName(name);
         if (updateToDb) {return this.updateToDb("name");}
         return false;
     }
-
     public boolean setUnitPrice(double unitPrice, boolean updateToDb) {
         setUnitPrice(unitPrice);
         if (updateToDb) return this.updateToDb("unitPrice");
         return false;
     }
-
     public boolean setQuantity(int quantity, boolean updateToDb) {
         setQuantity(quantity);
         if (updateToDb) return this.updateToDb("quantity");
@@ -46,15 +63,12 @@ public class Item extends BaseItem implements DatabaseOperations {
     }
 
     public void setItemCategory(ItemCategory itemCategory) { this.itemCategory = itemCategory; }
-
     public boolean setItemCategory(ItemCategory itemCategory, boolean updateToDb) {
         this.itemCategory = itemCategory;
         if (updateToDb) return this.updateToDb("itemCategory");
         return false;
     }
-
     public void setSupplier(Supplier supplier) { this.supplier = supplier; }
-
     public boolean setSupplier(Supplier supplier, boolean updateToDb) {
         this.supplier = supplier;
         if (updateToDb) return this.updateToDb("supplier");
@@ -62,6 +76,18 @@ public class Item extends BaseItem implements DatabaseOperations {
     }
 
     // getters
+    public String getId() {
+        return this.id;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public double getUnitPrice() {
+        return this.unitPrice;
+    }
+    public int getQuantity() {
+        return this.quantity;
+    }
     public ItemCategory getItemCategory() { return this.itemCategory; }
     public Supplier getSupplier() { return this.supplier; }
     public static CollectionReference getItemCollection() { return Item.itemCollection; }
