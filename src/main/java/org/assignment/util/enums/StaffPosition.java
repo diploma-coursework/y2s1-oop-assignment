@@ -30,7 +30,7 @@ public enum StaffPosition {
                            "1) STOCK_CONTROLLER\n" +
                            "2) WAREHOUSE_MANAGER   \n" +
                            "3) INVENTORY_SUPERVISOR   \n" +
-                           "4) ADMIN \n");
+                           "4) ADMIN");
         System.out.println("========================================");
     }
 
