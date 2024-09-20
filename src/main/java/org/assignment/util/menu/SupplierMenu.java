@@ -189,13 +189,10 @@ public class SupplierMenu extends BaseMenu {
 
     public Supplier searchSupplier() {
         clearScreen();
-        // search for supplier
-        Supplier supplier = new Supplier();
-        String id = " ";
 
         System.out.println("Please enter the ID of the supplier: ");
         System.out.print("(Key in XXX to cancel action): ");
-        id = (scanner.nextLine()).toUpperCase();
+        String id = (scanner.nextLine()).toUpperCase();
 
         if (!id.equals("XXX")) {
             return Supplier.getFromDb(id);
