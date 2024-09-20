@@ -120,7 +120,12 @@ public class Supplier extends Person implements DatabaseOperations {
 
     public boolean updateToDb(String fieldName)  {
         try {
-            Field field = this.getClass().getDeclaredField(fieldName);
+            Field field;
+            try {
+                field = this.getClass().getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                field = this.getClass().getSuperclass().getDeclaredField(fieldName);
+            }
             field.setAccessible(true);
 
             supplierCollection.document(this.id).update(fieldName, field.get(this)).get();
