@@ -34,31 +34,61 @@ public class SupplierMenu extends BaseMenu {
     }
 
     public void addSupplier() {
-        clearScreen();
-
         Supplier supplier = new Supplier();
         boolean confirmed = false;
 
         while (!confirmed) {
+            clearScreen();
+
             // Name
-            System.out.print("Supplier Name       : ");
-            supplier.setName(ValidationCheck.checkAndFormatName(scanner.nextLine()));
+            while (true) {
+                System.out.print("Supplier Name       : ");
+                String name = scanner.nextLine();
+                try {
+                    if (supplier.setName(ValidationCheck.checkAndFormatName(name), false))
+                        break;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid name. Please try again.");
+                }
+            }
 
             // Contact number
-            System.out.print("Contact Number      : ");
-            supplier.setContactNumber(scanner.nextLine());
+            while (true) {
+                System.out.print("Contact Number      : ");
+                String contactNumber = scanner.nextLine();
+                try {
+                    if (supplier.setContactNumber(contactNumber, false))
+                        break;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid contact number. Please try again.");
+                }
+            }
 
             // Email
-            System.out.print("Email               : ");
-            supplier.setEmail(scanner.nextLine());
-            // Validation Check
+            while (true) {
+                System.out.print("Email               : ");
+                String email = scanner.nextLine();
+                try {
+                    if (supplier.setEmail(email, false))
+                        break;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid email. Please try again.");
+                }
+            }
 
             // Address
-            System.out.print("Address             : ");
-            supplier.setAddress(scanner.nextLine());
+            while (true) {
+                System.out.print("Address             : ");
+                String address = scanner.nextLine();
+                try {
+                    if (supplier.setAddress(address, false))
+                        break;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid address. Please try again.");
+                }
+            }
 
             // Ask for confirmation,
-            // TODO: if confirm skip,else run clear and loop (maybe done???)
             System.out.print("\nConfirm to add supplier? (Y/N): ");
             char confirmation = Character.toUpperCase(scanner.nextLine().charAt(0));
 
@@ -68,6 +98,7 @@ public class SupplierMenu extends BaseMenu {
                 // Clear the supplier details if not confirmed
                 supplier.clear();
                 System.out.println("Please re-enter the details.\n");
+                pause();
             }
         }
 
@@ -79,6 +110,7 @@ public class SupplierMenu extends BaseMenu {
         // add to database
         supplier.addToDb();
         System.out.println("\nSuccessfully add supplier.");
+        pause();
     }
 
     public void removeSupplier() {
