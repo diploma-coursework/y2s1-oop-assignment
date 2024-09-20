@@ -41,12 +41,21 @@ public class ItemFlowMenu extends BaseMenu {
         if (itemFlowList == null || itemFlowList.isEmpty()) System.out.println("No item flow data is present.");
         else {
             // print all item flow details in table form
-            System.out.println("+" + "-".repeat(48) + "+");
+            System.out.printf("+%s+\n", "-".repeat(48));
+            System.out.printf("|%-24s|%-11s|%20s|%8s|%5s|\n+%s+\n",
+                    "Update Time",
+                    "Supplier Id",
+                    "Supplier Name",
+                    "Item Id",
+                    "Delta",
+                    "-".repeat(54));
+
             for (ItemFlow itemFlow : itemFlowList) {
-                System.out.printf("|%25s|%7s|%8s|%5d|\n",
+                System.out.printf("|%-24s|%-11s|%20s|%8s|%5d|\n",
                         itemFlow.getUpdateTimeIdAsString(),
-                        itemFlow.getSupplier(),
-                        itemFlow.getItem(),
+                        itemFlow.getSupplier().getId(),
+                        printShorten(itemFlow.getSupplier().getName(), 20),
+                        itemFlow.getItem().getId(),
                         itemFlow.getDelta());
             }
             System.out.println("+" + "-".repeat(48) + "+");
@@ -104,6 +113,11 @@ public class ItemFlowMenu extends BaseMenu {
         if (createSuccessful) System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
         else System.out.println(ansi().bgRed().a("Item flow creation was unsuccessful, please try again later.").reset());
         pause();
+    }
+
+    private String printShorten(String originalString, int limit) {
+        if (originalString.length() <= limit) return originalString;
+        return originalString.substring(0, limit - 3) + "...";
     }
 
     private void returnToStaffMenu() {
