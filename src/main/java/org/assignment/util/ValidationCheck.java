@@ -76,8 +76,6 @@ public class ValidationCheck {
                         .append(" ");                                             // Add a space
             }
         }
-
-
         return formattedName.toString().trim();  // Remove trailing space
     }
 

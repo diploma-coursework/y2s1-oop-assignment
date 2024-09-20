@@ -14,7 +14,6 @@ import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-
 public class StaffMenu extends BaseMenu {
 
     private final Staff loggedInStaff;
@@ -27,7 +26,7 @@ public class StaffMenu extends BaseMenu {
 
         this.loggedInStaff = loggedInStaff;
 
-        // Initialize menu options using createOption
+        // Initialize menu options
         MenuOptions.put("1", new Option("Admin Menu", () -> RestrictedAction(this::AdminMenu, AccessLevel.ADMIN)));
         MenuOptions.put("2", new Option("Manager menu", () -> RestrictedAction(this::ManagerMenu, AccessLevel.MANAGER)));
         MenuOptions.put("3", new Option("Staff relevant menu", () -> RestrictedAction(this::StaffRelevantMenu, AccessLevel.STAFF)));
@@ -60,10 +59,9 @@ public class StaffMenu extends BaseMenu {
     @Override
     public void start() {
 
-        String staffMenuGreet = "Welcome to Inventory Menu " + loggedInStaff.getName() + "!\n=================================";
-
         while (!exitFlag) {
             clearScreen();
+            String staffMenuGreet = "Welcome to Inventory Menu " + loggedInStaff.getName() + "!\n====================================";
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(staffMenuGreet).reset());
             displayOptions(MenuOptions);
             getUserOptions(MenuOptions);
@@ -72,9 +70,9 @@ public class StaffMenu extends BaseMenu {
 
     private void AdminMenu(){
         subMenuExitAction = false;
-        String adminMenuGreet = "Welcome to Admin Menu " + loggedInStaff.getName() + "!\n=================================";
         while (!subMenuExitAction) {
             clearScreen();
+            String adminMenuGreet = "Welcome to Admin Menu " + loggedInStaff.getName() + "!\n====================================";
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(adminMenuGreet).reset());
             displayOptions(AdminMenuOptions);
             getUserOptions(AdminMenuOptions);
@@ -83,9 +81,9 @@ public class StaffMenu extends BaseMenu {
 
     private void ManagerMenu(){
         subMenuExitAction = false;
-        String managerMenuGreet = "Welcome to Manager and Supervisor Menu " + loggedInStaff.getName() + "!\n=================================";
         while (!subMenuExitAction) {
             clearScreen();
+            String managerMenuGreet = "Welcome to Manager and Supervisor Menu " + loggedInStaff.getName() + "!\n====================================";
             System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(managerMenuGreet).reset());
             displayOptions(ManagerMenuOptions);
             getUserOptions(ManagerMenuOptions);
@@ -94,9 +92,9 @@ public class StaffMenu extends BaseMenu {
 
     private void StaffRelevantMenu(){
         subMenuExitAction = false;
-        String staffMenuGreet = "Welcome to Manager and Supervisor Menu " + loggedInStaff.getName() + "!\n=================================";
             while (!subMenuExitAction) {
                 clearScreen();
+                String staffMenuGreet = "Welcome to Staff relevant Menu " + loggedInStaff.getName() + "!\n=====================================";
                 System.out.println(ansi().cursor(0, 0).fgBrightGreen().a(staffMenuGreet).reset());
                 displayOptions(StaffMenuOptions);
                 getUserOptions(StaffMenuOptions);
@@ -132,19 +130,16 @@ public class StaffMenu extends BaseMenu {
 
 
             while (true) {
-                System.out.print(ansi().fgRgb(8552916).a("Enter Name: "));
+                System.out.print(ansi().fgRgb(8552916).a("\nEnter Name: "));
                 String name = scanner.nextLine();
                 try {
                     if (staff.setName(name, false)) {
                         break; // Exit loop if name is valid
                     }
-                    break; // Exit loop if name is valid
                 } catch (IllegalArgumentException e) {
                     System.out.println(ansi().bgBrightRed().a(e.getMessage() +"\n").reset());
                 }
             }
-
-
             while (true) {
                 System.out.print(ansi().fgRgb(8552916).a("\nEnter Gender (M/F): "));
                 char gender = scanner.next().toUpperCase().charAt(0);
@@ -369,17 +364,33 @@ public class StaffMenu extends BaseMenu {
                                 =====================================
                                 1.  Name
                                 2.  Gender
-                                3.  Contact Number
-                                4.  Email
-                                5.  Address
-                                6.  Salary
-                                7.  Password
+                                3.  Password
+                                4.  contact number
+                                5.  email
+                                6.  address
+                                7.  salary
                                 8.  Position
                                 =====================================
                                 """);
-            System.out.print("Choice (1-7): ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character (prevent index out of bounds error)
+            int choice;
+            while (true) {
+                System.out.print(ansi().fgRgb(8552916).a("Choice (1-8): "));
+                if (scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character (prevent index out of bounds error)
+
+                    if (choice >= 1 && choice <= 8) {
+                        // Process the choice using switch statement
+                        // (Your existing switch statement goes here)
+                        break; // Exit the loop if a valid choice is made
+                    } else {
+                        System.out.println(ansi().bgBrightRed().a("Invalid choice. Please enter a number between 1 and 8.\n").reset());
+                    }
+                } else {
+                    System.out.println(ansi().bgBrightRed().a("Invalid input. Please enter a number.\n").reset());
+                    scanner.next(); // Clear the invalid input
+                }
+            }
 
             boolean updateResult;
 
@@ -388,10 +399,11 @@ public class StaffMenu extends BaseMenu {
                     while (true) {
                         System.out.print(ansi().fgRgb(8552916).a("\nEnter new name: "));
                         String newName = scanner.nextLine();
-
                         try {
                             updateResult = staff.setName(newName, true);
-                            break; // Exit loop if name is valid
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -403,7 +415,10 @@ public class StaffMenu extends BaseMenu {
                         char newGender = scanner.next().toUpperCase().charAt(0);
                         try {
                             updateResult = staff.setGender(ValidationCheck.checkGender(newGender), true);
-                            break; // Exit loop if gender is valid
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
+
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -415,7 +430,9 @@ public class StaffMenu extends BaseMenu {
                         String newPassword = scanner.nextLine();
                         try {
                             updateResult = staff.setPassword(newPassword, true, false);
-                            break;
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -427,7 +444,9 @@ public class StaffMenu extends BaseMenu {
                         String newContact = scanner.nextLine();
                         try {
                             updateResult = staff.setContactNumber(newContact, true);
-                            break; // Exit loop if contact number is valid
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -439,7 +458,9 @@ public class StaffMenu extends BaseMenu {
                         String newEmail = scanner.nextLine();
                         try {
                             updateResult = staff.setEmail(newEmail, true);
-                            break; // Exit loop if email is valid
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -451,7 +472,9 @@ public class StaffMenu extends BaseMenu {
                         String newAddress = scanner.nextLine();
                         try {
                             updateResult = staff.setAddress(newAddress, true);
-                            break; // Exit loop if address is valid
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }
@@ -470,7 +493,9 @@ public class StaffMenu extends BaseMenu {
                             scanner.nextLine(); // Consume newline
                             try {
                                 updateResult = staff.setSalary(newSalary, true);
-                                break; // Exit loop if salary is valid
+                                if(updateResult) {
+                                    break; // Exit loop if name is valid
+                                }
                             } catch (IllegalArgumentException e) {
                                 System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                             }
@@ -493,7 +518,9 @@ public class StaffMenu extends BaseMenu {
                                 throw new IllegalArgumentException("Invalid position number.");
                             }
                             updateResult = staff.setPosition(newPosition, true);
-                            break;
+                            if(updateResult) {
+                                break; // Exit loop if name is valid
+                            }
                         } catch (IllegalArgumentException e) {
                             System.out.println(ansi().bgBrightRed().a(e.getMessage() + "\n").reset());
                         }

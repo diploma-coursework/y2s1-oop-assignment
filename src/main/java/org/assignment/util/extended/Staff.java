@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 
 public class Staff extends Person implements DatabaseOperations {
     private String gender;
@@ -123,17 +125,15 @@ public class Staff extends Person implements DatabaseOperations {
     }
     public boolean setName(String name, boolean updateToDb) {
         try{
-            String formattedName = ValidationCheck.checkAndFormatName(name);
-            super.setName(formattedName);
-
+            String validatedName = ValidationCheck.checkAndFormatName(name);
+            super.setName(validatedName);
             if (updateToDb) {
                 return this.updateToDb("name");
             }
             return true;
-
         } catch (IllegalArgumentException e) {
             // Handle exception or provide user feedback
-            System.out.println(e.getMessage());
+            System.out.println(ansi().bgBrightRed().a(e.getMessage()).reset());
             // You might want to rethrow or handle the error according to your application's needs
             return false;
         }
@@ -147,7 +147,7 @@ public class Staff extends Person implements DatabaseOperations {
             }
             return true;
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println(ansi().bgBrightRed().a(e.getMessage()).reset());
             return false;
         }
     }
@@ -160,7 +160,7 @@ public class Staff extends Person implements DatabaseOperations {
             }
             return true;
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println(ansi().bgBrightRed().a(e.getMessage()).reset());
             return false;
         }
     }
@@ -173,7 +173,7 @@ public class Staff extends Person implements DatabaseOperations {
             }
             return true;
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println(ansi().bgBrightRed().a(e.getMessage()).reset());
             return false;
         }
     }
