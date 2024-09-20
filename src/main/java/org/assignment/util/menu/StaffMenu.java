@@ -39,12 +39,12 @@ public class StaffMenu extends BaseMenu {
         AdminMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Manager or a supervisor statistical view of employee
-        ManagerMenuOptions.put("4", new Option("View staffs", () -> RestrictedAction(this::ViewStaff, AccessLevel.MANAGER)));
-        ManagerMenuOptions.put("5", new Option("Search staff document", () -> RestrictedAction(this::SearchStaff, AccessLevel.MANAGER)));
-        ManagerMenuOptions.put("6", new Option("view Employee salary distribution", () -> RestrictedAction(this::ViewSalaryDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOptions.put("7", new Option("View Employee genders distribution", () -> RestrictedAction(this::ViewGenderDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOptions.put("8", new Option("View Employee position distribution", () -> RestrictedAction(this::ViewPositionDistribution, AccessLevel.MANAGER)));
-        ManagerMenuOptions.put("9", new Option("View Tenure analysis", () -> RestrictedAction(this::ViewTenureAnalysis, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("1", new Option("View staffs", () -> RestrictedAction(this::ViewStaff, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("2", new Option("Search staff document", () -> RestrictedAction(this::SearchStaff, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("3", new Option("view Employee salary distribution", () -> RestrictedAction(this::ViewSalaryDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("4", new Option("View Employee genders distribution", () -> RestrictedAction(this::ViewGenderDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("5", new Option("View Employee position distribution", () -> RestrictedAction(this::ViewPositionDistribution, AccessLevel.MANAGER)));
+        ManagerMenuOptions.put("6", new Option("View Tenure analysis", () -> RestrictedAction(this::ViewTenureAnalysis, AccessLevel.MANAGER)));
         ManagerMenuOptions.put("0",new Option(ansi().fgRed().a("Exit").reset().toString(), (this::Exit)));
 
         //Staff or employee functionality
