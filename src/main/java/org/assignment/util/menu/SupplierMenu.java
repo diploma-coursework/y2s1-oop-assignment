@@ -118,6 +118,10 @@ public class SupplierMenu extends BaseMenu {
         // Search for supplier
         Supplier supplier = searchSupplier();
 
+        if (supplier == null) {
+            System.out.println("No supplier found.");
+        }
+
         // confirmation to remove
         char yn = ' ';
         do {
@@ -132,7 +136,7 @@ public class SupplierMenu extends BaseMenu {
                 return;
             }
             else
-            System.out.println("\nInvalid input. Y/N only.\n");
+                System.out.println("\nInvalid input. Y/N only.\n");
         } while (yn != 'Y');
 
         pause();
@@ -141,7 +145,7 @@ public class SupplierMenu extends BaseMenu {
     public void listSupplier() {
         clearScreen();
         List<Supplier> supplierList = Supplier.getAllItem();
-        if (supplierList == null) System.out.println("No item is present.");
+        if (supplierList == null) System.out.println("No supplier. Please add a supplier.");
         else {
             for (Supplier supplier : supplierList) {
                 System.out.println(supplier.toString() + "\n");
@@ -155,54 +159,99 @@ public class SupplierMenu extends BaseMenu {
         // search for supplier
         Supplier supplier = searchSupplier();
 
+        // Select data field to edit (except contract info and id cuz they are user-unchangeable)
         if (supplier != null) {
-            System.out.println(" 1 | Name");
-            System.out.println(" 2 | Contact Number");
-            System.out.println(" 3 | Email");
-            System.out.println(" 4 | Address");
+            System.out.println(" 1 | Name           | " + supplier.getName());
+            System.out.println(" 2 | Contact Number | " + supplier.getContactNumber());
+            System.out.println(" 3 | Email          | " + supplier.getEmail());
+            System.out.println(" 4 | Address        | " + supplier.getAddress());
+            System.out.println("---+----------------+------------------------------");
+            System.out.println(" 0 | Return to Menu");
 
-            System.out.println("Select 1 - 4 to edit: ");
+            System.out.println("Select 0 - 4 to edit: ");
             int selection = scanner.nextInt();
             scanner.nextLine();
 
-            boolean updateResult;
+            boolean updateResult = false;
 
             switch (selection) {
+                // Edit Name
                 case 1:
-                    System.out.println("\nSupplier Name: " + supplier.getName());
-                    System.out.print("Enter new name: ");
+                    while (true) {
+                        clearScreen();
+                        System.out.println("\nSupplier Name: " + supplier.getName());
+                        System.out.print("Enter new name: ");
 
-                    String newName = scanner.nextLine();
+                        String newName = scanner.nextLine();
 
-                    updateResult = supplier.setName(newName, true);
+                        try {
+                            updateResult = supplier.setName(newName, true);
+                            if (updateResult)
+                                break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid name. Please try again.");
+                        }
+                    }
                     break;
 
+                // Edit contact number
                 case 2:
-                    System.out.println("\nContact Number: " + supplier.getContactNumber());
-                    System.out.println("Enter new contact number: ");
+                    while (true) {
+                        System.out.println("\nContact Number: " + supplier.getContactNumber());
+                        System.out.println("Enter new contact number: ");
 
-                    String newContactNum = scanner.nextLine();
+                        String newContactNum = scanner.nextLine();
 
-                    updateResult = supplier.setContactNumber(newContactNum, true);
+                        try {
+                            updateResult = supplier.setContactNumber(newContactNum, true);
+                            if (updateResult)
+                                break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid contact number. Please try again.");
+                        }
+                    }
                     break;
 
+                // Edit email
                 case 3:
-                    System.out.println("\nEmail: " + supplier.getEmail());
-                    System.out.println("Enter new email: ");
+                    while (true) {
+                        System.out.println("\nEmail: " + supplier.getEmail());
+                        System.out.println("Enter new email: ");
 
-                    String newEmail = scanner.nextLine();
+                        String newEmail = scanner.nextLine();
 
-                    updateResult = supplier.setEmail(newEmail, true);
+                        try {
+                            updateResult = supplier.setEmail(newEmail, true);
+                            if (updateResult)
+                                break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid email. Please try again.");
+                        }
+                    }
                     break;
 
+                // Edit address
                 case 4:
-                    System.out.println("\nAddress: " + supplier.getEmail());
-                    System.out.println("Enter new address: ");
+                    while (true) {
+                        System.out.println("\nAddress: " + supplier.getEmail());
+                        System.out.println("Enter new address: ");
 
-                    String newAddress = scanner.nextLine();
+                        String newAddress = scanner.nextLine();
 
-                    updateResult = supplier.setAddress(newAddress, true);
+                        try {
+                            updateResult = supplier.setAddress(newAddress, true);
+                            if (updateResult)
+                                break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid address. Please try again.");
+                        }
+                    }
                     break;
+
+                case 0:
+                    System.out.println("Returning to supplier menu...");
+                    pause();
+                    return;
 
                 default:
                     System.out.println("Invalid choice");
@@ -214,7 +263,6 @@ public class SupplierMenu extends BaseMenu {
             else
                 System.out.println("Update failed.");
         }
-        // select data field to edit (except id and contract infos)
 
         pause();
     }
@@ -222,8 +270,7 @@ public class SupplierMenu extends BaseMenu {
     public Supplier searchSupplier() {
         clearScreen();
 
-        System.out.println("Please enter the ID of the supplier: ");
-        System.out.print("(Key in XXX to cancel action): ");
+        System.out.print("Please enter the ID of the supplier: ");
         String id = (scanner.nextLine()).toUpperCase();
 
         if (!id.equals("XXX")) {
