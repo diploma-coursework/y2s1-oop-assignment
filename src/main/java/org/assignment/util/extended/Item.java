@@ -144,7 +144,7 @@ public class Item implements DatabaseOperations {
     // FIXME: updateToDb not working
     public boolean updateToDb(String fieldName) {
         try {
-            Field field = this.getClass().getSuperclass().getDeclaredField(fieldName);
+            Field field = this.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
 
             itemCollection.document(this.getId()).update(fieldName, field.get(this)).get();
@@ -180,6 +180,12 @@ public class Item implements DatabaseOperations {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    // TEMP
+    public boolean adjustStock(int delta) {
+        if (delta < 0 && Math.abs(delta) > this.quantity) return false;
+        return this.setQuantity(this.quantity += delta, true);
     }
 
     @Override

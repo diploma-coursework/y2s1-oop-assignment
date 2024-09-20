@@ -16,8 +16,6 @@ public class ItemFlowMenu extends BaseMenu {
     public ItemFlowMenu() {
         ItemFlowMenu.options1.put("1", new Option("See Item Flow Statistics", this::seeItemFlowStatistics));
         ItemFlowMenu.options1.put("2", new Option("Update Item Flow", this::updateItemFlow));
-        ItemFlowMenu.options1.put("3", new Option("Other stuff", this::updateItemFlow));
-        ItemFlowMenu.options1.put("4", new Option("Generate XXX report", this::updateItemFlow));
         ItemFlowMenu.options1.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::returnToStaffMenu));
 
         exitFlag = false;
@@ -104,19 +102,31 @@ public class ItemFlowMenu extends BaseMenu {
             System.out.print(ansi().cursorToColumn(0).eraseLine().a("Enter id for the updating item: "));
         }
 
-        System.out.print(ansi().cursorRight(29).fgBrightBlue());
+        // print item and go to next input
+        System.out.print(ansi().reset().cursorDown(2).eraseLine().cursorDown(1)
+                .a(newItemFlow.getItem()).cursorUp(25).cursorRight(29).fgBrightBlue());
 
+        // delta input
         while (newItemFlow.getDelta() == 0) {
             String inputDelta = scanner.nextLine().trim();
             if (inputDelta.isEmpty() || !inputDelta.matches("-?\\d+")) {
                 System.out.print(ansi().reset().cursorUp(1).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
                 continue;
             }
+
             try {
                 newItemFlow.setDelta(Integer.parseInt(inputDelta));
+                // error if negative delta is more than available quantity (cant ship out more than we store)
+                if (newItemFlow.getDelta() < 0 && Math.abs(newItemFlow.getDelta()) > newItemFlow.getItem().getQuantity()) {
+                    newItemFlow.setDelta(0);
+                    throw new IllegalArgumentException("Cannot ship more than available stock.");
+                }
                 break;
             } catch (NumberFormatException e) {
-                System.out.print(ansi().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a("Number is too small / big.").reset()
+                System.out.print(ansi().reset().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a("Number is too small / big.").reset()
+                        .cursorUp(2).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
+            } catch (IllegalArgumentException e) {
+                System.out.print(ansi().reset().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a(e.getMessage()).reset()
                         .cursorUp(2).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
             }
         }
@@ -124,7 +134,19 @@ public class ItemFlowMenu extends BaseMenu {
         System.out.print(ansi().cursorDown(1).cursorToColumn(0).eraseLine());
         newItemFlow.setSupplier(newItemFlow.getItem().getSupplier());
         boolean createSuccessful = newItemFlow.addToDb();
-        if (createSuccessful) System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
+
+        if (createSuccessful) {
+            int oldQuantity = newItemFlow.getItem().getQuantity();
+            newItemFlow.getItem().adjustStock(newItemFlow.getDelta());
+
+            clearScreen();
+            System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
+            System.out.printf("Quantity for item %s %s from %d to %d.\n",
+                    newItemFlow.getItem().getId(),
+                    newItemFlow.getDelta() > 0 ? "increased" : "decreased",
+                    oldQuantity,
+                    newItemFlow.getItem().getQuantity());
+        }
         else System.out.println(ansi().bgRed().a("Item flow creation was unsuccessful, please try again later.").reset());
         pause();
     }
