@@ -29,9 +29,9 @@ public class ItemMenu extends BaseMenu {
 
         modifyOptions.put("1", new Option("Edit Name", () -> {}));
         modifyOptions.put("2", new Option("Edit Unit Price", () -> {}));
-        modifyOptions.put("3", new Option("Edit Quantity", () -> {}));
-        modifyOptions.put("4", new Option("Edit Supplier ID", () -> {}));
-        modifyOptions.put("5", new Option("Edit ItemCategory ID", () -> {}));
+//        modifyOptions.put("3", new Option("Edit Quantity", () -> {}));
+        modifyOptions.put("3", new Option("Edit Supplier ID", () -> {}));
+        modifyOptions.put("4", new Option("Edit ItemCategory ID", () -> {}));
         modifyOptions.put("0",new Option(ansi().fgBrightGreen().a("Save").reset().toString(), () -> {}));
 
         queryOptions.put("1", new Option("Filter By Name", this::filterByName));
@@ -133,31 +133,6 @@ public class ItemMenu extends BaseMenu {
                     continue;
                 }
                 item.setUnitPrice(Double.parseDouble(scannerValue.toString()));
-                break;
-            } else{
-                System.out.print(ansi().cursorUp(1).eraseLine());
-                scanner.nextLine();
-            }
-        }
-
-        // ITEM QUANTITY
-        while (true) {
-            scannerValue.setLength(0);
-            System.out.print("Item Quantity       :");
-            if (scanner.hasNextLine()){
-                scannerValue.append(scanner.nextLine().trim());
-                if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
-                    System.out.print(ansi().cursorUp(1).eraseLine());
-                    continue;
-                }
-
-                if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()) {return;}
-
-                if (Integer.parseInt(scannerValue.toString()) <0){
-                    System.out.print(ansi().cursorUp(1).eraseLine());
-                    continue;
-                }
-                item.setQuantity(Integer.parseInt(scannerValue.toString()));
                 break;
             } else{
                 System.out.print(ansi().cursorUp(1).eraseLine());
@@ -408,36 +383,7 @@ public class ItemMenu extends BaseMenu {
                 System.out.println("\nAre you sure about the change? (y / n)");
                 boolean updateConfirmation = getYesNoOption();
                 if (updateConfirmation) updateSuccess = item.setUnitPrice(Double.parseDouble(scannerValue.toString()), true);
-            } else if (selectedOption == modifyOptions.get("3")) {
-                while (true) {
-                    scannerValue.setLength(0);
-                    System.out.print("Enter new Quantity: ");
-                    if (scanner.hasNextLine()){
-                        scannerValue.append(scanner.nextLine().trim());
-
-                        if (scannerValue.isEmpty() || !scannerValue.toString().matches("-1|\\d+")) {
-                            System.out.print(ansi().cursorUp(1).eraseLine());
-                            continue;
-                        }
-
-                        if (acceptExitAction(Integer.valueOf(scannerValue.toString())).isEmpty()) {return;}
-
-                        if (Integer.parseInt(scannerValue.toString()) <0){
-                            System.out.print(ansi().cursorUp(1).eraseLine());
-                            continue;
-                        }
-                        item.setQuantity(Integer.parseInt(scannerValue.toString()));
-                        break;
-                    } else{
-                        System.out.print(ansi().cursorUp(1).eraseLine());
-                        scanner.nextLine();
-                    }
-                }
-
-                System.out.println("\nAre you sure about the change? (y / n)");
-                boolean updateConfirmation = getYesNoOption();
-                if (updateConfirmation) updateSuccess = item.setQuantity(Integer.parseInt(scannerValue.toString()), true);
-            } else if (selectedOption == modifyOptions.get("4")){
+            } else if (selectedOption == modifyOptions.get("3")){
                 while (true) {
                     scannerValue.setLength(0);
                     System.out.print("Supplier ID         :");

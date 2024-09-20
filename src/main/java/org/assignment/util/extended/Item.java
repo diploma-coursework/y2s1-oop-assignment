@@ -21,19 +21,19 @@ public class Item implements DatabaseOperations {
     private static final CollectionReference itemCollection = FirebaseConnection.getDb().collection("Item");
 
     public Item() {
-        this("", 0.0,0,null,null);
+        this("", 0.0,null,null);
     }
 
-    public Item(String name, double unitPrice, int quantity, ItemCategory itemCategory, Supplier supplier) {
+    public Item(String name, double unitPrice, ItemCategory itemCategory, Supplier supplier) {
         this.name = name;
         this.unitPrice = unitPrice;
-        this.quantity = quantity;
+        this.quantity = 0;
         this.itemCategory = itemCategory;
         this.supplier = supplier;
     }
 
     // setters
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
     public void setName(String name) {
@@ -45,7 +45,6 @@ public class Item implements DatabaseOperations {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
     public boolean setName(String name, boolean updateToDb) {
         setName(name);
         if (updateToDb) {return this.updateToDb("name");}
