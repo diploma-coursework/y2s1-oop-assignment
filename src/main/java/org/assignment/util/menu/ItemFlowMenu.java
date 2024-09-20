@@ -41,24 +41,38 @@ public class ItemFlowMenu extends BaseMenu {
         if (itemFlowList == null || itemFlowList.isEmpty()) System.out.println("No item flow data is present.");
         else {
             // print all item flow details in table form
-            System.out.printf("+%s+\n", "-".repeat(48));
-            System.out.printf("|%-24s|%-11s|%20s|%8s|%5s|\n+%s+\n",
+            String tableEdge = "+" + "-".repeat(24) + "+"
+                    + "-".repeat(11) + "+"
+                    + "-".repeat(20) + "+"
+                    + "-".repeat(8) + "+"
+                    + "-".repeat(20) + "+"
+                    + "-".repeat(5) + "+";
+            System.out.println(tableEdge);
+
+            // table labels
+            System.out.printf("|%-24s|%-11s|%-20s|%-8s|%-20s|%-5s|\n",
                     "Update Time",
                     "Supplier Id",
                     "Supplier Name",
                     "Item Id",
-                    "Delta",
-                    "-".repeat(54));
+                    "Item Name",
+                    "Delta");
+            System.out.println(tableEdge);
+
 
             for (ItemFlow itemFlow : itemFlowList) {
-                System.out.printf("|%-24s|%-11s|%20s|%8s|%5d|\n",
+                String rowData = String.format("|%-24s|%-11s|%-20s|%-8s|%-20s|%-5s|",
                         itemFlow.getUpdateTimeIdAsString(),
                         itemFlow.getSupplier().getId(),
                         printShorten(itemFlow.getSupplier().getName(), 20),
                         itemFlow.getItem().getId(),
+                        printShorten(itemFlow.getItem().getName(), 20),
                         itemFlow.getDelta());
+
+                if (itemFlow.getDelta() > 0) System.out.println(ansi().bgGreen().a(rowData).reset());
+                else System.out.println(ansi().bgRed().a(rowData).reset());
             }
-            System.out.println("+" + "-".repeat(48) + "+");
+            System.out.println(tableEdge);
         }
         pause();
     }
