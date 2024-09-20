@@ -1,6 +1,9 @@
 package org.assignment;
 
 import org.assignment.util.base.BaseMenu;
+import org.assignment.util.extended.Item;
+import org.assignment.util.extended.ItemCategory;
+import org.assignment.util.extended.Supplier;
 import org.assignment.util.menu.*;
 import java.util.Scanner;
 
@@ -9,6 +12,8 @@ import java.util.Scanner;
 public class Main extends BaseMenu {
 
     public static void main(String[] args) {
+        Item item1 = new Item("Sofa", 1000.00, ItemCategory.getFromDb("CAT0010"), Supplier.getFromDb("SUP0001"));
+        item1.addToDb();
         while (true) {
             System.out.println("Temporary Menu");
             System.out.println("1 for Item,2 for ItemCat,3 for Staff, 4 for Supplier, 5 for ItemFlow");

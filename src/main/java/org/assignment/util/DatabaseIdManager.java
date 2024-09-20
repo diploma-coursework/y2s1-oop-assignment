@@ -14,21 +14,15 @@ public class DatabaseIdManager {
     // No. of Item
     private static int dbGetIdCount(String collection){
         try {
-            // Retrieve the document snapshot
+            // 1 line for ApiFuture<DocumentSnapshot>, 1 line for DocumentSnapShot, better for thread, might cause common exception found when using thread
             ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
             DocumentSnapshot document = future.get();
 
             if (document.exists()) {
                 Object fieldObject = document.get("amount");
-
-                if (fieldObject instanceof Number) {
-                    return ((Number) fieldObject).intValue();
-                } else {
-                    return -1;
-                }
-            } else {
-                return -1;
+                if (fieldObject instanceof Number) {return ((Number) fieldObject).intValue();}
             }
+            return -1;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
@@ -37,29 +31,10 @@ public class DatabaseIdManager {
 
     private static void dbIncrementCount(String collection) {
         try {
-            // Retrieve the document snapshot
-            ApiFuture<DocumentSnapshot> future = db.collection("idNumber").document(collection).get();
-            DocumentSnapshot document = future.get();
-
-            if (document.exists()) {
-                Object fieldObject = document.get("amount");
-
-                if (fieldObject instanceof Number) {
-                    // Increment the value by 1
-                    int newAmount = ((Number) fieldObject).intValue() + 1;
-
-                    // Update the document with the new value
-                    Map<String, Object> updatedData = new HashMap<>();
-                    updatedData.put("amount", newAmount);
-
-                    ApiFuture<WriteResult> updateFuture = db.collection("idNumber").document(collection).set(updatedData);
-                    WriteResult result = updateFuture.get();
-                } else {
-                    System.out.println("Field 'amount' is not a number.");
-                }
-            } else {
-                System.out.println("Document does not exist.");
-            }
+            Map<String, Object> updatedData = new HashMap<>();
+            updatedData.put("amount", dbGetIdCount(collection)+1);
+            // reason to use .get() here, making sure the process is complete, before continuing
+            db.collection("idNumber").document(collection).set(updatedData).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,8 +57,7 @@ public class DatabaseIdManager {
             return false;
         }
 
-        String prefix;
-        String suffix;
+        String prefix, suffix;
 
         if (input.length() == 8){
             prefix = input.substring(0, 4);
