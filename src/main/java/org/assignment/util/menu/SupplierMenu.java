@@ -5,6 +5,7 @@ import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.ValidationCheck;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -116,10 +117,22 @@ public class SupplierMenu extends BaseMenu {
     public void removeSupplier() {
         clearScreen();
         // Search for supplier
-        Supplier supplier = searchSupplier();
+        Supplier supplier = new Supplier();
 
-        if (supplier == null) {
+        try {
+            supplier = searchSupplier();
+
+        } catch (IllegalArgumentException e) {
             System.out.println("No supplier found.");
+            pause();
+            return;
+        }
+
+        if (!supplier.getAllItems().isEmpty()) {
+            System.out.println("The supplier is unable to be removed.");
+            System.out.println("Please remove all items supplied by the supplier to perform removal.");
+            pause();
+            return;
         }
 
         // confirmation to remove
@@ -144,7 +157,7 @@ public class SupplierMenu extends BaseMenu {
 
     public void listSupplier() {
         clearScreen();
-        List<Supplier> supplierList = Supplier.getAllItem();
+        List<Supplier> supplierList = Supplier.getAllSupplier();
         if (supplierList == null) System.out.println("No supplier. Please add a supplier.");
         else {
             for (Supplier supplier : supplierList) {
@@ -157,7 +170,16 @@ public class SupplierMenu extends BaseMenu {
     public void editSupplier() {
         clearScreen();
         // search for supplier
-        Supplier supplier = searchSupplier();
+        Supplier supplier = new Supplier();
+
+        try {
+            supplier = searchSupplier();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("No supplier found.");
+            pause();
+            return;
+        }
 
         // Select data field to edit (except contract info and id cuz they are user-unchangeable)
         if (supplier != null) {
@@ -273,16 +295,27 @@ public class SupplierMenu extends BaseMenu {
         System.out.print("Please enter the ID of the supplier: ");
         String id = (scanner.nextLine()).toUpperCase();
 
-        if (!id.equals("XXX")) {
-            return Supplier.getFromDb(id);
+        Supplier supplier = Supplier.getFromDb(id);
+
+        if (supplier == null) {
+            throw new IllegalArgumentException("Supplier not found");
         }
 
-        return null;
+        return supplier;
     }
 
     public void renewSupplierContract() {
         // search supplier
-        Supplier supplier = searchSupplier();
+        Supplier supplier = new Supplier();
+
+        try {
+            supplier = searchSupplier();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("No supplier found.");
+            pause();
+            return;
+        }
 
         // validate if supplier contract is able to be renewed
         int ableToRenew = supplier.checkRenewContract();
