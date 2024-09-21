@@ -69,5 +69,10 @@ public abstract class BaseMenu {
         return Optional.of(result);
     }
 
+    protected String printShorten(String originalString, int limit) {
+        if (originalString.length() <= limit) return originalString;
+        return originalString.substring(0, limit - 3) + "...";
+    }
+
     public record Option(String description, Runnable execute) {}
 }
