@@ -136,15 +136,17 @@ public class ItemFlowMenu extends BaseMenu {
 
         if (createSuccessful) {
             int oldQuantity = newItemFlow.getItem().getQuantity();
-            newItemFlow.getItem().adjustStock(newItemFlow.getDelta());
-
-            clearScreen();
-            System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
-            System.out.printf("Quantity for item %s %s from %d to %d.\n",
-                    newItemFlow.getItem().getId(),
-                    newItemFlow.getDelta() > 0 ? "increased" : "decreased",
-                    oldQuantity,
-                    newItemFlow.getItem().getQuantity());
+            boolean adjustStockSuccessful = newItemFlow.getItem().adjustStock(newItemFlow.getDelta());
+            if (!adjustStockSuccessful) System.out.println("Adjustment of quantity of item was unsuccessful...");
+            else {
+                clearScreen();
+                System.out.println(ansi().fgBrightGreen().a("Item flow details updated.").reset());
+                System.out.printf("Quantity for item %s %s from %d to %d.\n",
+                        newItemFlow.getItem().getId(),
+                        newItemFlow.getDelta() > 0 ? "increased" : "decreased",
+                        oldQuantity,
+                        newItemFlow.getItem().getQuantity());
+            }
         }
         else System.out.println(ansi().bgRed().a("Item flow creation was unsuccessful, please try again later.").reset());
         pause();
