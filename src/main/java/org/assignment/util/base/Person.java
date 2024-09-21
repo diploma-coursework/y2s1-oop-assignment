@@ -1,5 +1,7 @@
 package org.assignment.util.base;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public abstract class Person {
     protected String id;
     protected String name;
@@ -40,9 +42,15 @@ public abstract class Person {
 
     @Override
     public String toString(){
-        // TODO: toString for Person
-        // return "PRINT PERSON STUFF\n";
-        return String.format("ID: %s\nName: %s\nContact Number: %s\nEmail: %s\nAddress: %s",
-                this.id, this.name, this.contactNumber, this.email, this.address);
+        String idPlaceHolder;
+        if (getId() == null) idPlaceHolder = ansi().fgYellow().a("[Unassigned]").reset().toString(); else idPlaceHolder = ansi().fgYellow().a(getId()).reset().toString();
+
+        return "-------------------------------------------" + "\n" +
+                "ID            : " + idPlaceHolder + "\n" +
+                "Name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
+                "Contact Number    : " + ansi().fgBrightMagenta().a(getContactNumber()) + "\n" +
+                "Email      : " + ansi().fgBrightMagenta().a(getEmail()).reset() + "\n" +
+                "Address:" + ansi().fgBrightMagenta().a(getEmail()).reset() + "\n" +
+                ansi().reset();
     }
 }
