@@ -60,7 +60,8 @@ public class ItemCategoryMenu extends BaseMenu {
         if (itemCategoryList == null) System.out.println("No item category is present.");
         else {
             for (ItemCategory itemCategory : itemCategoryList) {
-                System.out.println(itemCategory);
+                System.out.print(itemCategory);
+                System.out.printf("Items      : %s\n\n", ansi().fgCyan().a(itemCategory.getAllItems().size()).reset());
             }
         }
         pause();

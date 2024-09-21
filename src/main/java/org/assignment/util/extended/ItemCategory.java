@@ -3,6 +3,7 @@ package org.assignment.util.extended;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.FirebaseConnection;
 import org.assignment.util.base.DatabaseOperations;
@@ -135,6 +136,25 @@ public class ItemCategory implements DatabaseOperations {
             }
 
             return itemCategories;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public List<Item> getAllItems() {
+        try {
+            QuerySnapshot querySnapshot = Item.getItemCollection().whereEqualTo("itemCategory", itemCategoryCollection.document(this.id)).get().get();
+            List<QueryDocumentSnapshot> documentSnapshots = querySnapshot.getDocuments();
+            List<Item> items = new ArrayList<>();
+
+            if (documentSnapshots.isEmpty()) return items;
+
+            for (QueryDocumentSnapshot document : documentSnapshots) {
+                items.add(Item.getFromDb(document.getId()));
+            }
+
+            return items;
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
