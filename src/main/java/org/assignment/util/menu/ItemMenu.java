@@ -27,6 +27,7 @@ public class ItemMenu extends BaseMenu {
         menuOptions.put("4", new Option("View All Items", this::viewItems));
         menuOptions.put("5", new Option("Filter Items", this::menuFilter));
         menuOptions.put("6", new Option("Item Flow Overview ", this::itemFlowMenu));
+        menuOptions.put("7", new Option("Inventory Management Menu ", this::inventoryManagement));
         menuOptions.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::quit));
 
         modifyOptions.put("1", new Option("Edit Name", () -> {}));
@@ -736,6 +737,48 @@ public class ItemMenu extends BaseMenu {
 
     // Display the filtered items
     private void displayFilteredItems(List<Item> filteredItems) {filteredItems.forEach(item -> System.out.println(item.toString()));}
+
+    private void inventoryManagement() {
+        clearScreen();
+        List<Item> itemList = Item.getAllItem();
+        if (itemList == null || itemList.isEmpty()) System.out.println("No item flow data is present.");
+        else {
+            // print all item flow details in table form
+            String tableEdge = "+" + "-".repeat(8) + "+"
+                    + "-".repeat(20) + "+"
+                    + "-".repeat(13) + "+"
+                    + "-".repeat(14) + "+"
+                    + "-".repeat(13) + "+"
+                    + "-".repeat(17) + "+";
+            System.out.println(tableEdge);
+
+            // table labels
+            System.out.printf("|%-8s|%-20s|%-13s|%-14s|%-13s|%-17s|\n",
+                    "Item ID",
+                    "Item Name",
+                    "Item Quantity",
+                    "Item UnitPrice",
+                    "Supplier Name",
+                    "ItemCategory Name");
+            System.out.println(tableEdge);
+
+
+            for (Item item : itemList) {
+                String rowData = String.format("|%-8s|%-20s|%-13.2f|%-14d|%-13s|%-17s|",
+                        item.getId(),
+                        printShorten(item.getName(),20),
+                        item.getUnitPrice(),
+                        item.getQuantity(),
+                        item.getSupplier().getId(),
+                        item.getItemCategory().getId());
+
+                if (item.getQuantity() > 50) System.out.println(ansi().bgGreen().a(rowData).reset());
+                else System.out.println(ansi().bgRed().a(rowData).reset());
+            }
+            System.out.println(tableEdge);
+        }
+        pause();
+    }
 
     private void quit() {exitFlag = true;}
 

@@ -15,7 +15,7 @@ public class ItemFlowMenu extends BaseMenu {
     public ItemFlowMenu() {
         ItemFlowMenu.options1.put("1", new Option("See Item Flow Statistics", this::seeItemFlowStatistics));
         ItemFlowMenu.options1.put("2", new Option("Update Item Flow", this::updateItemFlow));
-        ItemFlowMenu.options1.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::returnToStaffMenu));
+        ItemFlowMenu.options1.put("0", new Option(ansi().fgRed().a("Return to item menu...").reset().toString(), this::returnToStaffMenu));
 
         exitFlag = false;
     }
@@ -150,11 +150,6 @@ public class ItemFlowMenu extends BaseMenu {
         }
         else System.out.println(ansi().bgRed().a("Item flow creation was unsuccessful, please try again later.").reset());
         pause();
-    }
-
-    private String printShorten(String originalString, int limit) {
-        if (originalString.length() <= limit) return originalString;
-        return originalString.substring(0, limit - 3) + "...";
     }
 
     private void returnToStaffMenu() {
