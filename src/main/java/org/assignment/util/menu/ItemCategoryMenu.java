@@ -213,7 +213,18 @@ public class ItemCategoryMenu extends BaseMenu {
         }
 
         // show current details
-        System.out.println(ansi().cursorUp(2).eraseLine().a(itemCategory));
+        System.out.print(ansi().cursorUp(2).eraseLine().a(itemCategory));
+        System.out.printf("Items      : %s\n\n", ansi().fgCyan().a(itemCategory.getAllItems().size()).reset());
+
+        // reject deletion if there's item in the category
+        if (!itemCategory.getAllItems().isEmpty()) {
+            System.out.println(ansi()
+                    .bgRed()
+                    .a("You are not allowed to delete this item category, there are still items under the category.")
+                    .reset());
+            pause();
+            return;
+        }
 
         System.out.println("Delete the following item category? (y / n)");
         boolean deleteConfirmation = getYesNoOption();
@@ -224,6 +235,7 @@ public class ItemCategoryMenu extends BaseMenu {
         } else {
             System.out.println("Process canceled...");
         }
+
         pause();
     }
 
