@@ -4,6 +4,7 @@ import org.assignment.util.DatabaseIdManager;
 import org.assignment.util.base.BaseMenu;
 import org.assignment.util.extended.Item;
 import org.assignment.util.extended.ItemCategory;
+import org.assignment.util.extended.ItemFlow;
 import org.assignment.util.extended.Supplier;
 import org.assignment.util.ValidationCheck;
 import java.util.*;
@@ -25,6 +26,7 @@ public class ItemMenu extends BaseMenu {
         menuOptions.put("3", new Option("Modify Item", this::modifyItem));
         menuOptions.put("4", new Option("View All Items", this::viewItems));
         menuOptions.put("5", new Option("Filter Items", this::menuFilter));
+        menuOptions.put("6", new Option("Item Flow Overview ", this::itemFlowMenu));
         menuOptions.put("0", new Option(ansi().fgRed().a("Return to staff menu...").reset().toString(), this::quit));
 
         modifyOptions.put("1", new Option("Edit Name", () -> {}));
@@ -315,12 +317,9 @@ public class ItemMenu extends BaseMenu {
                 item = Item.getFromDb(scannerValue.toString());
                 if (DatabaseIdManager.isValidCode("ITEM", scannerValue.toString()) && Item.getFromDb(scannerValue.toString()) != null) {break;}
 
-                System.out.print(ansi().cursorUp(1).eraseLine());
-                System.out.print("> ");
-            } else{
-                System.out.print(ansi().cursorUp(1).eraseLine());
-                System.out.print("> ");
             }
+            System.out.print(ansi().cursorUp(1).eraseLine());
+            System.out.print("> ");
         }
 
         clearScreen();
@@ -339,9 +338,9 @@ public class ItemMenu extends BaseMenu {
                 String newName = "";
                 System.out.print("Enter new Name: ");
 
-                while (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(item.getName())) {
+                while (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(Objects.requireNonNull(item).getName())) {
                     newName = scanner.nextLine().trim();
-                    if (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(item.getName())) {
+                    if (newName.isEmpty() || !ValidationCheck.isValidName(newName) || newName.equals(Objects.requireNonNull(item).getName())) {
                         System.out.print(ansi().cursorUp(1).eraseLine());
                         System.out.print("Enter new Name: ");
                     }
@@ -368,7 +367,7 @@ public class ItemMenu extends BaseMenu {
 
                         if (acceptExitAction(Double.valueOf(scannerValue.toString())).isEmpty()) {return;}
 
-                        if ((Double.parseDouble(scannerValue.toString()) <0) || (Double.parseDouble(scannerValue.toString()) == item.getUnitPrice())){
+                        if ((Double.parseDouble(scannerValue.toString()) <0) || (Double.parseDouble(scannerValue.toString()) == Objects.requireNonNull(item).getUnitPrice())){
                             System.out.print(ansi().cursorUp(1).eraseLine());
                             continue;
                         }
@@ -457,18 +456,26 @@ public class ItemMenu extends BaseMenu {
         pause();
     }
 
+    // Enter ItemFlow Menu
+    private void itemFlowMenu(){
+        ItemFlowMenu itemFlowMenu = new ItemFlowMenu();
+        itemFlowMenu.start();
+    }
+
     // Filter by Name
     private void filterByName() {
         System.out.print("Enter item name: ");
         String query = scanner.nextLine().trim();
 
-        if (query.isEmpty()) {System.out.print(ansi().cursorUp(1).eraseLine());};
+        if (query.isEmpty()) {System.out.print(ansi().cursorUp(1).eraseLine());}
 
-        List<Item> filteredItems = items.stream()
-                .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+        if (items != null) {
+            List<Item> filteredItems = items.stream()
+                    .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
+                    .collect(Collectors.toList());
 
-        displayFilteredItems(filteredItems);
+            displayFilteredItems(filteredItems);
+        } else {System.out.println("No items to filter.");}
     }
 
     // Filter by Unit Price
@@ -493,8 +500,10 @@ public class ItemMenu extends BaseMenu {
                     continue;
                 }
 
-                List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() == Double.parseDouble(price.toString())).collect(Collectors.toList());
-                displayFilteredItems(filteredItems);
+                if (items != null) {
+                    List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() == Double.parseDouble(price.toString())).collect(Collectors.toList());
+                    displayFilteredItems(filteredItems);
+                } else {System.out.println("No items to filter.");}
                 break;
             } else{
                 System.out.print(ansi().cursorUp(1).eraseLine());
@@ -560,8 +569,11 @@ public class ItemMenu extends BaseMenu {
             }
         }
 
-        List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() >= start && item.getUnitPrice() <= end).collect(Collectors.toList());
-        displayFilteredItems(filteredItems);
+        if (items != null){
+            List<Item> filteredItems = items.stream().filter(item -> item.getUnitPrice() >= start && item.getUnitPrice() <= end).collect(Collectors.toList());
+            displayFilteredItems(filteredItems);
+        }
+        else {System.out.println("No items to filter.");}
     }
 
     // Filter by Quantity
@@ -584,8 +596,11 @@ public class ItemMenu extends BaseMenu {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
-                List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() == Integer.parseInt(scannerValue.toString())).collect(Collectors.toList());
-                displayFilteredItems(filteredItems);
+
+                if (items != null){
+                    List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() == Integer.parseInt(scannerValue.toString())).collect(Collectors.toList());
+                    displayFilteredItems(filteredItems);
+                } else{System.out.println("No items to filter.");}
                 break;
             } else{
                 System.out.print(ansi().cursorUp(1).eraseLine());
@@ -647,9 +662,10 @@ public class ItemMenu extends BaseMenu {
                 scanner.nextLine();
             }
         }
-
-        List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() >= start && item.getQuantity() <= end).collect(Collectors.toList());
-        displayFilteredItems(filteredItems);
+        if (items != null){
+            List<Item> filteredItems = items.stream().filter(item -> item.getQuantity() >= start && item.getQuantity() <= end).collect(Collectors.toList());
+            displayFilteredItems(filteredItems);
+        } else {System.out.println("No items to filter.");}
     }
 
     // Filter by Supplier ID
@@ -672,10 +688,12 @@ public class ItemMenu extends BaseMenu {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
-                List<Item> filteredItems = items.stream()
-                        .filter(item -> item.getSupplier().getId().contentEquals(scannerValue))
-                        .collect(Collectors.toList());
-                displayFilteredItems(filteredItems);
+                if (items != null){
+                    List<Item> filteredItems = items.stream()
+                            .filter(item -> item.getSupplier().getId().contentEquals(scannerValue))
+                            .collect(Collectors.toList());
+                    displayFilteredItems(filteredItems);
+                }else {System.out.println("No items to filter.");}
                 break;
             } else{System.out.print(ansi().cursorUp(1).eraseLine());}
         }
@@ -702,10 +720,12 @@ public class ItemMenu extends BaseMenu {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
+                if (items != null){
                 List<Item> filteredItems = items.stream()
                         .filter(item -> item.getItemCategory().getId().contentEquals(scannerValue))
                         .collect(Collectors.toList());
                 displayFilteredItems(filteredItems);
+                } else {System.out.println("No items to filter.");}
                 break;
             } else{
                 System.out.print(ansi().cursorUp(1).eraseLine());

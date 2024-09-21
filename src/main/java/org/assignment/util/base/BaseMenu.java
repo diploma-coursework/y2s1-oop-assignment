@@ -10,7 +10,7 @@ public abstract class BaseMenu {
     protected boolean exitFlag;
     protected boolean subMenuExitAction;
 
-    public void start() {};
+    public void start() {}
 
     protected static void displayOptions(HashMap<String, Option> options) {
         options.forEach((optionIdentifier, option) -> {
