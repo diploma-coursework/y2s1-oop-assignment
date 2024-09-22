@@ -184,7 +184,7 @@ public class Supplier extends Person implements DatabaseOperations {
         String startDate = this.contractStartDate != null ? this.contractStartDate.format(formatter) : "N/A";
         String endDate = this.contractEndDate != null ? this.contractEndDate.format(formatter) : "N/A";
 
-        return super.toString() + String.format("\nContract Start Date: %s\nContract End Date: %s", startDate, endDate);
+        return super.toString() + String.format("Contract Start Date: %s\nContract End Date: %s", startDate, endDate);
     }
 
     // Update Data Fields (Setters)
