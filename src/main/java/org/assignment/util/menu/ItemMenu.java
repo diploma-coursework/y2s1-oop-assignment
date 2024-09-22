@@ -764,12 +764,12 @@ public class ItemMenu extends BaseMenu {
                     + "-".repeat(20) + "+"
                     + "-".repeat(13) + "+"
                     + "-".repeat(14) + "+"
-                    + "-".repeat(13) + "+"
-                    + "-".repeat(17) + "+";
+                    + "-".repeat(20) + "+"
+                    + "-".repeat(20) + "+";
             System.out.println(tableEdge);
 
             // table labels
-            System.out.printf("|%-8s|%-20s|%-13s|%-14s|%-13s|%-17s|\n",
+            System.out.printf("|%-8s|%-20s|%-13s|%-14s|%-20s|%-20s|\n",
                     "Item ID",
                     "Item Name",
                     "Item Quantity",
@@ -780,13 +780,13 @@ public class ItemMenu extends BaseMenu {
 
 
             for (Item item : itemList) {
-                String rowData = String.format("|%-8s|%-20s|%-13.2f|%-14d|%-13s|%-17s|",
+                String rowData = String.format("|%-8s|%-20s|%-13.2f|%-14d|%-20s|%-20s|",
                         item.getId(),
                         printShorten(item.getName(),20),
                         item.getUnitPrice(),
                         item.getQuantity(),
-                        item.getSupplier().getId(),
-                        item.getItemCategory().getId());
+                        printShorten(item.getSupplier().getName(),20),
+                        printShorten(item.getItemCategory().getName(),20));
 
                 if (item.getQuantity() > 50) System.out.println(ansi().bgGreen().a(rowData).reset());
                 else System.out.println(ansi().bgRed().a(rowData).reset());

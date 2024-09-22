@@ -1,6 +1,6 @@
 package org.assignment;
 
-import org.assignment.util.menu.MainMenu;
+import org.assignment.util.menu.*;
 
 public class Main {
 
