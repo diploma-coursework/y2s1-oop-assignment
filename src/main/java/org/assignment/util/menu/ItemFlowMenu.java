@@ -112,11 +112,12 @@ public class ItemFlowMenu extends BaseMenu {
         // delta input
         while (newItemFlow.getDelta() == 0) {
             String inputDelta = scanner.nextLine().trim();
+            if (inputDelta.equalsIgnoreCase("exit")) return;
+
             if (inputDelta.isEmpty() || !inputDelta.matches("-?\\d+")) {
                 System.out.print(ansi().reset().cursorUp(1).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
                 continue;
             }
-            if (inputDelta.equalsIgnoreCase("exit")) return;
 
             try {
                 newItemFlow.setDelta(Integer.parseInt(inputDelta));

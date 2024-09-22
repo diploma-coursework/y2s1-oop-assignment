@@ -57,11 +57,19 @@ public class MainMenu extends BaseMenu {
 
         System.out.println(ansi().fgBrightGreen().a("Staff Login\n=============").reset());
 
-        System.out.print(ansi().fgRgb(8552916).a("Staff Id: "));
-        String inputStaffId = scanner.nextLine();
+        System.out.print("Staff Id: ");
+        String inputStaffId = "";
+        while (inputStaffId.isEmpty()) {
+            inputStaffId = scanner.nextLine().trim();
+            if (inputStaffId.isEmpty()) System.out.print(ansi().cursorUp(1).eraseLine().a("Staff Id: "));
+        }
 
         System.out.print("Password: ");
-        String inputPassword = scanner.nextLine();
+        String inputPassword = "";
+        while (inputPassword.isEmpty()) {
+            inputPassword = scanner.nextLine().trim();
+            if (inputPassword.isEmpty()) System.out.print(ansi().cursorUp(1).eraseLine().a("Password: "));
+        }
         System.out.print(ansi().reset());
 
         Staff loginStaff = Staff.getFromDb(inputStaffId);
