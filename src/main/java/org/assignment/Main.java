@@ -11,5 +11,7 @@ public class Main extends BaseMenu {
          ItemMenu itemMenu = new ItemMenu();
          itemMenu.start();
 
+         //MainMenu mainMenu = new MainMenu();
+         //mainMenu.start();
     }
 }

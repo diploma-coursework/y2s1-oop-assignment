@@ -203,9 +203,15 @@ public class Staff extends Person implements DatabaseOperations {
     public boolean addToDb() {
         try {
 
+            //Checking for the existing name and email to prevent redundancy
+            System.out.println("\nChecking for existing staff with name: " + this.name);
+            QuerySnapshot existingNameSnapshot = staffCollection.whereEqualTo("name", this.name.trim()).get().get();
+            if (!existingNameSnapshot.isEmpty()) {
+                System.out.println("Staff with this name already exists.");
+                return false;  // Prevent duplicate entry
+            }
+
             System.out.println("\nChecking for existing staff with email: " + this.email);
-
-
             QuerySnapshot existingStaffSnapshot = staffCollection.whereEqualTo("email", this.email.trim()).get().get();
             if (!existingStaffSnapshot.isEmpty()) {
                 System.out.println("Staff with this email already exists.");
