@@ -103,7 +103,7 @@ public class ItemFlowMenu extends BaseMenu {
 
         // print item and go to next input
         System.out.print(ansi().reset().cursorDown(2).eraseLine().cursorDown(1)
-                .a(newItemFlow.getItem()).cursorUp(25).cursorRight(29).fgBrightBlue());
+                .a(newItemFlow.getItem()).cursor(3, 30).fgBrightBlue());
 
         // delta input
         while (newItemFlow.getDelta() == 0) {
@@ -116,17 +116,19 @@ public class ItemFlowMenu extends BaseMenu {
             try {
                 newItemFlow.setDelta(Integer.parseInt(inputDelta));
                 // error if negative delta is more than available quantity (cant ship out more than we store)
+                if (newItemFlow.getDelta() == 0) throw new IllegalArgumentException("Delta cannot be zero.");
+
                 if (newItemFlow.getDelta() < 0 && Math.abs(newItemFlow.getDelta()) > newItemFlow.getItem().getQuantity()) {
                     newItemFlow.setDelta(0);
-                    throw new IllegalArgumentException("Cannot ship more than available stock.");
+                    throw new IllegalArgumentException("Cannot ship out more than available stock.");
                 }
                 break;
             } catch (NumberFormatException e) {
                 System.out.print(ansi().reset().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a("Number is too small / big.").reset()
-                        .cursorUp(2).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
+                        .cursor(3, 0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
             } catch (IllegalArgumentException e) {
                 System.out.print(ansi().reset().cursorDown(1).cursorToColumn(0).eraseLine().bgRed().a(e.getMessage()).reset()
-                        .cursorUp(2).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
+                        .cursor(3, 0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
             }
         }
 
