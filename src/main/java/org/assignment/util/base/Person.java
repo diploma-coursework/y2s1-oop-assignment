@@ -48,7 +48,7 @@ public abstract class Person {
         return "-------------------------------------------" + "\n" +
                 "ID             : " + idPlaceHolder + "\n" +
                 "Name           : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
-                "Contact Number : " + ansi().fgBrightMagenta().a(getContactNumber()) + "\n" +
+                "Contact Number : " + ansi().fgBrightMagenta().a(getContactNumber()).reset() + "\n" +
                 "Email          : " + ansi().fgBrightMagenta().a(getEmail()).reset() + "\n" +
                 "Address        : " + ansi().fgBrightMagenta().a(getAddress()).reset() + "\n" +
                 ansi().reset();
