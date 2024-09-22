@@ -8,10 +8,10 @@ import org.assignment.util.menu.*;
 public class Main extends BaseMenu {
 
     public static void main(String[] args) {
-         ItemMenu itemMenu = new ItemMenu();
-         itemMenu.start();
+         //ItemMenu itemMenu = new ItemMenu();
+         //itemMenu.start();
 
-         //MainMenu mainMenu = new MainMenu();
-         //mainMenu.start();
+         MainMenu mainMenu = new MainMenu();
+         mainMenu.start();
     }
 }

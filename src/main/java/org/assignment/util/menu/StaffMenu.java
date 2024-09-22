@@ -597,8 +597,10 @@ public class StaffMenu extends BaseMenu {
         try {
             clearScreen();
 
-            System.out.println(ansi().fgBrightGreen().a("          View All Staff Records" +
-                                                              "=========================================\n").reset());
+            System.out.println(ansi().fgBrightGreen().a("""
+                   View All Staff Records
+        =========================================
+        """).reset());
 
             // Retrieve all staff records from the database
             List<Staff> allStaff = Staff.getAllStaffInfo();
