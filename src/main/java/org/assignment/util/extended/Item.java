@@ -198,7 +198,8 @@ public class Item implements DatabaseOperations {
                 "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(getUnitPrice()).reset() + "\n" +
                 "ITEM Quantity      : " + ansi().fgBrightMagenta().a(getQuantity()).reset() + "\n\n" +
                 "ITEM Supplier Info\n" + getSupplier() + "\n\n" +
-                "ITEM ItemCategory Info\n" + getItemCategory() + "\n" +
-                ansi().reset();
+                "ITEM ItemCategory Info\n" +
+                "-------------------------------------------" + "\n" +
+                getItemCategory() + "\n" + ansi().reset();
     }
 }
