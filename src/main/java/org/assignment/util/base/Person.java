@@ -46,11 +46,11 @@ public abstract class Person {
         if (getId() == null) idPlaceHolder = ansi().fgYellow().a("[Unassigned]").reset().toString(); else idPlaceHolder = ansi().fgYellow().a(getId()).reset().toString();
 
         return "-------------------------------------------" + "\n" +
-                "ID            : " + idPlaceHolder + "\n" +
-                "Name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
-                "Contact Number    : " + ansi().fgBrightMagenta().a(getContactNumber()) + "\n" +
-                "Email      : " + ansi().fgBrightMagenta().a(getEmail()).reset() + "\n" +
-                "Address:" + ansi().fgBrightMagenta().a(getAddress()).reset() + "\n" +
+                "ID             : " + idPlaceHolder + "\n" +
+                "Name           : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
+                "Contact Number : " + ansi().fgBrightMagenta().a(getContactNumber()) + "\n" +
+                "Email          : " + ansi().fgBrightMagenta().a(getEmail()).reset() + "\n" +
+                "Address        :" + ansi().fgBrightMagenta().a(getAddress()).reset() + "\n" +
                 ansi().reset();
     }
 }
