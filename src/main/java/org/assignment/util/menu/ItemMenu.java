@@ -788,7 +788,7 @@ public class ItemMenu extends BaseMenu {
                         printShorten(item.getSupplier().getName(),20),
                         printShorten(item.getItemCategory().getName(),20));
 
-                if (item.getQuantity() > 50) System.out.println(ansi().bgGreen().a(rowData).reset());
+                if (item.getQuantity() >= 50) System.out.println(ansi().bgGreen().a(rowData).reset());
                 else System.out.println(ansi().bgRed().a(rowData).reset());
             }
             System.out.println(tableEdge);

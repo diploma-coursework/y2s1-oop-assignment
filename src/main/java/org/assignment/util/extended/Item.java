@@ -140,7 +140,6 @@ public class Item implements DatabaseOperations {
         }
     }
 
-    // FIXME: updateToDb not working
     public boolean updateToDb(String fieldName) {
         try {
             Field field = this.getClass().getDeclaredField(fieldName);
