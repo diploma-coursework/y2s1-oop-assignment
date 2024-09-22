@@ -557,32 +557,35 @@ public class StaffMenu extends BaseMenu {
 
 
             if (inputStaffId.trim().isEmpty()) {
-                System.out.println(ansi().bgBrightRed().a("\nStaff ID cannot be empty.").reset());
+                System.out.println(ansi().bgBrightRed().a("\n⚠ Staff ID cannot be empty.").reset());
                 return;
             }
 
             Staff staff = Staff.getFromDb(inputStaffId);
 
             if (staff == null) {
-                System.out.println(ansi().bgBrightRed().a("No staff record found with ID: " + inputStaffId).reset());
+                System.out.println(ansi().bgBrightRed().a("❌ No staff record found with ID: " + inputStaffId).reset());
                 return;
             } else{
                 System.out.println(ansi().bgBrightGreen().a("\nStaff is found! ").reset());
             }
 
-            // Print details of the found staff member
-            System.out.println(ansi().fgRgb(8552916).a("\n=========================================="));
-            System.out.println("Staff ID: " + staff.getId());
-            System.out.println("Name: " + staff.getName());
-            System.out.println("Gender: " + staff.getGender());
-            System.out.println("Position: " + staff.getPosition());
-            System.out.println("Contact Number: " + staff.getContactNumber());
-            System.out.println("Email: " + staff.getEmail());
-            System.out.println("Address: " + staff.getAddress());
-            System.out.println("Salary: RM" + staff.getSalary());
-            System.out.println("Date Joined: " + staff.getDateJoined());
-            System.out.println("==========================================\n");
-            System.out.print(ansi().reset());
+            // Print details of the found staff member in a report format
+            System.out.println(ansi().fgRgb(8552916).a("\n================================================="));
+            System.out.println(ansi().fgBrightCyan().a("             Staff Information Report"));
+            System.out.println(ansi().fgRgb(8552916).a("================================================="));
+
+            System.out.print(ansi().fgRgb(8552916).a(" Staff ID        : ").fgBrightYellow().a(staff.getId()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Name            : ").fgBrightYellow().a(staff.getName()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Gender          : ").fgBrightYellow().a(staff.getGender()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Position        : ").fgBrightYellow().a(staff.getPosition()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Contact Number  : ").fgBrightYellow().a(staff.getContactNumber()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Email           : ").fgBrightYellow().a(staff.getEmail()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Address         : ").fgBrightYellow().a(staff.getAddress()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Salary          : ").fgBrightYellow().a("RM"+staff.getSalary()).reset() + "\n");
+            System.out.print(ansi().fgRgb(8552916).a(" Date Joined     : ").fgBrightYellow().a(staff.getDateJoined()).reset() + "\n");
+
+            System.out.println(ansi().fgRgb(8552916).a("=================================================\n").reset());
             pause();
 
         }catch(Exception e) {
@@ -594,7 +597,8 @@ public class StaffMenu extends BaseMenu {
         try {
             clearScreen();
 
-            System.out.println(ansi().fgBrightGreen().a("View All Staff Records\n=======================\n").reset());
+            System.out.println(ansi().fgBrightGreen().a("          View All Staff Records" +
+                                                              "=========================================\n").reset());
 
             // Retrieve all staff records from the database
             List<Staff> allStaff = Staff.getAllStaffInfo();
@@ -614,11 +618,11 @@ public class StaffMenu extends BaseMenu {
 
             // Display counts
             System.out.println(ansi().fgRgb(8552916).a("=================================================="));
-            System.out.println("Total number of staff records: " + totalStaffCount);
-            System.out.println("Number of Staff: " + staffCount);
-            System.out.println("Number of Managers: " + managerCount);
-            System.out.println("Number of Admins: " + adminCount);
-            System.out.println("===================================================");
+            System.out.printf("%s: %d\n", "Total number of staff records", totalStaffCount);
+            System.out.printf("%s: %d\n", "Number of Staff", staffCount);
+            System.out.printf("%s: %d\n", "Number of Managers", managerCount);
+            System.out.printf("%s: %d\n", "Number of Admins", adminCount);
+            System.out.println("==================================================\n");
             System.out.println(ansi().reset());
 
             if (totalStaffCount == 0) {
@@ -628,17 +632,18 @@ public class StaffMenu extends BaseMenu {
 
             // Print details of each staff member
             for (Staff staff : allStaff) {
-                System.out.println(ansi().fgRgb(8552916).a("\n=========================================="));
-                System.out.println("Staff ID: " + staff.getId());
-                System.out.println("Name: " + staff.getName());
-                System.out.println("Gender: " + staff.getGender());
-                System.out.println("Position: " + staff.getPosition());
-                System.out.println("Contact Number: " + staff.getContactNumber());
-                System.out.println("Email: " + staff.getEmail());
-                System.out.println("Address: " + staff.getAddress());
-                System.out.println("Salary: RM" + staff.getSalary());
-                System.out.println("Date Joined: " + staff.getDateJoined());
-                System.out.println("===========================================\n");
+                System.out.println(ansi().fgBrightCyan().a("                  Staff Information"));
+                System.out.println(ansi().fgRgb(8552916).a("=================================================="));
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Staff ID").reset(), ansi().fgBrightYellow().a(staff.getId()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Name").reset(), ansi().fgBrightYellow().a(staff.getName()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Gender").reset(), ansi().fgBrightYellow().a(staff.getGender()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Position").reset(), ansi().fgBrightYellow().a(staff.getPosition()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Contact Number").reset(), ansi().fgBrightYellow().a(staff.getContactNumber()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Email").reset(), ansi().fgBrightYellow().a(staff.getEmail()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Address").reset(), ansi().fgBrightYellow().a(staff.getAddress()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Salary").reset(), ansi().fgBrightYellow().a("RM"+staff.getSalary()).reset());
+                System.out.printf("%s: %s\n", ansi().fgRgb(8552916).a("Date Joined").reset(), ansi().fgBrightYellow().a(staff.getDateJoined()).reset());
+                System.out.println(ansi().fgRgb(8552916).a("==================================================\n").reset());
             }
 
             pause();
@@ -675,16 +680,18 @@ public class StaffMenu extends BaseMenu {
             double averageSalary = totalSalary / allStaff.size();
 
             // Display salary distribution
-            System.out.println(ansi().fgRgb(8552916).a("Total Salary: RM" + String.format("%.2f", totalSalary)));
-            System.out.println("Average Salary: RM" + String.format("%.2f", averageSalary));
-            System.out.println("Minimum Salary: RM" + String.format("%.2f", minSalary));
-            System.out.println("Maximum Salary: RM" + String.format("%.2f", maxSalary));
+            System.out.println(ansi().fgRgb(8552916).a("Salary Summary"));
+            System.out.println("============================================");
+            System.out.printf("| %-25s | RM%-10s |\n", "Total Salary:", String.format("%.2f", totalSalary));
+            System.out.printf("| %-25s | RM%-10s |\n", "Average Salary:", String.format("%.2f", averageSalary));
+            System.out.printf("| %-25s | RM%-10s |\n", "Minimum Salary:", String.format("%.2f", minSalary));
+            System.out.printf("| %-25s | RM%-10s |\n", "Maximum Salary:", String.format("%.2f", maxSalary));
+            System.out.println("============================================\n");
             System.out.println(ansi().reset());
 
             // Define salary ranges
             int[] ranges = {0, 5000, 10000, 15000, 20000, 50000};
             int[] rangeCounts = new int[ranges.length - 1];
-
             for (Staff staff : allStaff) {
                 double salary = staff.getSalary();
                 for (int i = 0; i < ranges.length - 1; i++) {
@@ -695,13 +702,17 @@ public class StaffMenu extends BaseMenu {
                 }
             }
 
-            System.out.println(ansi().fgRgb(8552916).a("\nSalary Ranges:"));
-            System.out.println("=======================================");
+            // Display salary ranges
+            System.out.println(ansi().fgRgb(8552916).a("Salary Ranges:"));
+            System.out.println("===========================================================");
+            System.out.printf("| %-42s | %-10s |\n", "Salary Range", "Count");
+            System.out.println("===========================================================");
             for (int i = 0; i < ranges.length - 1; i++) {
-                System.out.println("RM" + ranges[i] + " - RM" + (ranges[i + 1] - 1) + ": " + rangeCounts[i]);
+                System.out.printf("| RM%-25d - RM%-10d | %-10d |\n", ranges[i], ranges[i + 1] - 1, rangeCounts[i]);
             }
-            System.out.println("=======================================\n");
+            System.out.println("===========================================================\n");
             System.out.println(ansi().reset());
+
             pause();
 
         } catch (Exception e) {
@@ -737,11 +748,12 @@ public class StaffMenu extends BaseMenu {
             double malePercentage = ((double) maleCount / totalStaffCount) * 100;
             double femalePercentage = ((double) femaleCount / totalStaffCount) * 100;
 
-            System.out.println(ansi().fgRgb(8552916).a("\n========================"));
-            System.out.println("Total number of employee: " + totalStaffCount);
-            System.out.println("Male: " + maleCount + " (" + String.format("%.2f", malePercentage) + "%)");
-            System.out.println("Female: " + femaleCount + " (" + String.format("%.2f", femalePercentage) + "%)");
-            System.out.println("========================\n");
+            System.out.println(ansi().fgRgb(8552916).a("\nGender Summary:"));
+            System.out.println("=======================================================");
+            System.out.printf("| %-25s | %-10d | %-10s |\n", "Total Employees:", totalStaffCount, "(100.0%)");
+            System.out.printf("| %-25s | %-10d | (%.2f%%)   |\n", "Male:", maleCount, malePercentage);
+            System.out.printf("| %-25s | %-10d | (%.2f%%)   |\n", "Female:", femaleCount, femalePercentage);
+            System.out.println("=======================================================\n");
             System.out.println(ansi().reset());
             pause();
 
@@ -770,12 +782,16 @@ public class StaffMenu extends BaseMenu {
                 positionCounts.put(position, positionCounts.getOrDefault(position, 0) + 1);
             }
 
-            System.out.println(ansi().fgRgb(8552916).a("\n=========================="));
-            System.out.println("Position Distribution:");
+            // Display position distribution
+            System.out.println(ansi().fgRgb(8552916).a("\nPosition Distribution Summary:"));
+            System.out.println("==========================================");
+
+            System.out.printf("| %-25s | %-10s |\n", "Position", "Count");
+            System.out.println("==========================================");
             for (Map.Entry<StaffPosition, Integer> entry : positionCounts.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+                System.out.printf("| %-25s | %-10d |\n", entry.getKey(), entry.getValue());
             }
-            System.out.println("==========================\n");
+            System.out.println("==========================================\n");
             System.out.println(ansi().reset());
 
             pause();
@@ -815,27 +831,16 @@ public class StaffMenu extends BaseMenu {
                 }
             }
 
-            System.out.println(ansi().fgRgb(8552916).a("Tenure Distribution of Staffs/Employees"));
-            System.out.println("\n=====================");
-            for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
-                System.out.println(ansi().fgRgb(8552916).a(entry.getKey() + ": " + entry.getValue()));
-            }
-            System.out.println("=====================\n");
-            System.out.println(ansi().reset());
 
-            /*
             System.out.println(ansi().fgRgb(8552916).a("        Tenure Distribution of Staffs/Employees"));
-            System.out.println("=====================================================");
-            System.out.printf("| %-25s | %-20s |\n", "Tenure Range", "Number of Staff");
-            System.out.println("=====================================================");
-
+            System.out.println("====================================================" + ansi().fgRgb(8552916).reset());
+            System.out.printf("| %-33s | %-28s |\n", ansi().fgBrightYellow().a("Tenure Range").reset(), ansi().fgBrightYellow().a("Number of Staff").reset());
+            System.out.println(ansi().fgRgb(8552916).a("====================================================").reset());
             for (Map.Entry<String, Integer> entry : tenureCounts.entrySet()) {
+                System.out.print(ansi().fgBrightCyan());
                 System.out.printf("| %-25s | %-20d |\n", entry.getKey(), entry.getValue());
             }
-
-            System.out.println("=====================================================");
-            System.out.println(ansi().reset());
-            */
+            System.out.println(ansi().fgRgb(8552916).a("====================================================").reset());
             pause();
 
         } catch (Exception e) {
