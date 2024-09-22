@@ -82,6 +82,7 @@ public class ItemMenu extends BaseMenu {
         subMenuExitAction = false;
         while (!subMenuExitAction){
             clearScreen();
+            System.out.println(ansi().fgBrightGreen().a(" Search for Item Menu :\n=========================\n").reset());
             displayOptions(queryOptions);
             getUserOptions(queryOptions);
             pause();
@@ -211,7 +212,7 @@ public class ItemMenu extends BaseMenu {
     private void removeItem() {
         clearScreen();
         List<Item> removeList = new ArrayList<>();
-
+        System.out.println(ansi().fgBrightGreen().a(" Delete Items Menu :\n=========================\n").reset());
         System.out.println("Enter the IDs' of the Items to Remove: ");
         System.out.println("Eg.(ITEM0001 ITEM0002...)");
         System.out.println("Enter Exit to exit");
@@ -257,7 +258,7 @@ public class ItemMenu extends BaseMenu {
              }
 
              for (int i =1;i <= removeList.size();i++){
-                 System.out.println(i + ") " + removeList.get(i-1).getId());
+                 System.out.println(i + ") " + ansi().fgBrightGreen().a(removeList.get(i-1).getId()).reset());
              }
 
              System.out.println("Enter the Indexes to remove from List, Enter 0 to Confirm, Enter -1 to Exit");
@@ -300,6 +301,7 @@ public class ItemMenu extends BaseMenu {
 
     private void modifyItem() {
         clearScreen();
+        System.out.println(ansi().fgBrightGreen().a(" Update an Item :\n=========================\n").reset());
         System.out.println("Enter the ID of the ITEM to modify: ");
         System.out.println("Enter Exit to exit");
         System.out.print("> ");
@@ -332,6 +334,9 @@ public class ItemMenu extends BaseMenu {
 
             // "0" for exit
             if (selectedOption == modifyOptions.get("0")) return;
+            // cls and print again
+            clearScreen();
+            System.out.println("\n"+item);
 
             // "1" for edit name
             boolean updateSuccess = true;
@@ -451,6 +456,7 @@ public class ItemMenu extends BaseMenu {
         if (itemList == null) System.out.println("No item is present.");
         else {
             for (Item item : itemList) {
+                System.out.println("-------------------------------------------");
                 System.out.println(item);
             }
         }
@@ -465,18 +471,28 @@ public class ItemMenu extends BaseMenu {
 
     // Filter by Name
     private void filterByName() {
-        System.out.print("Enter item name: ");
-        String query = scanner.nextLine().trim();
+        while (true){
+            System.out.print("Enter item name: ");
+            String query = scanner.nextLine().trim();
 
-        if (query.isEmpty()) {System.out.print(ansi().cursorUp(1).eraseLine());}
+            if (query.isEmpty()) {
+                System.out.print(ansi().cursorUp(1).eraseLine());
+                continue;
+            }
 
-        if (items != null) {
-            List<Item> filteredItems = items.stream()
-                    .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
-                    .collect(Collectors.toList());
+            if (acceptExitAction(query).isEmpty()){return;}
 
-            displayFilteredItems(filteredItems);
-        } else {System.out.println("No items to filter.");}
+            if (items != null) {
+                List<Item> filteredItems = items.stream()
+                        .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
+                        .collect(Collectors.toList());
+
+                displayFilteredItems(filteredItems);
+            } else {
+                System.out.println("No items to filter.");
+            }
+            break;
+        }
     }
 
     // Filter by Unit Price
@@ -736,7 +752,7 @@ public class ItemMenu extends BaseMenu {
     }
 
     // Display the filtered items
-    private void displayFilteredItems(List<Item> filteredItems) {filteredItems.forEach(item -> System.out.println(item.toString()));}
+    private void displayFilteredItems(List<Item> filteredItems) {filteredItems.forEach(item -> System.out.println("-------------------------------------------\n" + item.toString()));}
 
     private void inventoryManagement() {
         clearScreen();
