@@ -12,7 +12,10 @@ import java.util.Scanner;
 public class Main extends BaseMenu {
 
     public static void main(String[] args) {
-        ItemMenu itemMenu = new ItemMenu();
-        itemMenu.start();
+        // ItemMenu itemMenu = new ItemMenu();
+        // itemMenu.start();
+
+        SupplierMenu supplierMenu = new SupplierMenu();
+        supplierMenu.start();
     }
 }

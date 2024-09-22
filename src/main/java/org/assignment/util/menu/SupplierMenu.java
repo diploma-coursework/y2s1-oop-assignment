@@ -128,6 +128,8 @@ public class SupplierMenu extends BaseMenu {
             return;
         }
 
+        System.out.println("\n" + supplier.toString() + "\n");
+
         if (!supplier.getAllItems().isEmpty()) {
             System.out.println("The supplier is unable to be removed.");
             System.out.println("Please remove all items supplied by the supplier to perform removal.");
@@ -333,7 +335,7 @@ public class SupplierMenu extends BaseMenu {
                     supplier.setContractEndDate(supplier.getContractEndDate(), true);
                     System.out.println("\nContract successfully renewed.\n");
                 }
-                else if (yn != 'N') {
+                else if (yn == 'N') {
                     return;
                 }
                 else {
