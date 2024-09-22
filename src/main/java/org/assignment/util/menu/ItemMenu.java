@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ItemMenu extends BaseMenu {
-    private static final List<Item> items = Item.getAllItem(); // FIXME: testing
+    private static final List<Item> items = Item.getAllItem();
     private static final Scanner scanner = new Scanner(System.in);
     private static final HashMap<String, Option> menuOptions = new HashMap<>()
             , modifyOptions = new HashMap<>(), queryOptions = new HashMap<>()
@@ -121,7 +121,7 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             scannerValue.setLength(0);
             System.out.print("Item Unit Price     :");
-            // FIXME: NaN would be valid
+
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
 
@@ -340,7 +340,7 @@ public class ItemMenu extends BaseMenu {
 
             // "1" for edit name
             boolean updateSuccess = true;
-            if (selectedOption == modifyOptions.get("1")) { // TODO: When invalidName, it doesnt go back to starting position
+            if (selectedOption == modifyOptions.get("1")) {
                 String newName = "";
                 System.out.print("Enter new Name: ");
 
@@ -362,7 +362,7 @@ public class ItemMenu extends BaseMenu {
                 while (true) {
                     scannerValue.setLength(0);
                     System.out.print("Enter new Unit Price: ");
-                    // FIXME: NaN would be valid
+
                     if (scanner.hasNextLine()){
                         scannerValue.append(scanner.nextLine().trim());
 
@@ -501,7 +501,7 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             price.setLength(0);
             System.out.print("Enter Unit Price     :");
-            // FIXME: NaN would be valid
+
             if (scanner.hasNextLine()){
                 price.append(scanner.nextLine().trim());
 
@@ -562,7 +562,7 @@ public class ItemMenu extends BaseMenu {
         while (true) {
             price.setLength(0);
             System.out.print("Enter Ending Range       :");
-            // FIXME: NaN would be valid
+
             if (scanner.hasNextLine()){
                 price.append(scanner.nextLine().trim());
 

@@ -66,7 +66,6 @@ public class Supplier extends Person implements DatabaseOperations {
             docValues.put("contactNumber", getContactNumber());
             docValues.put("address", getAddress());
             docValues.put("email", getEmail());
-            // TODO: it needs to be stored as either String or Timestamp in db, below need change
             docValues.put("contractStartDate", getContractStartDate().toString());
             docValues.put("contractEndDate", getContractEndDate().toString());
 
@@ -97,7 +96,6 @@ public class Supplier extends Person implements DatabaseOperations {
             fetchedSupplier.setContactNumber(Optional.ofNullable(docData.get("contactNumber")).orElse("").toString());
             fetchedSupplier.setEmail(Optional.ofNullable(docData.get("email")).orElse("").toString());
             fetchedSupplier.setAddress(Optional.ofNullable(docData.get("address")).orElse("").toString());
-            // TODO: ur contract stuff (idk correct or not), can make them into a method, and call it here,so less redundant
 
             String contractStartDateStr = docData.get("contractStartDate").toString();
             LocalDate contractStartDate = contractStartDateStr != null ? LocalDate.parse(contractStartDateStr) : null;
@@ -176,9 +174,6 @@ public class Supplier extends Person implements DatabaseOperations {
 
     @Override
     public String toString(){
-        // TODO: toString for Supplier
-        // return super.toString() + "SUPPLIER DETAILS\n";
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         String startDate = this.contractStartDate != null ? this.contractStartDate.format(formatter) : "N/A";
