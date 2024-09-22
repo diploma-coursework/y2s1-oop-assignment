@@ -84,7 +84,9 @@ public class ItemFlowMenu extends BaseMenu {
         System.out.print(ansi().a("""
                 Enter id for the updating item:
                 Enter delta of the quantity:
-                """).cursorUp(2).cursorRight(32).fgBrightBlue());
+                
+                (Type 'exit' to exit)
+                """).cursorUp(4).cursorRight(32).fgBrightBlue());
 
         while (newItemFlow.getItem() == null) {
             String inputItemId = scanner.nextLine().trim();
@@ -92,12 +94,14 @@ public class ItemFlowMenu extends BaseMenu {
                 System.out.print(ansi().cursorUp(1).cursorRight(32));
                 continue;
             }
+
+            if (inputItemId.equalsIgnoreCase("exit")) return;
             Item inputItem = Item.getFromDb(inputItemId);
             if (inputItem != null) {
                 newItemFlow.setItem(inputItem);
                 break;
             }
-            System.out.print(ansi().cursorDown(2).bgRed().a("Invalid item id.").reset().cursorUp(3));
+            System.out.print(ansi().cursorDown(2).eraseLine().reset().bgRed().a("Invalid item id.").reset().cursorUp(3));
             System.out.print(ansi().cursorToColumn(0).eraseLine().a("Enter id for the updating item: "));
         }
 
@@ -112,6 +116,7 @@ public class ItemFlowMenu extends BaseMenu {
                 System.out.print(ansi().reset().cursorUp(1).cursorToColumn(0).eraseLine().a("Enter delta of the quantity: ").fgBrightBlue());
                 continue;
             }
+            if (inputDelta.equalsIgnoreCase("exit")) return;
 
             try {
                 newItemFlow.setDelta(Integer.parseInt(inputDelta));
