@@ -190,8 +190,8 @@ public class ItemMenu extends BaseMenu {
             System.out.print("To Confirm Adding [Enter 1] else [Enter 0]: ");
             if (scanner.hasNextLine()){
                 scannerValue.append(scanner.nextLine().trim());
-
-                if (scannerValue.isEmpty() || (Integer.parseInt(scannerValue.toString()) != 1 && (Integer.parseInt(scannerValue.toString()) != 0))) {
+//                (Integer.parseInt(scannerValue.toString()) != 1 && (Integer.parseInt(scannerValue.toString()) != 0))
+                if (scannerValue.isEmpty() || !scannerValue.toString().matches("[01]")) {
                     System.out.print(ansi().cursorUp(1).eraseLine());
                     continue;
                 }
