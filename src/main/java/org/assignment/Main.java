@@ -5,7 +5,7 @@ import org.assignment.util.menu.*;
 
 // FIXME: testing Concurrent
 
-public class Main extends BaseMenu {
+public class Main {
 
     public static void main(String[] args) {
          //ItemMenu itemMenu = new ItemMenu();
