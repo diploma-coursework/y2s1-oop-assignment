@@ -195,7 +195,7 @@ public class Item implements DatabaseOperations {
         return "-------------------------------------------" + "\n" +
                 "ITEM ID            : " + idPlaceHolder + "\n" +
                 "ITEM Name          : " + ansi().fgBlue().a(getName()).reset().toString() + "\n" +
-                "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(getUnitPrice()).reset() + "\n" +
+                "ITEM Unit Price    : " + ansi().fgBrightMagenta().a(String.format("%.2f",getUnitPrice())).reset() + "\n" +
                 "ITEM Quantity      : " + ansi().fgBrightMagenta().a(getQuantity()).reset() + "\n\n" +
                 "ITEM Supplier Info\n" + getSupplier() + "\n\n" +
                 "ITEM ItemCategory Info\n" +
