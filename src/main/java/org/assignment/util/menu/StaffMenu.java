@@ -550,7 +550,7 @@ public class StaffMenu extends BaseMenu {
         try {
             clearScreen();
 
-            System.out.println(ansi().fgBrightGreen().a("Staff Login\n=============").reset());
+            System.out.println(ansi().fgBrightGreen().a("Search Staff record\n===============").reset());
 
             System.out.print(ansi().fgRgb(8552916).a("Staff Id: "));
             String inputStaffId = scanner.nextLine();
